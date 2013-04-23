@@ -35,7 +35,29 @@
         o[a[i]]=''
       return o
 
-  # ----------+----------+----------+----------+----------+----------+----------+
+    # ----------+----------+----------+----------+----------+----------+----------+
+    # Public functions
+    # ----------+----------+----------+----------+----------+----------+----------+
+
+    this.getSelectedIds = ->
+      ids = []
+      $.each(elem.find(".jfmfs-item.selected"), (i, item) ->
+        ids.push($(item).attr("id"))
+      )
+      return ids
+
+    this.getSelectedIdsAndNames = ->
+      selected = []
+      $.each(elem.find(".jfmfs-item.selected"), (i, item) ->
+        selected.push( {id: $(item).attr("id"), name: $(item).find(".item-name").text()})
+      )
+      return selected
+
+    this.clearSelected = ->
+      all_items.removeClass("selected")
+
+
+# ----------+----------+----------+----------+----------+----------+----------+
     # Private functions
     # ----------+----------+----------+----------+----------+----------+----------+
 
@@ -206,6 +228,8 @@
 
     init()
 
+    return this
+
   $.fn.thingyPicker = (options)->
       this.each ->
         options = $.extend(
@@ -218,10 +242,13 @@
         element = $(this)
 
         # return early if this element already has a plugin instance
-        return if element.data('thingyPicker')
+        return element.data('thingyPicker') if element.data('thingyPicker')
 
         # pass options to plugin constructor
         picker = new ThingyPicker(this, options)
+
+        if options.debug
+          console.log "adding thingyPicker to element", element
 
         element.data("thingyPicker", picker)
 

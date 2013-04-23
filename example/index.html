@@ -18,6 +18,15 @@
     <div class='fb-example'>
       <div id="fb-root"></div>
       <script src="http://connect.facebook.net/en_US/all.js"></script>
+      <div id='logged-out-status'>
+        <a href='javascript:login()'>Login</a>
+      </div>
+      <div id='logged-in-status' style='display:none;'>
+        <div id='username'></div>
+        <a href='#' id='show-items'>Show Selected items</a>
+        <div id='selected-items' style='height: 30px;'></div>
+        <div class='thingy-picker'></div>
+      </div>
       <script>
         FB.init({appId: '113738725493871', cookie: true});
         FB.getLoginStatus(function(response) {
@@ -29,47 +38,43 @@
                         });
         
          function login() {
-                            FB.login(function(response) {
-                                if (response.status === "connected") {
-                                    init();
-                                } else {
-                                    alert('Login Failed!');
-                                }
-                            });
-                        }
+            FB.login(function(response) {
+                if (response.status === "connected") {
+                    init();
+                } else {
+                    alert('Login Failed!');
+                }
+            });
+          }
         
         function init() {
-                          FB.api('/me', function(response) {
-                              $("#username").html("<img src='https://graph.facebook.com/" + response.id + "/picture'/><div>" + response.name + "</div>");
+          $('#logged-out-status').hide();
+          $('#logged-in-status').show();
+        
+          FB.api('/me', function(response) {
+              $("#username").html("<img src='https://graph.facebook.com/" + response.id + "/picture'/><div>" + response.name + "</div>");
         
         
-                              FB.api("/me/friends?fields=id,name,picture", function(response){
-                                var items = $.map(response.data, function(e, i){
-                                  return {
-                                    id: e.id,
-                                    name: e.name,
-                                    picture: e.picture.data.url
-                                  };
-                                });
-                                $(".fb-example .thingy-picker").thingyPicker({items: items});
-                              });
-                        });
-                  }
+              FB.api("/me/friends?fields=id,name,picture", function(response){
+                var items = $.map(response.data, function(e, i){
+                  return {
+                    id: e.id,
+                    name: e.name,
+                    picture: e.picture.data.url
+                  };
+                });
+                $(".fb-example .thingy-picker").thingyPicker({items: items});
+              });
+            });
+          }
         
-        $("#show-items").on("click", function() {
-            var itemSelector = $("#jfmfs-container").data('jfmfs');
-            $("#selected-items").html(itemSelector.getSelectedIds().join(', '));
+        $("#show-items").click(function() {
+          console.log("clicked");
+          var itemSelector = $(".fb-example .thingy-picker").data('thingyPicker');
+          console.log(itemSelector.getSelectedIds());
+          $("#selected-items").html(itemSelector.getSelectedIds().join(', '));
         });
       </script>
-      <div id='logged-out-status'>
-        <a href='javascript:login()'>Login</a>
-      </div>
-      <div>
-        <div id='username'></div>
-        <a href='#' id='show-items' style='display:none'>Show Selected items</a>
-        <div id='selected-items' style='height: 30px;'></div>
-        <div class='thingy-picker'></div>
-      </div>
     </div>
   </body>
 </html>

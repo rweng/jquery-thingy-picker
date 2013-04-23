@@ -50,6 +50,30 @@
         }
         return o;
       };
+      this.getSelectedIds = function() {
+        var ids;
+
+        ids = [];
+        $.each(elem.find(".jfmfs-item.selected"), function(i, item) {
+          return ids.push($(item).attr("id"));
+        });
+        return ids;
+      };
+      this.getSelectedIdsAndNames = function() {
+        var selected;
+
+        selected = [];
+        $.each(elem.find(".jfmfs-item.selected"), function(i, item) {
+          return selected.push({
+            id: $(item).attr("id"),
+            name: $(item).find(".item-name").text()
+          });
+        });
+        return selected;
+      };
+      this.clearSelected = function() {
+        return all_items.removeClass("selected");
+      };
       init = function() {
         var all_items, first_element_offset_px, getViewportHeight, i, item_height_px, updateSelectedCount, _i, _ref;
 
@@ -192,7 +216,8 @@
         return buffer.push(settings.itemToHtml(item));
       });
       item_container.append(buffer.join(""));
-      return init();
+      init();
+      return this;
     };
     return $.fn.thingyPicker = function(options) {
       return this.each(function() {
@@ -206,9 +231,12 @@
         }
         element = $(this);
         if (element.data('thingyPicker')) {
-          return;
+          return element.data('thingyPicker');
         }
         picker = new ThingyPicker(this, options);
+        if (options.debug) {
+          console.log("adding thingyPicker to element", element);
+        }
         return element.data("thingyPicker", picker);
       });
     };
