@@ -5,16 +5,22 @@
     var ThingyPicker;
 
     ThingyPicker = function(element, options) {
-      var all_friends, arrayToObjectGraph, buffer, container, elem, excluded_friends_graph, friend_container, friends_per_row, init, lastSelected, maxSelectedEnabled, obj, preselectedFriends, preselected_friends_graph, selectedClass, selectedCount, settings, sortedFriendData, updateMaxSelectedMessage;
+      var arrayToObjectGraph, buffer, container, elem, init, item_container, items_per_row, lastSelected, maxSelectedEnabled, obj, preselected_items_graph, selectedClass, selectedCount, settings, updateMaxSelectedMessage;
 
-      friends_per_row = 0;
+      items_per_row = 0;
       elem = $(element);
       obj = this;
       settings = $.extend({
         max_selected: -1,
         max_selected_message: "{0} of {1} selected",
-        pre_selected_friends: [],
-        exclude_friends: [],
+        pre_selected_items: [],
+        exclude_items: [],
+        itemToHtml: function(contact) {
+          var selectedClass, _ref;
+
+          selectedClass = (_ref = contact.id, __indexOf.call(this.pre_selected_items, _ref) >= 0) ? "selected" : "";
+          return "<div class='jfmfs-item " + selectedClass + "' id='" + contact.id + "'><img src='" + contact.picture + "'/><div class='item-name'>" + contact.name + "</div></div>";
+        },
         sorter: function(a, b) {
           var x, y, _ref, _ref1;
 
@@ -29,7 +35,7 @@
         labels: {
           selected: "Selected",
           filter_default: "Start typing a name",
-          filter_title: "Find Friends:",
+          filter_title: "Find items:",
           all: "All",
           max_selected_message: "{0} of {1} selected"
         }
@@ -45,30 +51,30 @@
         return o;
       };
       init = function() {
-        var all_friends, first_element_offset_px, friend_height_px, getViewportHeight, i, updateSelectedCount, _i, _ref;
+        var all_items, first_element_offset_px, getViewportHeight, i, item_height_px, updateSelectedCount, _i, _ref;
 
-        all_friends = $(".jfmfs-friend", elem);
-        first_element_offset_px = all_friends.first().offset().top;
-        for (i = _i = 0, _ref = all_friends.length; 0 <= _ref ? _i < _ref : _i > _ref; i = 0 <= _ref ? ++_i : --_i) {
-          if ($(all_friends[i]).offset().top === first_element_offset_px) {
-            friends_per_row++;
+        all_items = $(".jfmfs-item", elem);
+        first_element_offset_px = all_items.first().offset().top;
+        for (i = _i = 0, _ref = all_items.length; 0 <= _ref ? _i < _ref : _i > _ref; i = 0 <= _ref ? ++_i : --_i) {
+          if ($(all_items[i]).offset().top === first_element_offset_px) {
+            items_per_row++;
           } else {
-            friend_height_px = $(all_friends[i]).offset().top - first_element_offset_px;
+            item_height_px = $(all_items[i]).offset().top - first_element_offset_px;
             break;
           }
         }
-        elem.delegate(".jfmfs-friend", 'click', function(event) {
-          var aFriend, alreadySelected, end, isMaxSelected, isSelected, lastIndex, onlyOne, selIndex, start, _j;
+        elem.delegate(".jfmfs-item", 'click', function(event) {
+          var aitem, alreadySelected, end, isMaxSelected, isSelected, lastIndex, onlyOne, selIndex, start, _j;
 
           onlyOne = settings.max_selected === 1;
           isSelected = $(this).hasClass("selected");
-          isMaxSelected = $(".jfmfs-friend.selected").length >= settings.max_selected;
-          alreadySelected = friend_container.find(".selected").attr('id') === $(this).attr('id');
+          isMaxSelected = $(".jfmfs-item.selected").length >= settings.max_selected;
+          alreadySelected = item_container.find(".selected").attr('id') === $(this).attr('id');
           if (!onlyOne && !isSelected && maxSelectedEnabled() && isMaxSelected) {
             return;
           }
           if (onlyOne && !alreadySelected) {
-            friend_container.find(".selected").removeClass("selected");
+            item_container.find(".selected").removeClass("selected");
           }
           $(this).toggleClass("selected");
           $(this).removeClass("hover");
@@ -82,10 +88,10 @@
                 end = Math.max(selIndex, lastIndex);
                 start = Math.min(selIndex, lastIndex);
                 for (i = _j = start; start <= end ? _j < end : _j > end; i = start <= end ? ++_j : --_j) {
-                  aFriend = $(all_friends[i]);
-                  if (!aFriend.hasClass("hide-non-selected") && !aFriend.hasClass("hide-filtered")) {
-                    if (maxSelectedEnabled() && $(".jfmfs-friend.selected").length < settings.max_selected) {
-                      $(all_friends[i]).addClass("selected");
+                  aitem = $(all_items[i]);
+                  if (!aitem.hasClass("hide-non-selected") && !aitem.hasClass("hide-filtered")) {
+                    if (maxSelectedEnabled() && $(".jfmfs-item.selected").length < settings.max_selected) {
+                      $(all_items[i]).addClass("selected");
                     }
                   }
                 }
@@ -101,17 +107,17 @@
         });
         $("#jfmfs-filter-selected").click(function(event) {
           event.preventDefault();
-          all_friends.not(".selected").addClass("hide-non-selected");
+          all_items.not(".selected").addClass("hide-non-selected");
           $(".filter-link").removeClass("selected");
           return $(this).addClass("selected");
         });
         $("#jfmfs-filter-all").click(function(event) {
           event.preventDefault();
-          all_friends.removeClass("hide-non-selected");
+          all_items.removeClass("hide-non-selected");
           $(".filter-link").removeClass("selected");
           return $(this).addClass("selected");
         });
-        elem.find(".jfmfs-friend:not(.selected)").on('hover', function(ev) {
+        elem.find(".jfmfs-item:not(.selected)").on('hover', function(ev) {
           if (ev.type === 'mouseover') {
             $(this).addClass("hover");
           }
@@ -119,19 +125,19 @@
             return $(this).removeClass("hover");
           }
         });
-        elem.find("#jfmfs-friend-filter-text").keyup(function() {
+        elem.find("#jfmfs-item-filter-text").keyup(function() {
           var filter, keyUpTimer;
 
           filter = $(this).val();
           clearTimeout(keyUpTimer);
           return keyUpTimer = setTimeout(function() {
             if (filter === '') {
-              all_friends.removeClass("hide-filtered");
+              all_items.removeClass("hide-filtered");
             } else {
 
             }
-            container.find(".friend-name:not(:Contains(" + filter + "))").parent().addClass("hide-filtered");
-            return container.find(".friend-name:Contains(" + filter + ")").parent().removeClass("hide-filtered");
+            container.find(".item-name:not(:Contains(" + filter + "))").parent().addClass("hide-filtered");
+            return container.find(".item-name:Contains(" + filter + ")").parent().removeClass("hide-filtered");
           }, 400);
         }).focus(function() {
           if ($.trim($(this).val()) === 'Start typing a name') {
@@ -162,10 +168,10 @@
         };
         updateMaxSelectedMessage();
         updateSelectedCount();
-        return elem.trigger("jfmfs.friendload.finished");
+        return elem.trigger("jfmfs.itemload.finished");
       };
       selectedCount = function() {
-        return $(".jfmfs-friend.selected").length;
+        return $(".jfmfs-item.selected").length;
       };
       maxSelectedEnabled = function() {
         return settings.max_selected > 0;
@@ -176,23 +182,16 @@
         message = settings.labels.max_selected_message.replace("{0}", selectedCount()).replace("{1}", settings.max_selected);
         return $("#jfmfs-max-selected-wrapper").html(message);
       };
-      elem.html("<div id='jfmfs-friend-selector'>" + "    <div id='jfmfs-inner-header'>" + ("        <span class='jfmfs-title'>" + settings.labels.filter_title + " </span><input type='text' id='jfmfs-friend-filter-text' value='" + settings.labels.filter_default + "'/>") + ("        <a class='filter-link selected' id='jfmfs-filter-all' href='#'>" + settings.labels.all + "</a>") + ("        <a class='filter-link' id='jfmfs-filter-selected' href='#'>" + settings.labels.selected + " (<span id='jfmfs-selected-count'>0</span>)</a>") + (settings.max_selected > 0 ? "<div id='jfmfs-max-selected-wrapper'></div>" : "" + "    </div>" + "    <div id='jfmfs-friend-container'></div>" + "</div>"));
-      friend_container = elem.find("#jfmfs-friend-container");
-      container = elem.find("#jfmfs-friend-selector");
-      preselected_friends_graph = arrayToObjectGraph(settings.pre_selected_friends);
-      excluded_friends_graph = arrayToObjectGraph(settings.exclude_friends);
-      all_friends = 1;
-      sortedFriendData = settings.data;
-      preselectedFriends = {};
+      elem.html("<div id='jfmfs-item-selector'>" + "    <div id='jfmfs-inner-header'>" + ("        <span class='jfmfs-title'>" + settings.labels.filter_title + " </span><input type='text' id='jfmfs-item-filter-text' value='" + settings.labels.filter_default + "'/>") + ("        <a class='filter-link selected' id='jfmfs-filter-all' href='#'>" + settings.labels.all + "</a>") + ("        <a class='filter-link' id='jfmfs-filter-selected' href='#'>" + settings.labels.selected + " (<span id='jfmfs-selected-count'>0</span>)</a>") + (settings.max_selected > 0 ? "<div id='jfmfs-max-selected-wrapper'></div>" : "" + "    </div>" + "    <div id='jfmfs-item-container'></div>" + "</div>"));
+      item_container = elem.find("#jfmfs-item-container");
+      container = elem.find("#jfmfs-item-selector");
+      preselected_items_graph = arrayToObjectGraph(settings.pre_selected_items);
       buffer = [];
       selectedClass = "";
-      $.each(settings.data, function(i, friend) {
-        var _ref;
-
-        selectedClass = (_ref = friend.id, __indexOf.call(preselected_friends_graph, _ref) >= 0) ? "selected" : "";
-        return buffer.push("<div class='jfmfs-friend " + selectedClass + "' id='" + friend.id + "'><img src='" + friend.picture + "'/><div class='friend-name'>" + friend.name + "</div></div>");
+      $.each(settings.items, function(i, item) {
+        return buffer.push(settings.itemToHtml(item));
       });
-      friend_container.append(buffer.join(""));
+      item_container.append(buffer.join(""));
       return init();
     };
     return $.fn.thingyPicker = function(options) {

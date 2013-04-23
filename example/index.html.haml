@@ -49,21 +49,21 @@
 
 
                               FB.api("/me/friends?fields=id,name,picture", function(response){
-                                var data = $.map(response.data, function(e, i){
+                                var items = $.map(response.data, function(e, i){
                                   return {
                                     id: e.id,
                                     name: e.name,
                                     picture: e.picture.data.url
                                   };
                                 });
-                                $(".fb-example .thingy-picker").thingyPicker({data: data});
+                                $(".fb-example .thingy-picker").thingyPicker({items: items});
                               });
                         });
                   }
 
-        $("#show-friends").on("click", function() {
-            var friendSelector = $("#jfmfs-container").data('jfmfs');
-            $("#selected-friends").html(friendSelector.getSelectedIds().join(', '));
+        $("#show-items").on("click", function() {
+            var itemSelector = $("#jfmfs-container").data('jfmfs');
+            $("#selected-items").html(itemSelector.getSelectedIds().join(', '));
         });
 
       #logged-out-status
@@ -71,7 +71,7 @@
 
       %div
         #username
-        %a#show-friends(href="#" style="display:none") Show Selected Friends
-        #selected-friends(style="height: 30px;")
+        %a#show-items(href="#" style="display:none") Show Selected items
+        #selected-items(style="height: 30px;")
 
         .thingy-picker

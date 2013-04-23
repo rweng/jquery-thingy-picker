@@ -1,7 +1,7 @@
 /*
 Copyright 2010 Mike Brevoort http://mike.brevoort.com @mbrevoort
 
-v1.0 jquery-facebook-multi-friend-selector
+v1.0 jquery-facebook-multi-item-selector
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,14 +15,14 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-#jfmfs-friend-selector input {
+#jfmfs-item-selector input {
   background-color: #fcfcfc;
   border: 1px solid #ccc;
   font: 11px verdana, arial, helvetica, sans-serif;
   margin: 2px 0;
   padding: 2px 4px;
 }
-.jfmfs-friend {
+.jfmfs-item {
   cursor: pointer;
   display: block;
   float: left;
@@ -37,21 +37,21 @@ limitations under the License.
   -moz-user-select: none;
   overflow: hidden;
 }
-.jfmfs-friend img {
+.jfmfs-item img {
   border: 1px solid #CCC;
   float: left;
   margin: 0;
 }
-.jfmfs-friend.selected img {
+.jfmfs-item.selected img {
   border: 1px solid #233E75;
 }
-.jfmfs-friend div {
+.jfmfs-item div {
   color: #111111;
   font-size: 11px;
   overflow: hidden;
   padding: 2px 0 0 6px;
 }
-#jfmfs-friend-container {
+#jfmfs-item-container {
   overflow: scroll;
   overflow-x: hidden;
   -ms-overflow-x: hidden;
@@ -61,7 +61,7 @@ limitations under the License.
   color: #333;
   font-size: 12px;
 }
-#jfmfs-friend-selector {
+#jfmfs-item-selector {
   width: 725px;
   max-width: 100%;
   height: 430px;
@@ -76,7 +76,7 @@ limitations under the License.
   height: 25px;
   padding: 2px;
 }
-.jfmfs-friend.selected {
+.jfmfs-item.selected {
   background-color: #3B5998;
   border: 1px solid #3B5998;
   background: #6D84B4;
@@ -92,7 +92,7 @@ limitations under the License.
   /* for firefox 3.6+ */
 
 }
-.jfmfs-friend.selected div {
+.jfmfs-item.selected div {
   color: #FFFFFF;
 }
 .hover {
@@ -111,19 +111,19 @@ div.jfmfs-button {
   padding: 2px 5px;
   text-decoration: none;
 }
-#jfmfs-friend-selector a.filter-link:link,
+#jfmfs-item-selector a.filter-link:link,
 a.filter-link:visited {
   font-weight: bold;
   text-decoration: none;
 }
-#jfmfs-friend-selector a.filter-link:hover,
-#jfmfs-friend-selector a.selected {
+#jfmfs-item-selector a.filter-link:hover,
+#jfmfs-item-selector a.selected {
   background-color: #6D84B4;
   -moz-border-radius: 5px;
   -webkit-border-radius: 5px;
   color: #FFFFFF;
 }
-#jfmfs-friend-selector .filter-link {
+#jfmfs-item-selector .filter-link {
   margin: 4px 5px 4px 5px;
   padding: 3px 5px 3px 5px;
 }
@@ -133,7 +133,7 @@ a.filter-link:visited {
 #jfmfs-inner-header div.jfmfs-button-hover {
   text-decoration: underline;
 }
-#jfmfs-friend-filter-text {
+#jfmfs-item-filter-text {
   height: 23px;
 }
 #jfmfs-inner-header span.jfmfs-title {

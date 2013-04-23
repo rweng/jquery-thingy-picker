@@ -44,21 +44,21 @@
         
         
                               FB.api("/me/friends?fields=id,name,picture", function(response){
-                                var data = $.map(response.data, function(e, i){
+                                var items = $.map(response.data, function(e, i){
                                   return {
                                     id: e.id,
                                     name: e.name,
                                     picture: e.picture.data.url
                                   };
                                 });
-                                $(".fb-example .thingy-picker").thingyPicker({data: data});
+                                $(".fb-example .thingy-picker").thingyPicker({items: items});
                               });
                         });
                   }
         
-        $("#show-friends").on("click", function() {
-            var friendSelector = $("#jfmfs-container").data('jfmfs');
-            $("#selected-friends").html(friendSelector.getSelectedIds().join(', '));
+        $("#show-items").on("click", function() {
+            var itemSelector = $("#jfmfs-container").data('jfmfs');
+            $("#selected-items").html(itemSelector.getSelectedIds().join(', '));
         });
       </script>
       <div id='logged-out-status'>
@@ -66,8 +66,8 @@
       </div>
       <div>
         <div id='username'></div>
-        <a href='#' id='show-friends' style='display:none'>Show Selected Friends</a>
-        <div id='selected-friends' style='height: 30px;'></div>
+        <a href='#' id='show-items' style='display:none'>Show Selected items</a>
+        <div id='selected-items' style='height: 30px;'></div>
         <div class='thingy-picker'></div>
       </div>
     </div>
