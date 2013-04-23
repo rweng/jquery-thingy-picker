@@ -7,18 +7,18 @@
     elem = $(element)
     obj = this
     settings = $.extend({
-      max_selected: -1,
-      max_selected_message: "{0} of {1} selected",
-      pre_selected_items: [],
-      exclude_items: [],
+      maxSelected: -1,
+      preSelectedItems: [],
+      excludeItems: [],
       itemToHtml: (contact) ->
-        selectedClass = if (contact.id in this.pre_selected_items) then "selected" else ""
+        selectedClass = if (contact.id in this.preSelectedItems) then "selected" else ""
         "<div class='item #{selectedClass}' id='#{contact.id}'><img src='#{contact.picture}'/><div class='item-name'>#{contact.name}</div></div>"
       sorter: (a, b) ->
         x = a.name.toLowerCase()
         y = b.name.toLowerCase()
         ((x < y) ? -1 : ((x > y) ? 1 : 0))
-      , labels: {
+      ,
+      labels: {
         selected: "Selected",
         filter_placeholder: "Start typing a name",
         find_items: "Find items:",
@@ -66,9 +66,9 @@
 
       # handle when a item is clicked for selection
       elem.delegate ".item", 'click', (event) ->
-        onlyOne = settings.max_selected == 1
+        onlyOne = settings.maxSelected == 1
         isSelected = $(this).hasClass("selected")
-        isMaxSelected = $(".item.selected").length >= settings.max_selected
+        isMaxSelected = $(".item.selected").length >= settings.maxSelected
         alreadySelected = item_container.find(".selected").attr('id') == $(this).attr('id')
 
         #if the element is being selected, test if the max number of items have
@@ -97,7 +97,7 @@
               for i in [start...end]
                 aitem = $( all_items[i] )
                 if !aitem.hasClass("hide-non-selected") && !aitem.hasClass("hide-filtered")
-                  if maxSelectedEnabled() && $(".item.selected").length < settings.max_selected
+                  if maxSelectedEnabled() && $(".item.selected").length < settings.maxSelected
                     $( all_items[i] ).addClass("selected")
 
 
@@ -161,16 +161,6 @@
         $(this).removeClass("jfmfs-button-hover")
       )
 
-      # manages lazy loading of images
-      getViewportHeight = ->
-        height = window.innerHeight # Safari, Opera
-        mode = document.compatMode
-
-        if ( (mode || !$.support.boxModel) ) # IE, Gecko
-          height = if mode == 'CSS1Compat' then document.documentElement.clientHeight else document.body.clientHeight # Quirks
-
-        return height
-
       updateSelectedCount = ->
         $("#jfmfs-selected-count").html( selectedCount() )
 
@@ -184,10 +174,10 @@
       $(".item.selected").length
 
     maxSelectedEnabled = ->
-      settings.max_selected > 0
+      settings.maxSelected > 0
 
     updateMaxSelectedMessage = ->
-      message = settings.labels.max_selected_message.replace("{0}", selectedCount()).replace("{1}", settings.max_selected)
+      message = settings.labels.max_selected_message.replace("{0}", selectedCount()).replace("{1}", settings.maxSelected)
       $("#jfmfs-max-selected-wrapper").html( message )
 
     # ----------+----------+----------+----------+----------+----------+----------+
@@ -199,7 +189,7 @@
       "        <span class='jfmfs-title'>#{settings.labels.find_items}</span><input type='text' class='filter' value='#{settings.labels.filter_placeholder}'/>" +
       "        <a class='filter-link selected' id='jfmfs-filter-all' href='#'>#{settings.labels.all}</a>" +
       "        <a class='filter-link' id='jfmfs-filter-selected' href='#'>#{settings.labels.selected} (<span id='jfmfs-selected-count'>0</span>)</a>" +
-      (if settings.max_selected > 0 then "<div id='jfmfs-max-selected-wrapper'></div>" else "") +
+      (if settings.maxSelected > 0 then "<div id='jfmfs-max-selected-wrapper'></div>" else "") +
       "    </div>" +
       "    <div class='items'></div>" +
       "</div>"
@@ -207,7 +197,6 @@
 
     item_container = elem.find(".items")
     container = elem.find(".thingy-picker")
-    preselected_items_graph = arrayToObjectGraph(settings.pre_selected_items)
     buffer = []
     selectedClass = ""
 

@@ -11,6 +11,22 @@ There is a demo at [http://jquery-thingy-picker.herokuapp.com/](http://jquery-th
 
 See the [example/index.html](https://github.com/rweng/jquery-thingy-picker/blob/master/example/index.html) for examples.
 
+## Options:
+
+
+```js
+{
+    items: [{id: 1, name: "test", picture: "http://domain.com/pic.png"}]
+    debug: true,
+    maxSelected: -1,
+    preSelectedItems: [],
+    excludeItems: [],
+    itemToHtml: function(){},
+    sorter: function(){},
+    labels: {} // see jquery-thingy-picker.js
+}
+```
+
 # Development
 
 Install and start server:

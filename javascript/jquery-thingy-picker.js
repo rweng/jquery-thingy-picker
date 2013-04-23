@@ -5,20 +5,19 @@
     var ThingyPicker;
 
     ThingyPicker = function(element, options) {
-      var arrayToObjectGraph, buffer, container, elem, init, item_container, items_per_row, lastSelected, maxSelectedEnabled, obj, preselected_items_graph, selectedClass, selectedCount, settings, updateMaxSelectedMessage;
+      var arrayToObjectGraph, buffer, container, elem, init, item_container, items_per_row, lastSelected, maxSelectedEnabled, obj, selectedClass, selectedCount, settings, updateMaxSelectedMessage;
 
       items_per_row = 0;
       elem = $(element);
       obj = this;
       settings = $.extend({
-        max_selected: -1,
-        max_selected_message: "{0} of {1} selected",
-        pre_selected_items: [],
-        exclude_items: [],
+        maxSelected: -1,
+        preSelectedItems: [],
+        excludeItems: [],
         itemToHtml: function(contact) {
           var selectedClass, _ref;
 
-          selectedClass = (_ref = contact.id, __indexOf.call(this.pre_selected_items, _ref) >= 0) ? "selected" : "";
+          selectedClass = (_ref = contact.id, __indexOf.call(this.preSelectedItems, _ref) >= 0) ? "selected" : "";
           return "<div class='item " + selectedClass + "' id='" + contact.id + "'><img src='" + contact.picture + "'/><div class='item-name'>" + contact.name + "</div></div>";
         },
         sorter: function(a, b) {
@@ -75,15 +74,15 @@
         return all_items.removeClass("selected");
       };
       init = function() {
-        var all_items, getViewportHeight, updateSelectedCount;
+        var all_items, updateSelectedCount;
 
         all_items = $(".item", elem);
         elem.delegate(".item", 'click', function(event) {
           var aitem, alreadySelected, end, i, isMaxSelected, isSelected, lastIndex, onlyOne, selIndex, start, _i;
 
-          onlyOne = settings.max_selected === 1;
+          onlyOne = settings.maxSelected === 1;
           isSelected = $(this).hasClass("selected");
-          isMaxSelected = $(".item.selected").length >= settings.max_selected;
+          isMaxSelected = $(".item.selected").length >= settings.maxSelected;
           alreadySelected = item_container.find(".selected").attr('id') === $(this).attr('id');
           if (!onlyOne && !isSelected && maxSelectedEnabled() && isMaxSelected) {
             return;
@@ -105,7 +104,7 @@
                 for (i = _i = start; start <= end ? _i < end : _i > end; i = start <= end ? ++_i : --_i) {
                   aitem = $(all_items[i]);
                   if (!aitem.hasClass("hide-non-selected") && !aitem.hasClass("hide-filtered")) {
-                    if (maxSelectedEnabled() && $(".item.selected").length < settings.max_selected) {
+                    if (maxSelectedEnabled() && $(".item.selected").length < settings.maxSelected) {
                       $(all_items[i]).addClass("selected");
                     }
                   }
@@ -167,16 +166,6 @@
         }, function() {
           return $(this).removeClass("jfmfs-button-hover");
         });
-        getViewportHeight = function() {
-          var height, mode;
-
-          height = window.innerHeight;
-          mode = document.compatMode;
-          if (mode || !$.support.boxModel) {
-            height = mode === 'CSS1Compat' ? document.documentElement.clientHeight : document.body.clientHeight;
-          }
-          return height;
-        };
         updateSelectedCount = function() {
           return $("#jfmfs-selected-count").html(selectedCount());
         };
@@ -188,18 +177,17 @@
         return $(".item.selected").length;
       };
       maxSelectedEnabled = function() {
-        return settings.max_selected > 0;
+        return settings.maxSelected > 0;
       };
       updateMaxSelectedMessage = function() {
         var message;
 
-        message = settings.labels.max_selected_message.replace("{0}", selectedCount()).replace("{1}", settings.max_selected);
+        message = settings.labels.max_selected_message.replace("{0}", selectedCount()).replace("{1}", settings.maxSelected);
         return $("#jfmfs-max-selected-wrapper").html(message);
       };
-      elem.html("<div class='thingy-picker'>" + "    <div class='inner-header'>" + ("        <span class='jfmfs-title'>" + settings.labels.find_items + "</span><input type='text' class='filter' value='" + settings.labels.filter_placeholder + "'/>") + ("        <a class='filter-link selected' id='jfmfs-filter-all' href='#'>" + settings.labels.all + "</a>") + ("        <a class='filter-link' id='jfmfs-filter-selected' href='#'>" + settings.labels.selected + " (<span id='jfmfs-selected-count'>0</span>)</a>") + (settings.max_selected > 0 ? "<div id='jfmfs-max-selected-wrapper'></div>" : "") + "    </div>" + "    <div class='items'></div>" + "</div>");
+      elem.html("<div class='thingy-picker'>" + "    <div class='inner-header'>" + ("        <span class='jfmfs-title'>" + settings.labels.find_items + "</span><input type='text' class='filter' value='" + settings.labels.filter_placeholder + "'/>") + ("        <a class='filter-link selected' id='jfmfs-filter-all' href='#'>" + settings.labels.all + "</a>") + ("        <a class='filter-link' id='jfmfs-filter-selected' href='#'>" + settings.labels.selected + " (<span id='jfmfs-selected-count'>0</span>)</a>") + (settings.maxSelected > 0 ? "<div id='jfmfs-max-selected-wrapper'></div>" : "") + "    </div>" + "    <div class='items'></div>" + "</div>");
       item_container = elem.find(".items");
       container = elem.find(".thingy-picker");
-      preselected_items_graph = arrayToObjectGraph(settings.pre_selected_items);
       buffer = [];
       selectedClass = "";
       $.each(settings.items, function(i, item) {
