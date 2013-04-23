@@ -17,7 +17,8 @@ Install and start server:
 
     bundle install
     rvmsudo bundle exec ghost add jquery-thingy-picker.herokuapp.com
-    foreman start
+    rake serve # for starting the server
+    guard # during development
 
 Remove from hosts file:
 
