@@ -1,0 +1,75 @@
+<!-- do not edit the index.html, but the index.html.haml -->
+<!DOCTYPE html>
+<html lang='en'>
+  <head>
+    <meta charset='utf-8'>
+    <meta content='IE=Edge,chrome=1' http-equiv='X-UA-Compatible'>
+    <meta content='width=device-width, initial-scale=1.0' name='viewport'>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
+    <script src='/js/jquery-thingy-picker.js' type='text/javascript'></script>
+    <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
+    <!--[if lt IE 9]>
+      <script src='http://html5shim.googlecode.com/svn/trunk/html5.js' type='text/javascript'></script>
+    <![endif]-->
+    <!--[if IE]>  <![endif]-->
+    <link href='/css/jquery-thingy-picker.css' rel='stylesheet' type='text/css'>
+  </head>
+  <body>
+    <div class='fb-example'>
+      <div id="fb-root"></div>
+      <script src="http://connect.facebook.net/en_US/all.js"></script>
+      <script>
+        FB.init({appId: '113738725493871', cookie: true});
+        FB.getLoginStatus(function(response) {
+                            if (response.session) {
+                              init();
+                            } else {
+                              // no user session available, someone you dont know
+                            }
+                        });
+        
+         function login() {
+                            FB.login(function(response) {
+                                if (response.status === "connected") {
+                                    init();
+                                } else {
+                                    alert('Login Failed!');
+                                }
+                            });
+                        }
+        
+        function init() {
+                          FB.api('/me', function(response) {
+                              $("#username").html("<img src='https://graph.facebook.com/" + response.id + "/picture'/><div>" + response.name + "</div>");
+        
+        
+                              FB.api("/me/friends?fields=id,name,picture", function(response){
+                                var data = $.map(response.data, function(e, i){
+                                  return {
+                                    id: e.id,
+                                    name: e.name,
+                                    picture: e.picture.data.url
+                                  };
+                                });
+                                $(".fb-example .thingy-picker").thingyPicker({data: data});
+                              });
+                        });
+                  }
+        
+        $("#show-friends").on("click", function() {
+            var friendSelector = $("#jfmfs-container").data('jfmfs');
+            $("#selected-friends").html(friendSelector.getSelectedIds().join(', '));
+        });
+      </script>
+      <div id='logged-out-status'>
+        <a href='javascript:login()'>Login</a>
+      </div>
+      <div>
+        <div id='username'></div>
+        <a href='#' id='show-friends' style='display:none'>Show Selected Friends</a>
+        <div id='selected-friends' style='height: 30px;'></div>
+        <div class='thingy-picker'></div>
+      </div>
+    </div>
+  </body>
+</html>
