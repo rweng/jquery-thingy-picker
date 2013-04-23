@@ -77,6 +77,10 @@ limitations under the License.
       -moz-user-select: none;
       overflow: hidden;
 
+      &.hide-non-selected, &.hide-filtered {
+        display: none;
+      }
+
       img {
         border: 1px solid #CCC;
         float: left;
@@ -137,10 +141,6 @@ limitations under the License.
 
   .hover {
     background-color: #EFF2F7;
-  }
-
-  .hide-non-selected, .hide-filtered {
-    display: none;
   }
 
   div.jfmfs-button {

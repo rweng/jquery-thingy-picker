@@ -15,7 +15,27 @@
     <link href='/css/jquery-thingy-picker.css' rel='stylesheet' type='text/css'>
   </head>
   <body>
+    <div class='js-example'>
+      <h1>JavaScript Example</h1>
+      <div class='picker'></div>
+      <script>
+        $('.js-example .picker').thingyPicker({items: [{
+          id: 1,
+          name: "50x50",
+          picture: "http://placehold.it/50x50"
+        },{
+          id: 2,
+          name: "50x100",
+          picture: "http://placehold.it/50x100"
+        },{
+          id: 3,
+          name: "100x50",
+          picture: "http://placehold.it/100x50"
+        }]});
+      </script>
+    </div>
     <div class='fb-example'>
+      <h1>Facebook Example</h1>
       <div id="fb-root"></div>
       <script src="http://connect.facebook.net/en_US/all.js"></script>
       <div id='logged-out-status'>

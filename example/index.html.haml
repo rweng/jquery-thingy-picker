@@ -19,7 +19,27 @@
     %link(rel="stylesheet" type="text/css" href="/css/jquery-thingy-picker.css")
 
   %body
+    .js-example
+      %h1 JavaScript Example
+      .picker
+      :javascript
+        $('.js-example .picker').thingyPicker({items: [{
+          id: 1,
+          name: "50x50",
+          picture: "http://placehold.it/50x50"
+        },{
+          id: 2,
+          name: "50x100",
+          picture: "http://placehold.it/50x100"
+        },{
+          id: 3,
+          name: "100x50",
+          picture: "http://placehold.it/100x50"
+        }]});
+
+
     .fb-example
+      %h1 Facebook Example
       <div id="fb-root"></div>
       <script src="http://connect.facebook.net/en_US/all.js"></script>
 

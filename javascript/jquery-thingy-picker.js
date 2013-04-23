@@ -156,12 +156,11 @@
           clearTimeout(keyUpTimer);
           return keyUpTimer = setTimeout(function() {
             if (filter === '') {
-              all_items.removeClass("hide-filtered");
+              return all_items.removeClass("hide-filtered");
             } else {
-
+              container.find(".item-name:not(:Contains(" + filter + "))").parent().addClass("hide-filtered");
+              return container.find(".item-name:Contains(" + filter + ")").parent().removeClass("hide-filtered");
             }
-            container.find(".item-name:not(:Contains(" + filter + "))").parent().addClass("hide-filtered");
-            return container.find(".item-name:Contains(" + filter + ")").parent().removeClass("hide-filtered");
           }, 400);
         }).focus(function() {
           if ($.trim($(this).val()) === 'Start typing a name') {

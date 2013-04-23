@@ -68,6 +68,10 @@ limitations under the License.
   -moz-user-select: none;
   overflow: hidden;
 }
+.thingy-picker .items .item.hide-non-selected,
+.thingy-picker .items .item.hide-filtered {
+  display: none;
+}
 .thingy-picker .items .item img {
   border: 1px solid #CCC;
   float: left;
@@ -123,10 +127,6 @@ limitations under the License.
 }
 .thingy-picker .hover {
   background-color: #EFF2F7;
-}
-.thingy-picker .hide-non-selected,
-.thingy-picker .hide-filtered {
-  display: none;
 }
 .thingy-picker div.jfmfs-button {
   background: none repeat scroll 0 0 #6D84B4;
