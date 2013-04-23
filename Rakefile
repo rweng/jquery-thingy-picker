@@ -4,7 +4,7 @@ task :serve do
     require 'launchy'
     sleep 1
     puts "Opening in browser ..."
-    Launchy.open("http://thingy.local:9292")
+    Launchy.open("http://jquery-thingy-picker.herokuapp.com:9292")
   end
 
   require "rack"
