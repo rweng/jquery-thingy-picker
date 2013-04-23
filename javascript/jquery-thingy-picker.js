@@ -75,20 +75,11 @@
         return all_items.removeClass("selected");
       };
       init = function() {
-        var all_items, first_element_offset_px, getViewportHeight, i, item_height_px, updateSelectedCount, _i, _ref;
+        var all_items, getViewportHeight, updateSelectedCount;
 
         all_items = $(".item", elem);
-        first_element_offset_px = all_items.first().offset().top;
-        for (i = _i = 0, _ref = all_items.length; 0 <= _ref ? _i < _ref : _i > _ref; i = 0 <= _ref ? ++_i : --_i) {
-          if ($(all_items[i]).offset().top === first_element_offset_px) {
-            items_per_row++;
-          } else {
-            item_height_px = $(all_items[i]).offset().top - first_element_offset_px;
-            break;
-          }
-        }
         elem.delegate(".item", 'click', function(event) {
-          var aitem, alreadySelected, end, isMaxSelected, isSelected, lastIndex, onlyOne, selIndex, start, _j;
+          var aitem, alreadySelected, end, i, isMaxSelected, isSelected, lastIndex, onlyOne, selIndex, start, _i;
 
           onlyOne = settings.max_selected === 1;
           isSelected = $(this).hasClass("selected");
@@ -111,7 +102,7 @@
                 lastIndex = lastSelected.index();
                 end = Math.max(selIndex, lastIndex);
                 start = Math.min(selIndex, lastIndex);
-                for (i = _j = start; start <= end ? _j < end : _j > end; i = start <= end ? ++_j : --_j) {
+                for (i = _i = start; start <= end ? _i < end : _i > end; i = start <= end ? ++_i : --_i) {
                   aitem = $(all_items[i]);
                   if (!aitem.hasClass("hide-non-selected") && !aitem.hasClass("hide-filtered")) {
                     if (maxSelectedEnabled() && $(".item.selected").length < settings.max_selected) {
@@ -205,7 +196,7 @@
         message = settings.labels.max_selected_message.replace("{0}", selectedCount()).replace("{1}", settings.max_selected);
         return $("#jfmfs-max-selected-wrapper").html(message);
       };
-      elem.html("<div class='thingy-picker'>" + "    <div class='inner-header'>" + ("        <span class='jfmfs-title'>" + settings.labels.find_items + "</span><input type='text' class='filter' value='" + settings.labels.filter_placeholder + "'/>") + ("        <a class='filter-link selected' id='jfmfs-filter-all' href='#'>" + settings.labels.all + "</a>") + ("        <a class='filter-link' id='jfmfs-filter-selected' href='#'>" + settings.labels.selected + " (<span id='jfmfs-selected-count'>0</span>)</a>") + (settings.max_selected > 0 ? "<div id='jfmfs-max-selected-wrapper'></div>" : "" + "    </div>" + "    <div class='items'></div>" + "</div>"));
+      elem.html("<div class='thingy-picker'>" + "    <div class='inner-header'>" + ("        <span class='jfmfs-title'>" + settings.labels.find_items + "</span><input type='text' class='filter' value='" + settings.labels.filter_placeholder + "'/>") + ("        <a class='filter-link selected' id='jfmfs-filter-all' href='#'>" + settings.labels.all + "</a>") + ("        <a class='filter-link' id='jfmfs-filter-selected' href='#'>" + settings.labels.selected + " (<span id='jfmfs-selected-count'>0</span>)</a>") + (settings.max_selected > 0 ? "<div id='jfmfs-max-selected-wrapper'></div>" : "") + "    </div>" + "    <div class='items'></div>" + "</div>");
       item_container = elem.find(".items");
       container = elem.find(".thingy-picker");
       preselected_items_graph = arrayToObjectGraph(settings.pre_selected_items);

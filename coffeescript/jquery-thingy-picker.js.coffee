@@ -64,15 +64,6 @@
     init = ->
       all_items = $(".item", elem);
 
-      # calculate items per row
-      first_element_offset_px = all_items.first().offset().top;
-      for i in [0...(all_items.length)]
-        if $(all_items[i]).offset().top == first_element_offset_px
-          items_per_row++
-        else
-          item_height_px = $(all_items[i]).offset().top - first_element_offset_px
-          break
-
       # handle when a item is clicked for selection
       elem.delegate ".item", 'click', (event) ->
         onlyOne = settings.max_selected == 1
@@ -208,7 +199,7 @@
       "        <span class='jfmfs-title'>#{settings.labels.find_items}</span><input type='text' class='filter' value='#{settings.labels.filter_placeholder}'/>" +
       "        <a class='filter-link selected' id='jfmfs-filter-all' href='#'>#{settings.labels.all}</a>" +
       "        <a class='filter-link' id='jfmfs-filter-selected' href='#'>#{settings.labels.selected} (<span id='jfmfs-selected-count'>0</span>)</a>" +
-      if settings.max_selected > 0 then "<div id='jfmfs-max-selected-wrapper'></div>" else "" +
+      (if settings.max_selected > 0 then "<div id='jfmfs-max-selected-wrapper'></div>" else "") +
       "    </div>" +
       "    <div class='items'></div>" +
       "</div>"
