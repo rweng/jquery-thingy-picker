@@ -203,7 +203,7 @@
     # Initialization of container
     # ----------+----------+----------+----------+----------+----------+----------+
     elem.html(
-      "<div id='jfmfs-item-selector'>" +
+      "<div class='jfmfs-item-selector'>" +
       "    <div id='jfmfs-inner-header'>" +
       "        <span class='jfmfs-title'>#{settings.labels.filter_title} </span><input type='text' id='jfmfs-item-filter-text' value='#{settings.labels.filter_default}'/>" +
       "        <a class='filter-link selected' id='jfmfs-filter-all' href='#'>#{settings.labels.all}</a>" +

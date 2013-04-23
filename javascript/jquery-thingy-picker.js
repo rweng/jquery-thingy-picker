@@ -206,7 +206,7 @@
         message = settings.labels.max_selected_message.replace("{0}", selectedCount()).replace("{1}", settings.max_selected);
         return $("#jfmfs-max-selected-wrapper").html(message);
       };
-      elem.html("<div id='jfmfs-item-selector'>" + "    <div id='jfmfs-inner-header'>" + ("        <span class='jfmfs-title'>" + settings.labels.filter_title + " </span><input type='text' id='jfmfs-item-filter-text' value='" + settings.labels.filter_default + "'/>") + ("        <a class='filter-link selected' id='jfmfs-filter-all' href='#'>" + settings.labels.all + "</a>") + ("        <a class='filter-link' id='jfmfs-filter-selected' href='#'>" + settings.labels.selected + " (<span id='jfmfs-selected-count'>0</span>)</a>") + (settings.max_selected > 0 ? "<div id='jfmfs-max-selected-wrapper'></div>" : "" + "    </div>" + "    <div id='jfmfs-item-container'></div>" + "</div>"));
+      elem.html("<div class='jfmfs-item-selector'>" + "    <div id='jfmfs-inner-header'>" + ("        <span class='jfmfs-title'>" + settings.labels.filter_title + " </span><input type='text' id='jfmfs-item-filter-text' value='" + settings.labels.filter_default + "'/>") + ("        <a class='filter-link selected' id='jfmfs-filter-all' href='#'>" + settings.labels.all + "</a>") + ("        <a class='filter-link' id='jfmfs-filter-selected' href='#'>" + settings.labels.selected + " (<span id='jfmfs-selected-count'>0</span>)</a>") + (settings.max_selected > 0 ? "<div id='jfmfs-max-selected-wrapper'></div>" : "" + "    </div>" + "    <div id='jfmfs-item-container'></div>" + "</div>"));
       item_container = elem.find("#jfmfs-item-container");
       container = elem.find("#jfmfs-item-selector");
       preselected_items_graph = arrayToObjectGraph(settings.pre_selected_items);

@@ -15,14 +15,32 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-#jfmfs-item-selector input {
+.jfmfs-item-selector {
+  width: 725px;
+  max-width: 100%;
+  height: 430px;
+  overflow-y: hidden;
+}
+.jfmfs-item-selector a.filter-link:link,
+.jfmfs-item-selector a.filter-link:visited {
+  font-weight: bold;
+  text-decoration: none;
+}
+.jfmfs-item-selector a.filter-link:hover,
+.jfmfs-item-selector a.selected {
+  background-color: #6D84B4;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  color: #FFFFFF;
+}
+.jfmfs-item-selector input {
   background-color: #fcfcfc;
   border: 1px solid #ccc;
   font: 11px verdana, arial, helvetica, sans-serif;
   margin: 2px 0;
   padding: 2px 4px;
 }
-.jfmfs-item {
+.jfmfs-item-selector .jfmfs-item {
   cursor: pointer;
   display: block;
   float: left;
@@ -37,46 +55,12 @@ limitations under the License.
   -moz-user-select: none;
   overflow: hidden;
 }
-.jfmfs-item img {
+.jfmfs-item-selector .jfmfs-item img {
   border: 1px solid #CCC;
   float: left;
   margin: 0;
 }
-.jfmfs-item.selected img {
-  border: 1px solid #233E75;
-}
-.jfmfs-item div {
-  color: #111111;
-  font-size: 11px;
-  overflow: hidden;
-  padding: 2px 0 0 6px;
-}
-#jfmfs-item-container {
-  overflow: scroll;
-  overflow-x: hidden;
-  -ms-overflow-x: hidden;
-  width: 100%;
-  height: 400px;
-  font-family: 'lucida grande', tahoma, verdana, arial, sans-serif;
-  color: #333;
-  font-size: 12px;
-}
-#jfmfs-item-selector {
-  width: 725px;
-  max-width: 100%;
-  height: 430px;
-  overflow-y: hidden;
-}
-#jfmfs-inner-header {
-  background: none repeat scroll 0 0 #F7F7F7;
-  border-bottom: 1px solid #CCCCCC;
-  color: #3B5998;
-  font-size: 11px;
-  font-weight: bold;
-  height: 25px;
-  padding: 2px;
-}
-.jfmfs-item.selected {
+.jfmfs-item-selector .jfmfs-item.selected {
   background-color: #3B5998;
   border: 1px solid #3B5998;
   background: #6D84B4;
@@ -92,17 +76,56 @@ limitations under the License.
   /* for firefox 3.6+ */
 
 }
-.jfmfs-item.selected div {
+.jfmfs-item-selector .jfmfs-item.selected img {
+  border: 1px solid #233E75;
+}
+.jfmfs-item-selector .jfmfs-item.selected div {
   color: #FFFFFF;
 }
-.hover {
+.jfmfs-item-selector .jfmfs-item div {
+  color: #111111;
+  font-size: 11px;
+  overflow: hidden;
+  padding: 2px 0 0 6px;
+}
+.jfmfs-item-selector #jfmfs-item-container {
+  overflow: scroll;
+  overflow-x: hidden;
+  -ms-overflow-x: hidden;
+  width: 100%;
+  height: 400px;
+  font-family: 'lucida grande', tahoma, verdana, arial, sans-serif;
+  color: #333;
+  font-size: 12px;
+}
+.jfmfs-item-selector #jfmfs-inner-header {
+  background: none repeat scroll 0 0 #F7F7F7;
+  border-bottom: 1px solid #CCCCCC;
+  color: #3B5998;
+  font-size: 11px;
+  font-weight: bold;
+  height: 25px;
+  padding: 2px;
+}
+.jfmfs-item-selector #jfmfs-inner-header .filter-link {
+  float: right;
+}
+.jfmfs-item-selector #jfmfs-inner-header div.jfmfs-button-hover {
+  text-decoration: underline;
+}
+.jfmfs-item-selector #jfmfs-inner-header span.jfmfs-title {
+  color: #333333;
+  font-weight: bold;
+  margin: 3px 0 2px;
+}
+.jfmfs-item-selector .hover {
   background-color: #EFF2F7;
 }
-.hide-non-selected,
-.hide-filtered {
+.jfmfs-item-selector .hide-non-selected,
+.jfmfs-item-selector .hide-filtered {
   display: none;
 }
-div.jfmfs-button {
+.jfmfs-item-selector div.jfmfs-button {
   background: none repeat scroll 0 0 #6D84B4;
   border: 1px solid #3B5998;
   color: white;
@@ -111,37 +134,14 @@ div.jfmfs-button {
   padding: 2px 5px;
   text-decoration: none;
 }
-#jfmfs-item-selector a.filter-link:link,
-a.filter-link:visited {
-  font-weight: bold;
-  text-decoration: none;
-}
-#jfmfs-item-selector a.filter-link:hover,
-#jfmfs-item-selector a.selected {
-  background-color: #6D84B4;
-  -moz-border-radius: 5px;
-  -webkit-border-radius: 5px;
-  color: #FFFFFF;
-}
-#jfmfs-item-selector .filter-link {
+.jfmfs-item-selector .filter-link {
   margin: 4px 5px 4px 5px;
   padding: 3px 5px 3px 5px;
 }
-#jfmfs-inner-header .filter-link {
-  float: right;
-}
-#jfmfs-inner-header div.jfmfs-button-hover {
-  text-decoration: underline;
-}
-#jfmfs-item-filter-text {
+.jfmfs-item-selector #jfmfs-item-filter-text {
   height: 23px;
 }
-#jfmfs-inner-header span.jfmfs-title {
-  color: #333333;
-  font-weight: bold;
-  margin: 3px 0 2px;
-}
-#jfmfs-max-selected-wrapper {
+.jfmfs-item-selector #jfmfs-max-selected-wrapper {
   float: right;
   margin: 4px 5px 4px 5px;
   padding: 3px 5px 3px 5px;
