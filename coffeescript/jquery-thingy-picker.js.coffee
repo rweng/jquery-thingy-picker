@@ -215,7 +215,7 @@
     )
 
     item_container = elem.find("#jfmfs-item-container")
-    container = elem.find("#jfmfs-item-selector")
+    container = elem.find(".jfmfs-item-selector")
     preselected_items_graph = arrayToObjectGraph(settings.pre_selected_items)
     buffer = []
     selectedClass = ""
