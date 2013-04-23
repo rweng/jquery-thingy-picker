@@ -4,6 +4,13 @@ This is a contact-/anything-picker based on [Mike Brevoort's excellent jquery-fa
 
 There is a demo at [http://jquery-thingy-picker.herokuapp.com/](http://jquery-thingy-picker.herokuapp.com/).
 
+# Usage
+
+1. Include the css/less and coffeescript/js files in your HTML
+2. call `$(selector).thingyPicker({items: items})` on a dom-node. items must be an array in the format `{id: ..., name: ..., picture: ...}`
+
+See the [example/index.html](https://github.com/rweng/jquery-thingy-picker/blob/master/example/index.html) for examples.
+
 # Development
 
 Install and start server:
