@@ -13,15 +13,15 @@
       exclude_items: [],
       itemToHtml: (contact) ->
         selectedClass = if (contact.id in this.pre_selected_items) then "selected" else ""
-        "<div class='jfmfs-item #{selectedClass}' id='#{contact.id}'><img src='#{contact.picture}'/><div class='item-name'>#{contact.name}</div></div>"
+        "<div class='item #{selectedClass}' id='#{contact.id}'><img src='#{contact.picture}'/><div class='item-name'>#{contact.name}</div></div>"
       sorter: (a, b) ->
         x = a.name.toLowerCase()
         y = b.name.toLowerCase()
         ((x < y) ? -1 : ((x > y) ? 1 : 0))
       , labels: {
         selected: "Selected",
-        filter_default: "Start typing a name",
-        filter_title: "Find items:",
+        filter_placeholder: "Start typing a name",
+        find_items: "Find items:",
         all: "All",
         max_selected_message: "{0} of {1} selected"
       }
@@ -41,14 +41,14 @@
 
     this.getSelectedIds = ->
       ids = []
-      $.each(elem.find(".jfmfs-item.selected"), (i, item) ->
+      $.each(elem.find(".item.selected"), (i, item) ->
         ids.push($(item).attr("id"))
       )
       return ids
 
     this.getSelectedIdsAndNames = ->
       selected = []
-      $.each(elem.find(".jfmfs-item.selected"), (i, item) ->
+      $.each(elem.find(".item.selected"), (i, item) ->
         selected.push( {id: $(item).attr("id"), name: $(item).find(".item-name").text()})
       )
       return selected
@@ -62,7 +62,7 @@
     # ----------+----------+----------+----------+----------+----------+----------+
 
     init = ->
-      all_items = $(".jfmfs-item", elem);
+      all_items = $(".item", elem);
 
       # calculate items per row
       first_element_offset_px = all_items.first().offset().top;
@@ -74,10 +74,10 @@
           break
 
       # handle when a item is clicked for selection
-      elem.delegate ".jfmfs-item", 'click', (event) ->
+      elem.delegate ".item", 'click', (event) ->
         onlyOne = settings.max_selected == 1
         isSelected = $(this).hasClass("selected")
-        isMaxSelected = $(".jfmfs-item.selected").length >= settings.max_selected
+        isMaxSelected = $(".item.selected").length >= settings.max_selected
         alreadySelected = item_container.find(".selected").attr('id') == $(this).attr('id')
 
         #if the element is being selected, test if the max number of items have
@@ -106,7 +106,7 @@
               for i in [start...end]
                 aitem = $( all_items[i] )
                 if !aitem.hasClass("hide-non-selected") && !aitem.hasClass("hide-filtered")
-                  if maxSelectedEnabled() && $(".jfmfs-item.selected").length < settings.max_selected
+                  if maxSelectedEnabled() && $(".item.selected").length < settings.max_selected
                     $( all_items[i] ).addClass("selected")
 
 
@@ -138,14 +138,14 @@
         $(this).addClass("selected")
 
       # hover effect on items
-      elem.find(".jfmfs-item:not(.selected)").on 'hover', (ev) ->
+      elem.find(".item:not(.selected)").on 'hover', (ev) ->
         if (ev.type == 'mouseover')
           $(this).addClass("hover")
         if (ev.type == 'mouseout')
           $(this).removeClass("hover")
 
       # filter as you type
-      elem.find("#jfmfs-item-filter-text").keyup(->
+      elem.find("input.filter").keyup(->
         filter = $(this).val()
         clearTimeout(keyUpTimer)
         keyUpTimer = setTimeout(->
@@ -190,7 +190,7 @@
 
 
     selectedCount = ->
-      $(".jfmfs-item.selected").length
+      $(".item.selected").length
 
     maxSelectedEnabled = ->
       settings.max_selected > 0
@@ -203,19 +203,19 @@
     # Initialization of container
     # ----------+----------+----------+----------+----------+----------+----------+
     elem.html(
-      "<div class='jfmfs-item-selector'>" +
-      "    <div id='jfmfs-inner-header'>" +
-      "        <span class='jfmfs-title'>#{settings.labels.filter_title} </span><input type='text' id='jfmfs-item-filter-text' value='#{settings.labels.filter_default}'/>" +
+      "<div class='thingy-picker'>" +
+      "    <div class='inner-header'>" +
+      "        <span class='jfmfs-title'>#{settings.labels.find_items}</span><input type='text' class='filter' value='#{settings.labels.filter_placeholder}'/>" +
       "        <a class='filter-link selected' id='jfmfs-filter-all' href='#'>#{settings.labels.all}</a>" +
       "        <a class='filter-link' id='jfmfs-filter-selected' href='#'>#{settings.labels.selected} (<span id='jfmfs-selected-count'>0</span>)</a>" +
       if settings.max_selected > 0 then "<div id='jfmfs-max-selected-wrapper'></div>" else "" +
       "    </div>" +
-      "    <div id='jfmfs-item-container'></div>" +
+      "    <div class='items'></div>" +
       "</div>"
     )
 
-    item_container = elem.find("#jfmfs-item-container")
-    container = elem.find(".jfmfs-item-selector")
+    item_container = elem.find(".items")
+    container = elem.find(".thingy-picker")
     preselected_items_graph = arrayToObjectGraph(settings.pre_selected_items)
     buffer = []
     selectedClass = ""
