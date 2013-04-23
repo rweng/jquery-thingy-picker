@@ -5,8 +5,9 @@
     var ThingyPicker;
 
     ThingyPicker = function(element, options) {
-      var all_friends, arrayToObjectGraph, buffer, container, elem, excluded_friends_graph, friend_container, init, lastSelected, obj, preselectedFriends, preselected_friends_graph, selectedClass, settings, sortedFriendData, _ref;
+      var all_friends, arrayToObjectGraph, buffer, container, elem, excluded_friends_graph, friend_container, friends_per_row, init, lastSelected, maxSelectedEnabled, obj, preselectedFriends, preselected_friends_graph, selectedClass, selectedCount, settings, sortedFriendData, updateMaxSelectedMessage;
 
+      friends_per_row = 0;
       elem = $(element);
       obj = this;
       settings = $.extend({
@@ -44,7 +45,7 @@
         return o;
       };
       init = function() {
-        var all_friends, first_element_offset_px, friend_height_px, getViewportHeight, i, showImagesInViewPort, updateSelectedCount, _i, _ref;
+        var all_friends, first_element_offset_px, friend_height_px, getViewportHeight, i, updateSelectedCount, _i, _ref;
 
         all_friends = $(".jfmfs-friend", elem);
         first_element_offset_px = all_friends.first().offset().top;
@@ -129,9 +130,8 @@
             } else {
 
             }
-            container.find(".friend-name:not(:Contains(" + filter(+"))")).parent().addClass("hide-filtered");
-            container.find(".friend-name:Contains(" + filter(+")")).parent().removeClass("hide-filtered");
-            return showImagesInViewPort();
+            container.find(".friend-name:not(:Contains(" + filter + "))").parent().addClass("hide-filtered");
+            return container.find(".friend-name:Contains(" + filter + ")").parent().removeClass("hide-filtered");
           }, 400);
         }).focus(function() {
           if ($.trim($(this).val()) === 'Start typing a name') {
@@ -157,46 +157,26 @@
           }
           return height;
         };
-        showImagesInViewPort = function() {
-          var $el, allVisibleFriends, container_height_px, container_offset_px, elementVisitedCount, foundVisible, scroll_top_px, top_px;
-
-          container_height_px = friend_container.innerHeight();
-          scroll_top_px = friend_container.scrollTop();
-          container_offset_px = friend_container.offset().top;
-          $el = void 0;
-          top_px = void 0;
-          elementVisitedCount = 0;
-          foundVisible = false;
-          allVisibleFriends = $(".jfmfs-friend:not(.hide-filtered )");
-          return $.each(allVisibleFriends, function(i, $el) {
-            elementVisitedCount++;
-            if ($el !== null) {
-              $el = $(allVisibleFriends[i]);
-              top_px = (first_element_offset_px + (friend_height_px * Math.ceil(elementVisitedCount / friends_per_row))) - scroll_top_px - container_offset_px;
-              if (top_px + friend_height_px >= -10 && top_px - friend_height_px < container_height_px) {
-                $el.data('inview', true);
-                $el.trigger('inview', [true]);
-                return foundVisible = true;
-              } else {
-                if (foundVisible) {
-                  return false;
-                }
-              }
-            }
-          });
-        };
         updateSelectedCount = function() {
           return $("#jfmfs-selected-count").html(selectedCount());
         };
-        friend_container.bind('scroll', $.debounce(250, showImagesInViewPort));
         updateMaxSelectedMessage();
-        showImagesInViewPort();
         updateSelectedCount();
         return elem.trigger("jfmfs.friendload.finished");
       };
-      elem.html("<div id='jfmfs-friend-selector'>" + "    <div id='jfmfs-inner-header'>" + "        <span class='jfmfs-title'>" + settings.labels.filter_title + " </span><input type='text' id='jfmfs-friend-filter-text' value='" + settings.labels.filter_default + "'/>" + "        <a class='filter-link selected' id='jfmfs-filter-all' href='#'>" + settings.labels.all + "</a>" + "        <a class='filter-link' id='jfmfs-filter-selected' href='#'>" + settings.labels.selected + " (<span id='jfmfs-selected-count'>0</span>)</a>" + ((_ref = settings.max_selected > 0) != null ? _ref : {
-        "<div id='jfmfs-max-selected-wrapper'></div>": ""
-      }) + "    </div>" + "    <div id='jfmfs-friend-container'></div>" + "</div>");
+      selectedCount = function() {
+        return $(".jfmfs-friend.selected").length;
+      };
+      maxSelectedEnabled = function() {
+        return settings.max_selected > 0;
+      };
+      updateMaxSelectedMessage = function() {
+        var message;
+
+        message = settings.labels.max_selected_message.replace("{0}", selectedCount()).replace("{1}", settings.max_selected);
+        return $("#jfmfs-max-selected-wrapper").html(message);
+      };
+      elem.html("<div id='jfmfs-friend-selector'>" + "    <div id='jfmfs-inner-header'>" + ("        <span class='jfmfs-title'>" + settings.labels.filter_title + " </span><input type='text' id='jfmfs-friend-filter-text' value='" + settings.labels.filter_default + "'/>") + ("        <a class='filter-link selected' id='jfmfs-filter-all' href='#'>" + settings.labels.all + "</a>") + ("        <a class='filter-link' id='jfmfs-filter-selected' href='#'>" + settings.labels.selected + " (<span id='jfmfs-selected-count'>0</span>)</a>") + (settings.max_selected > 0 ? "<div id='jfmfs-max-selected-wrapper'></div>" : "" + "    </div>" + "    <div id='jfmfs-friend-container'></div>" + "</div>"));
       friend_container = elem.find("#jfmfs-friend-container");
       container = elem.find("#jfmfs-friend-selector");
       preselected_friends_graph = arrayToObjectGraph(settings.pre_selected_friends);
@@ -207,10 +187,9 @@
       buffer = [];
       selectedClass = "";
       $.each(settings.data, function(i, friend) {
-        var _ref1;
+        var _ref;
 
-        console.log(friend);
-        selectedClass = (_ref1 = friend.id, __indexOf.call(preselected_friends_graph, _ref1) >= 0) ? "selected" : "";
+        selectedClass = (_ref = friend.id, __indexOf.call(preselected_friends_graph, _ref) >= 0) ? "selected" : "";
         return buffer.push("<div class='jfmfs-friend " + selectedClass + "' id='" + friend.id + "'><img src='" + friend.picture + "'/><div class='friend-name'>" + friend.name + "</div></div>");
       });
       friend_container.append(buffer.join(""));

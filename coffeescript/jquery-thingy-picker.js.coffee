@@ -3,6 +3,7 @@
 (($)->
   ThingyPicker = (element, options) ->
 
+    friends_per_row = 0
     elem = $(element)
     obj = this
     settings = $.extend({
@@ -126,9 +127,8 @@
           if(filter == '')
             all_friends.removeClass("hide-filtered")
           else
-          container.find(".friend-name:not(:Contains(" + filter +"))").parent().addClass("hide-filtered")
-          container.find(".friend-name:Contains(" + filter +")").parent().removeClass("hide-filtered")
-          showImagesInViewPort()
+          container.find(".friend-name:not(:Contains(#{filter}))").parent().addClass("hide-filtered")
+          container.find(".friend-name:Contains(#{filter})").parent().removeClass("hide-filtered")
         , 400)
       ).focus( ->
         if $.trim($(this).val()) == 'Start typing a name'
@@ -155,41 +155,24 @@
 
         return height
 
-      showImagesInViewPort = ->
-        container_height_px = friend_container.innerHeight()
-        scroll_top_px = friend_container.scrollTop()
-        container_offset_px = friend_container.offset().top
-        $el = undefined
-        top_px = undefined
-        elementVisitedCount = 0
-        foundVisible = false
-        allVisibleFriends = $(".jfmfs-friend:not(.hide-filtered )")
-
-        $.each(allVisibleFriends, (i, $el) ->
-          elementVisitedCount++;
-          if($el != null)
-            $el = $(allVisibleFriends[i])
-            top_px = (first_element_offset_px + (friend_height_px * Math.ceil(elementVisitedCount/friends_per_row))) - scroll_top_px - container_offset_px
-            if top_px + friend_height_px >= -10 && top_px - friend_height_px < container_height_px  # give some extra padding for broser differences
-              $el.data('inview', true)
-              $el.trigger('inview', [ true ])
-              foundVisible = true
-            else
-              if(foundVisible)
-                return false
-        )
-
       updateSelectedCount = ->
         $("#jfmfs-selected-count").html( selectedCount() )
 
-      friend_container.bind('scroll', $.debounce( 250, showImagesInViewPort ))
 
       updateMaxSelectedMessage()
-      showImagesInViewPort()
       updateSelectedCount()
       elem.trigger("jfmfs.friendload.finished")
 
 
+    selectedCount = ->
+      $(".jfmfs-friend.selected").length
+
+    maxSelectedEnabled = ->
+      settings.max_selected > 0
+
+    updateMaxSelectedMessage = ->
+      message = settings.labels.max_selected_message.replace("{0}", selectedCount()).replace("{1}", settings.max_selected)
+      $("#jfmfs-max-selected-wrapper").html( message )
 
     # ----------+----------+----------+----------+----------+----------+----------+
     # Initialization of container
@@ -197,10 +180,10 @@
     elem.html(
       "<div id='jfmfs-friend-selector'>" +
       "    <div id='jfmfs-inner-header'>" +
-      "        <span class='jfmfs-title'>" + settings.labels.filter_title + " </span><input type='text' id='jfmfs-friend-filter-text' value='" + settings.labels.filter_default + "'/>" +
-      "        <a class='filter-link selected' id='jfmfs-filter-all' href='#'>" + settings.labels.all + "</a>" +
-      "        <a class='filter-link' id='jfmfs-filter-selected' href='#'>" + settings.labels.selected + " (<span id='jfmfs-selected-count'>0</span>)</a>" +
-      ((settings.max_selected > 0) ? "<div id='jfmfs-max-selected-wrapper'></div>" : "") +
+      "        <span class='jfmfs-title'>#{settings.labels.filter_title} </span><input type='text' id='jfmfs-friend-filter-text' value='#{settings.labels.filter_default}'/>" +
+      "        <a class='filter-link selected' id='jfmfs-filter-all' href='#'>#{settings.labels.all}</a>" +
+      "        <a class='filter-link' id='jfmfs-filter-selected' href='#'>#{settings.labels.selected} (<span id='jfmfs-selected-count'>0</span>)</a>" +
+      if settings.max_selected > 0 then "<div id='jfmfs-max-selected-wrapper'></div>" else "" +
       "    </div>" +
       "    <div id='jfmfs-friend-container'></div>" +
       "</div>"
@@ -217,7 +200,6 @@
     selectedClass = ""
 
     $.each(settings.data, (i, friend) ->
-      console.log friend
       selectedClass = if (friend.id in preselected_friends_graph) then "selected" else ""
       buffer.push("<div class='jfmfs-friend #{selectedClass}' id='#{friend.id}'><img src='#{friend.picture}'/><div class='friend-name'>#{friend.name}</div></div>")
     );
