@@ -23,6 +23,7 @@ See the [example/index.html](https://github.com/rweng/jquery-thingy-picker/blob/
     excludeItems: [],
     itemToHtml: function(){},
     sorter: function(){},
+    isItemFiltered: function(){},
     labels: {} // see jquery-thingy-picker.js
 }
 ```

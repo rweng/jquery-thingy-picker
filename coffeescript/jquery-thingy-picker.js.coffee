@@ -7,9 +7,12 @@
     elem = $(element)
     obj = this
     settings = $.extend({
-      maxSelected: -1,
-      preSelectedItems: [],
-      excludeItems: [],
+      maxSelected: -1
+      preSelectedItems: []
+      excludeItems: []
+      isItemFiltered: ($item, filterText) ->
+        itemName = $item.find(".item-name").text()
+        not new RegExp(filterText, "i").test(itemName)
       itemToHtml: (contact) ->
         selectedClass = if (contact.id in this.preSelectedItems) then "selected" else ""
         "<div class='item #{selectedClass}' id='#{contact.id}'><img src='#{contact.picture}'/><div class='item-name'>#{contact.name}</div></div>"
@@ -140,11 +143,12 @@
         filter = $(this).val()
         clearTimeout(keyUpTimer)
         keyUpTimer = setTimeout(->
-          if(filter == '')
-            all_items.removeClass("hide-filtered")
-          else
-            container.find(".item-name:not(:Contains(#{filter}))").parent().addClass("hide-filtered")
-            container.find(".item-name:Contains(#{filter})").parent().removeClass("hide-filtered")
+          all_items.each (index, item) ->
+            $item = $(item)
+            if settings.isItemFiltered($item, filter)
+              $item.addClass('hide-filtered')
+            else
+              $item.removeClass('hide-filtered')
         , 400)
       ).focus( ->
         if $.trim($(this).val()) == 'Start typing a name'

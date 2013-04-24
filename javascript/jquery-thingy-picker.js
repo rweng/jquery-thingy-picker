@@ -14,6 +14,12 @@
         maxSelected: -1,
         preSelectedItems: [],
         excludeItems: [],
+        isItemFiltered: function($item, filterText) {
+          var itemName;
+
+          itemName = $item.find(".item-name").text();
+          return !new RegExp(filterText, "i").test(itemName);
+        },
         itemToHtml: function(contact) {
           var selectedClass, _ref;
 
@@ -145,12 +151,16 @@
           filter = $(this).val();
           clearTimeout(keyUpTimer);
           return keyUpTimer = setTimeout(function() {
-            if (filter === '') {
-              return all_items.removeClass("hide-filtered");
-            } else {
-              container.find(".item-name:not(:Contains(" + filter + "))").parent().addClass("hide-filtered");
-              return container.find(".item-name:Contains(" + filter + ")").parent().removeClass("hide-filtered");
-            }
+            return all_items.each(function(index, item) {
+              var $item;
+
+              $item = $(item);
+              if (settings.isItemFiltered($item, filter)) {
+                return $item.addClass('hide-filtered');
+              } else {
+                return $item.removeClass('hide-filtered');
+              }
+            });
           }, 400);
         }).focus(function() {
           if ($.trim($(this).val()) === 'Start typing a name') {
