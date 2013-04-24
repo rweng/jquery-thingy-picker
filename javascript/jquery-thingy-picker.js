@@ -161,10 +161,10 @@
             return $(this).val('Start typing a name');
           }
         });
-        elem.find(".jfmfs-button").hover(function() {
-          return $(this).addClass("jfmfs-button-hover");
+        elem.find(".button").hover(function() {
+          return $(this).addClass("button-hover");
         }, function() {
-          return $(this).removeClass("jfmfs-button-hover");
+          return $(this).removeClass("button-hover");
         });
         updateSelectedCount = function() {
           return $("#jfmfs-selected-count").html(selectedCount());
@@ -183,9 +183,9 @@
         var message;
 
         message = settings.labels.max_selected_message.replace("{0}", selectedCount()).replace("{1}", settings.maxSelected);
-        return $("#jfmfs-max-selected-wrapper").html(message);
+        return $(".max-selected-wrapper").html(message);
       };
-      elem.html("<div class='thingy-picker'>" + "    <div class='inner-header'>" + ("        <span class='jfmfs-title'>" + settings.labels.find_items + "</span><input type='text' class='filter' value='" + settings.labels.filter_placeholder + "'/>") + ("        <a class='filter-link selected' id='jfmfs-filter-all' href='#'>" + settings.labels.all + "</a>") + ("        <a class='filter-link' id='jfmfs-filter-selected' href='#'>" + settings.labels.selected + " (<span id='jfmfs-selected-count'>0</span>)</a>") + (settings.maxSelected > 0 ? "<div id='jfmfs-max-selected-wrapper'></div>" : "") + "    </div>" + "    <div class='items'></div>" + "</div>");
+      elem.html("<div class='thingy-picker'>" + "    <div class='inner-header'>" + ("        <span class='filter-label'>" + settings.labels.find_items + "</span><input type='text' class='filter' value='" + settings.labels.filter_placeholder + "'/>") + ("        <a class='filter-link selected' id='jfmfs-filter-all' href='#'>" + settings.labels.all + "</a>") + ("        <a class='filter-link' id='jfmfs-filter-selected' href='#'>" + settings.labels.selected + " (<span id='jfmfs-selected-count'>0</span>)</a>") + (settings.maxSelected > 0 ? "<div class='max-selected-wrapper'></div>" : "") + "    </div>" + "    <div class='items'></div>" + "</div>");
       item_container = elem.find(".items");
       container = elem.find(".thingy-picker");
       buffer = [];

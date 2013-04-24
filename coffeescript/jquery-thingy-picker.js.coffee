@@ -155,10 +155,10 @@
       )
 
       # hover states on the buttons
-      elem.find(".jfmfs-button").hover( ->
-        $(this).addClass("jfmfs-button-hover")
+      elem.find(".button").hover( ->
+        $(this).addClass("button-hover")
       , ->
-        $(this).removeClass("jfmfs-button-hover")
+        $(this).removeClass("button-hover")
       )
 
       updateSelectedCount = ->
@@ -178,7 +178,7 @@
 
     updateMaxSelectedMessage = ->
       message = settings.labels.max_selected_message.replace("{0}", selectedCount()).replace("{1}", settings.maxSelected)
-      $("#jfmfs-max-selected-wrapper").html( message )
+      $(".max-selected-wrapper").html( message )
 
     # ----------+----------+----------+----------+----------+----------+----------+
     # Initialization of container
@@ -186,10 +186,10 @@
     elem.html(
       "<div class='thingy-picker'>" +
       "    <div class='inner-header'>" +
-      "        <span class='jfmfs-title'>#{settings.labels.find_items}</span><input type='text' class='filter' value='#{settings.labels.filter_placeholder}'/>" +
+      "        <span class='filter-label'>#{settings.labels.find_items}</span><input type='text' class='filter' value='#{settings.labels.filter_placeholder}'/>" +
       "        <a class='filter-link selected' id='jfmfs-filter-all' href='#'>#{settings.labels.all}</a>" +
       "        <a class='filter-link' id='jfmfs-filter-selected' href='#'>#{settings.labels.selected} (<span id='jfmfs-selected-count'>0</span>)</a>" +
-      (if settings.maxSelected > 0 then "<div id='jfmfs-max-selected-wrapper'></div>" else "") +
+      (if settings.maxSelected > 0 then "<div class='max-selected-wrapper'></div>" else "") +
       "    </div>" +
       "    <div class='items'></div>" +
       "</div>"
