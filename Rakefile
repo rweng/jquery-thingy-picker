@@ -1,3 +1,6 @@
+require File.expand_path('../app', __FILE__)
+Application.load_tasks
+
 task :serve do
   # shamelessly stolen from: https://github.com/mojombo/jekyll/blob/master/Rakefile
   Thread.new do
@@ -8,5 +11,6 @@ task :serve do
   end
 
   require "rack"
-  Rack::Server.new(config: File.expand_path("../config.ru", __FILE__), Port: 9292).start
+  port = ENV['PORT'] || 9292
+  Rack::Server.new(config: File.expand_path("../config.ru", __FILE__), Port: port).start
 end
