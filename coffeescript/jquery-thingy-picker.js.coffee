@@ -99,7 +99,7 @@
 
               for i in [start...end]
                 aitem = $( all_items[i] )
-                if !aitem.hasClass("hide-non-selected") && !aitem.hasClass("hide-filtered")
+                if !aitem.hasClass("hide-non-selected") && !aitem.hasClass("filtered")
                   if maxSelectedEnabled() && $(".item.selected").length < settings.maxSelected
                     $( all_items[i] ).addClass("selected")
 
@@ -146,9 +146,9 @@
           all_items.each (index, item) ->
             $item = $(item)
             if settings.isItemFiltered($item, filter)
-              $item.addClass('hide-filtered')
+              $item.addClass('filtered')
             else
-              $item.removeClass('hide-filtered')
+              $item.removeClass('filtered')
         , 400)
       ).focus( ->
         if $.trim($(this).val()) == 'Start typing a name'

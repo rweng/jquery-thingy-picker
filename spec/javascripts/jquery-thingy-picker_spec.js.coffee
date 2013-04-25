@@ -1,5 +1,6 @@
 describe 'jquery-thingy-picker', ->
   $el = undefined
+  WAIT_TIME = 500
 
   beforeEach ->
     $el = $('<div id="#element" />')
@@ -30,13 +31,30 @@ describe 'jquery-thingy-picker', ->
       })
 
     it 'should contain 3 .items', ->
-      expect($el.find(".item:not(.hide-filtered)").length).toBe(3)
+      expect($el.find(".item").length).toBe(3)
 
-    it 'should filter if s.th. is inserted in the filter input', ->
-      runs ->
-        $el.find("input.filter").val("2").trigger('keyup')
 
-      waits 500
+    describe 'Filtering', ->
+      it 'should not be filtered by default', ->
+        expect($el.find(".item.filtered").length).toBe(0)
 
-      runs ->
-        expect($el.find(".item.hide-filtered").length).toBe(2)
+      it 'should filter if s.th. is inserted in the filter input', ->
+        runs ->
+          $el.find("input.filter").val("2").trigger('keyup')
+
+        waits WAIT_TIME
+
+        runs ->
+          expect($el.find(".item.filtered").length).toBe(2)
+
+      it 'should clear the filter if the filter input is cleared', ->
+        runs ->
+          $el.find(".item").addClass('filtered')
+          $el.find("input.filter").val("").trigger('keyup')
+
+        waits WAIT_TIME
+
+        runs ->
+          expect($el.find(".filtered").length).toBe(0)
+
+

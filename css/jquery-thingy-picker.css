@@ -69,7 +69,7 @@ limitations under the License.
   overflow: hidden;
 }
 .thingy-picker .items .item.hide-non-selected,
-.thingy-picker .items .item.hide-filtered {
+.thingy-picker .items .item.filtered {
   display: none;
 }
 .thingy-picker .items .item img {

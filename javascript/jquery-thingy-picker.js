@@ -109,7 +109,7 @@
                 start = Math.min(selIndex, lastIndex);
                 for (i = _i = start; start <= end ? _i < end : _i > end; i = start <= end ? ++_i : --_i) {
                   aitem = $(all_items[i]);
-                  if (!aitem.hasClass("hide-non-selected") && !aitem.hasClass("hide-filtered")) {
+                  if (!aitem.hasClass("hide-non-selected") && !aitem.hasClass("filtered")) {
                     if (maxSelectedEnabled() && $(".item.selected").length < settings.maxSelected) {
                       $(all_items[i]).addClass("selected");
                     }
@@ -156,9 +156,9 @@
 
               $item = $(item);
               if (settings.isItemFiltered($item, filter)) {
-                return $item.addClass('hide-filtered');
+                return $item.addClass('filtered');
               } else {
-                return $item.removeClass('hide-filtered');
+                return $item.removeClass('filtered');
               }
             });
           }, 400);
