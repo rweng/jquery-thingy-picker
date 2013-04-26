@@ -1,9 +1,17 @@
 describe 'jquery-thingy-picker', ->
-  $el = undefined
+  window.$el = undefined
   WAIT_TIME = 500
 
   beforeEach ->
-    $el = $('<div id="#element" />')
+    window.$el = $('<div id="element" />')
+
+    # add a hidden element containing our element to the body, so we can check the css with jquery
+    window.$hidden = $('<div id="hidden" style="display: none;" />')
+    $hidden.append($el)
+    $("body").append($hidden)
+
+  afterEach ->
+    $hidden.remove()
 
   it '#element should be defined', ->
     expect($el.length).toBe(1)
@@ -35,6 +43,10 @@ describe 'jquery-thingy-picker', ->
 
 
     describe 'Filtering', ->
+      visibleItems = ->
+        _.select $el.find('.item'), (i)->
+          $(i).css('display') != 'none'
+
       it 'should not be filtered by default', ->
         expect($el.find(".item.filtered").length).toBe(0)
 
@@ -56,5 +68,30 @@ describe 'jquery-thingy-picker', ->
 
         runs ->
           expect($el.find(".filtered").length).toBe(0)
+
+
+      describe 'Show Selected link', ->
+        it 'should add .filter-unselected to .items', ->
+          runs ->
+            $el.find("#jfmfs-filter-selected").trigger('click')
+
+          waits WAIT_TIME
+
+          runs ->
+            expect($el.find(".items.filter-unselected").length).toBe(1)
+
+        it 'should hide non-selected items', ->
+          runs ->
+            $el.find(".item:first").trigger('click')
+            $el.find("#jfmfs-filter-selected").trigger('click')
+
+          waits WAIT_TIME
+
+          runs ->
+            expect($el.find(".item.selected").length).toBe(1)
+            expect($el.find(".items.filter-unselected").length).toBe(1)
+            expect(visibleItems().length).toBe(1)
+
+
 
 

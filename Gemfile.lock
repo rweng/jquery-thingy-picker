@@ -131,6 +131,7 @@ GEM
     thor (0.18.1)
     tilt (1.3.7)
     tzinfo (0.3.37)
+    underscore-rails (1.4.4)
     unindent (1.0)
 
 PLATFORMS
@@ -155,3 +156,4 @@ DEPENDENCIES
   therubyracer
   thin
   tzinfo
+  underscore-rails

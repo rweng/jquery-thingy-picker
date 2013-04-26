@@ -62,6 +62,14 @@ limitations under the License.
     color: #333;
     font-size: 12px;
 
+    &.filter-unselected .item {
+      display: none;
+
+      &.selected {
+        display: block;
+      }
+    }
+
     .item {
       cursor: pointer;
       display: block;
@@ -77,7 +85,7 @@ limitations under the License.
       -moz-user-select: none;
       overflow: hidden;
 
-      &.hide-non-selected, &.filtered {
+      &.filtered {
         display: none;
       }
 

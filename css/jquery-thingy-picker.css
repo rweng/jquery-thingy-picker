@@ -53,6 +53,12 @@ limitations under the License.
   color: #333;
   font-size: 12px;
 }
+.thingy-picker .items.filter-unselected .item {
+  display: none;
+}
+.thingy-picker .items.filter-unselected .item.selected {
+  display: block;
+}
 .thingy-picker .items .item {
   cursor: pointer;
   display: block;
@@ -68,7 +74,6 @@ limitations under the License.
   -moz-user-select: none;
   overflow: hidden;
 }
-.thingy-picker .items .item.hide-non-selected,
 .thingy-picker .items .item.filtered {
   display: none;
 }

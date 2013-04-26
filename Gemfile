@@ -22,4 +22,5 @@ gem 'thin'
 
 gem 'jasminerice'
 gem 'jquery-rails'
+gem 'underscore-rails'
 gem 'guard-jasmine'

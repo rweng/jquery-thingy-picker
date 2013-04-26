@@ -117,8 +117,9 @@
         elem.trigger("jfmfs.selection.changed", [obj.getSelectedIdsAndNames()]);
 
       # filter by selected, hide all non-selected
-      $("#jfmfs-filter-selected").click (event) ->
+      elem.find("#jfmfs-filter-selected").click (event) ->
         event.preventDefault()
+        elem.find(".items").addClass("filter-unselected")
 
         all_items.not(".selected").addClass("hide-non-selected")
         $(".filter-link").removeClass("selected")
@@ -192,7 +193,7 @@
       "    <div class='inner-header'>" +
       "        <span class='filter-label'>#{settings.labels.find_items}</span><input type='text' class='filter' value='#{settings.labels.filter_placeholder}'/>" +
       "        <a class='filter-link selected' id='jfmfs-filter-all' href='#'>#{settings.labels.all}</a>" +
-      "        <a class='filter-link' id='jfmfs-filter-selected' href='#'>#{settings.labels.selected} (<span id='jfmfs-selected-count'>0</span>)</a>" +
+      "        <a class='filter-link' data-tp-action='filterSelected' id='jfmfs-filter-selected' href='#'>#{settings.labels.selected} (<span id='jfmfs-selected-count'>0</span>)</a>" +
       (if settings.maxSelected > 0 then "<div class='max-selected-wrapper'></div>" else "") +
       "    </div>" +
       "    <div class='items'></div>" +

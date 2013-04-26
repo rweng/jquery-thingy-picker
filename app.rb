@@ -6,6 +6,7 @@ require 'jasminerice'
 require 'guard/jasmine'
 require 'sprockets/railtie'
 require 'jquery-rails'
+require 'underscore-rails'
 
 class Application < Rails::Application
   config.cache_classes = true
@@ -13,6 +14,7 @@ class Application < Rails::Application
   config.assets.enabled = true
   config.assets.version = '1.0'
   config.assets.paths << File.expand_path('coffeescript', Rails.root)
+  config.assets.paths << File.expand_path('css', Rails.root)
   config.secret_token = '9696be98e32a5f213730cb7ed6161c79'
 
   # insert own ActionDispatch::Static

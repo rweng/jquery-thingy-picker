@@ -125,8 +125,9 @@
           }
           return elem.trigger("jfmfs.selection.changed", [obj.getSelectedIdsAndNames()]);
         });
-        $("#jfmfs-filter-selected").click(function(event) {
+        elem.find("#jfmfs-filter-selected").click(function(event) {
           event.preventDefault();
+          elem.find(".items").addClass("filter-unselected");
           all_items.not(".selected").addClass("hide-non-selected");
           $(".filter-link").removeClass("selected");
           return $(this).addClass("selected");
@@ -195,7 +196,7 @@
         message = settings.labels.max_selected_message.replace("{0}", selectedCount()).replace("{1}", settings.maxSelected);
         return $(".max-selected-wrapper").html(message);
       };
-      elem.html("<div class='thingy-picker'>" + "    <div class='inner-header'>" + ("        <span class='filter-label'>" + settings.labels.find_items + "</span><input type='text' class='filter' value='" + settings.labels.filter_placeholder + "'/>") + ("        <a class='filter-link selected' id='jfmfs-filter-all' href='#'>" + settings.labels.all + "</a>") + ("        <a class='filter-link' id='jfmfs-filter-selected' href='#'>" + settings.labels.selected + " (<span id='jfmfs-selected-count'>0</span>)</a>") + (settings.maxSelected > 0 ? "<div class='max-selected-wrapper'></div>" : "") + "    </div>" + "    <div class='items'></div>" + "</div>");
+      elem.html("<div class='thingy-picker'>" + "    <div class='inner-header'>" + ("        <span class='filter-label'>" + settings.labels.find_items + "</span><input type='text' class='filter' value='" + settings.labels.filter_placeholder + "'/>") + ("        <a class='filter-link selected' id='jfmfs-filter-all' href='#'>" + settings.labels.all + "</a>") + ("        <a class='filter-link' data-tp-action='filterSelected' id='jfmfs-filter-selected' href='#'>" + settings.labels.selected + " (<span id='jfmfs-selected-count'>0</span>)</a>") + (settings.maxSelected > 0 ? "<div class='max-selected-wrapper'></div>" : "") + "    </div>" + "    <div class='items'></div>" + "</div>");
       item_container = elem.find(".items");
       container = elem.find(".thingy-picker");
       buffer = [];
