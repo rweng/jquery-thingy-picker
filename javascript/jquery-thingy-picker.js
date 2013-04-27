@@ -185,7 +185,7 @@
         return elem.trigger("jfmfs.itemload.finished");
       };
       selectedCount = function() {
-        return $(".item.selected").length;
+        return elem.find(".item.selected").length;
       };
       maxSelectedEnabled = function() {
         return settings.maxSelected > 0;

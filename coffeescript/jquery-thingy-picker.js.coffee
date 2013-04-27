@@ -179,7 +179,7 @@
 
 
     selectedCount = ->
-      $(".item.selected").length
+      elem.find(".item.selected").length
 
     maxSelectedEnabled = ->
       settings.maxSelected > 0

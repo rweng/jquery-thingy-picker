@@ -32,8 +32,11 @@ describe 'jquery-thingy-picker', ->
     $hidden.append($el)
 
     # add an element just to see if the thingy-picker also works if we have two of them on the page
-    $hidden.prepend(makeThingy($('<div id="elementPrepend" />')))
-    $hidden.append(makeThingy($('<div id="elementAppend" />')))
+    # select the first element to make sure that it doesn't effect current
+    $hidden.prepend(pre = makeThingy($('<div id="elementPrepend" />')))
+    pre.find('.item:first').addClass('selected')
+    $hidden.append(post = makeThingy($('<div id="elementAppend" />')))
+    post.find('.item:first').addClass('selected')
 
 
     $("body").append($hidden)
