@@ -126,7 +126,7 @@
         $(this).addClass("selected")
 
       # remove filter, show all
-      elem.find("#jfmfs-filter-all").click (event) ->
+      elem.find("[data-tp-action='filterAll']").click (event) ->
         event.preventDefault()
         elem.find(".items").removeClass("filter-unselected")
 
@@ -169,7 +169,7 @@
       )
 
       updateSelectedCount = ->
-        elem.find("#jfmfs-selected-count").html( selectedCount() )
+        elem.find(".selected-count").html( selectedCount() )
 
 
       updateMaxSelectedMessage()
@@ -194,8 +194,8 @@
       "<div class='thingy-picker'>" +
       "    <div class='inner-header'>" +
       "        <span class='filter-label'>#{settings.labels.find_items}</span><input type='text' class='filter' value='#{settings.labels.filter_placeholder}'/>" +
-      "        <a class='filter-link selected' id='jfmfs-filter-all' href='#'>#{settings.labels.all}</a>" +
-      "        <a class='filter-link' data-tp-action='filterSelected' id='jfmfs-filter-selected' href='#'>#{settings.labels.selected} (<span id='jfmfs-selected-count'>0</span>)</a>" +
+      "        <a class='filter-link selected' data-tp-action='filterAll' href='#'>#{settings.labels.all}</a>" +
+      "        <a class='filter-link' data-tp-action='filterSelected' href='#'>#{settings.labels.selected} (<span class='selected-count'>0</span>)</a>" +
       (if settings.maxSelected > 0 then "<div class='max-selected-wrapper'></div>" else "") +
       "    </div>" +
       "    <div class='items'></div>" +

@@ -84,7 +84,7 @@ describe 'jquery-thingy-picker', ->
       describe 'Show Selected link', ->
         it 'should add .filter-unselected to .items', ->
           runs ->
-            $el.find("#jfmfs-filter-selected").trigger('click')
+            $el.find("[data-tp-action='filterSelected']").trigger('click')
 
           waits WAIT_TIME
 
@@ -94,7 +94,7 @@ describe 'jquery-thingy-picker', ->
         it 'should hide non-selected items', ->
           runs ->
             $el.find(".item:first").trigger('click')
-            $el.find("#jfmfs-filter-selected").trigger('click')
+            $el.find("[data-tp-action='filterSelected']").trigger('click')
 
           waits WAIT_TIME
 
@@ -105,26 +105,26 @@ describe 'jquery-thingy-picker', ->
 
         it 'should update the count of items are selected', ->
           runs ->
-            expect($el.find("#jfmfs-selected-count").text()).toBe("0")
+            expect($el.find(".selected-count").text()).toBe("0")
             $el.find(".item:first").trigger('click')
 
           waits WAIT_TIME
 
           runs ->
-            expect($el.find("#jfmfs-selected-count").text()).toBe("1")
+            expect($el.find(".selected-count").text()).toBe("1")
 
       describe 'Show all link', ->
         it 'should show all items'
 
         it 'should remove .filter-unselected from .items', ->
           runs ->
-            $el.find("#jfmfs-filter-selected").trigger('click')
+            $el.find("[data-tp-action='filterSelected']").trigger('click')
 
           waits WAIT_TIME
 
           runs ->
             expect($el.find(".items.filter-unselected").length).toBe(1)
-            $el.find("#jfmfs-filter-all").trigger('click')
+            $el.find("[data-tp-action='filterAll']").trigger('click')
 
           waits WAIT_TIME
 
