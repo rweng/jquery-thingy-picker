@@ -117,7 +117,7 @@
         elem.trigger("jfmfs.selection.changed", [obj.getSelectedIdsAndNames()]);
 
       # filter by selected, hide all non-selected
-      elem.find("#jfmfs-filter-selected").click (event) ->
+      elem.find("[data-tp-action='filterSelected']").click (event) ->
         event.preventDefault()
         elem.find(".items").addClass("filter-unselected")
 
@@ -126,8 +126,10 @@
         $(this).addClass("selected")
 
       # remove filter, show all
-      $("#jfmfs-filter-all").click (event) ->
+      elem.find("#jfmfs-filter-all").click (event) ->
         event.preventDefault()
+        elem.find(".items").removeClass("filter-unselected")
+
         all_items.removeClass("hide-non-selected")
         $(".filter-link").removeClass("selected")
         $(this).addClass("selected")
@@ -167,7 +169,7 @@
       )
 
       updateSelectedCount = ->
-        $("#jfmfs-selected-count").html( selectedCount() )
+        elem.find("#jfmfs-selected-count").html( selectedCount() )
 
 
       updateMaxSelectedMessage()

@@ -125,15 +125,16 @@
           }
           return elem.trigger("jfmfs.selection.changed", [obj.getSelectedIdsAndNames()]);
         });
-        elem.find("#jfmfs-filter-selected").click(function(event) {
+        elem.find("[data-tp-action='filterSelected']").click(function(event) {
           event.preventDefault();
           elem.find(".items").addClass("filter-unselected");
           all_items.not(".selected").addClass("hide-non-selected");
           $(".filter-link").removeClass("selected");
           return $(this).addClass("selected");
         });
-        $("#jfmfs-filter-all").click(function(event) {
+        elem.find("#jfmfs-filter-all").click(function(event) {
           event.preventDefault();
+          elem.find(".items").removeClass("filter-unselected");
           all_items.removeClass("hide-non-selected");
           $(".filter-link").removeClass("selected");
           return $(this).addClass("selected");
@@ -178,7 +179,7 @@
           return $(this).removeClass("button-hover");
         });
         updateSelectedCount = function() {
-          return $("#jfmfs-selected-count").html(selectedCount());
+          return elem.find("#jfmfs-selected-count").html(selectedCount());
         };
         updateMaxSelectedMessage();
         updateSelectedCount();
