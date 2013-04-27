@@ -2,14 +2,14 @@
 # item must be {id: ..., picture: ..., name: ...}
 (($)->
   ThingyPicker = (element, options) ->
-
-    items_per_row = 0
     elem = $(element)
     obj = this
     settings = $.extend({
+      debug: false
       maxSelected: -1
       preSelectedItems: []
       excludeItems: []
+      items: []
       isItemFiltered: ($item, filterText) ->
         itemName = $item.find(".item-name").text()
         not new RegExp(filterText, "i").test(itemName)
@@ -32,12 +32,6 @@
 
     lastSelected = undefined # used when shift-click is performed to know where to start from to select multiple elements
 
-    arrayToObjectGraph = (a) ->
-      o = {};
-      for i in [0...(a.length)]
-        o[a[i]]=''
-      return o
-
     # ----------+----------+----------+----------+----------+----------+----------+
     # Public functions
     # ----------+----------+----------+----------+----------+----------+----------+
@@ -56,11 +50,18 @@
       )
       return selected
 
+    this.getSelectedItems = ->
+      elem.find('.item.selected')
+
+    this.allItems = ->
+      elem.find('.item')
+
     this.clearSelected = ->
-      all_items.removeClass("selected")
+      obj.allItems().removeClass("selected")
+      return elem
 
 
-# ----------+----------+----------+----------+----------+----------+----------+
+    # ----------+----------+----------+----------+----------+----------+----------+
     # Private functions
     # ----------+----------+----------+----------+----------+----------+----------+
 
@@ -208,35 +209,29 @@
     selectedClass = ""
 
     $.each(settings.items, (i, item) ->
-      buffer.push settings.itemToHtml(item)
+      tmpItem = $(settings.itemToHtml(item))
+      item_container.append tmpItem
+      tmpItem.data('ts-item', item)
     );
-
-    item_container.append(buffer.join(""))
 
     init()
 
     return this
 
-  $.fn.thingyPicker = (options)->
-      this.each ->
-        options = $.extend(
-          debug: false
-        , options || {})
+  $.fn.thingyPicker = (option)->
+    # kinda like bootstrap does it:
+    # https://github.com/twitter/bootstrap/blob/master/js/bootstrap-dropdown.js#L134
+    this.map ->
+      $this = $(this)
+      data = $this.data('thingyPicker')
 
-        if options.debug
-          console.log("thingyPicker on: ", this)
-
-        element = $(this)
-
-        # return early if this element already has a plugin instance
-        return element.data('thingyPicker') if element.data('thingyPicker')
-
-        # pass options to plugin constructor
-        picker = new ThingyPicker(this, options)
-
-        if options.debug
-          console.log "adding thingyPicker to element", element
-
-        element.data("thingyPicker", picker)
+      if !data
+        $this.data('thingyPicker', data = new ThingyPicker(this, option))
+        return this
+      else if (typeof option == 'string')
+        data[option].call($this)
+      else
+        console.log "you should call thingyPicker with initializer or command"
+        return this
 
 )(jQuery)

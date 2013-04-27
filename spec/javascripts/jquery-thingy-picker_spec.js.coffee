@@ -2,26 +2,29 @@ describe 'jquery-thingy-picker', ->
   window.$el = undefined
   WAIT_TIME = 500
 
+  items = ->
+    [{
+      id: 1,
+      name: "Item 1",
+      picture: "http://placehold.it/50x50"
+    },{
+      id: 2,
+      name: "Item 2",
+      picture: "http://placehold.it/50x100"
+    },{
+      id: 3,
+      name: "Item 3",
+      picture: "http://placehold.it/100x50"
+    }]
+
   makeThingy = ($el)->
     $el.thingyPicker({
-      items: [{
-        id: 1,
-        name: "Item 1",
-        picture: "http://placehold.it/50x50"
-      },{
-        id: 2,
-        name: "Item 2",
-        picture: "http://placehold.it/50x100"
-      },{
-        id: 3,
-        name: "Item 3",
-        picture: "http://placehold.it/100x50"
-      }]
+      debug: true
+      items: items()
     })
     $el
 
   beforeEach ->
-
     window.$el = $('<div id="element" />')
 
     # add a hidden element containing our element to the body, so we can check the css with jquery
@@ -29,8 +32,8 @@ describe 'jquery-thingy-picker', ->
     $hidden.append($el)
 
     # add an element just to see if the thingy-picker also works if we have two of them on the page
-    $hidden.prepend(makeThingy($('<div id="element" />')))
-    $hidden.append(makeThingy($('<div id="element" />')))
+    $hidden.prepend(makeThingy($('<div id="elementPrepend" />')))
+    $hidden.append(makeThingy($('<div id="elementAppend" />')))
 
 
     $("body").append($hidden)
@@ -44,13 +47,25 @@ describe 'jquery-thingy-picker', ->
   it 'should be a jquery plugin', ->
     expect($el.thingyPicker).toBeDefined()
 
+  describe 'with no items', ->
+    it 'should initialize correctly', ->
+      expect($el.thingyPicker({debug: true})).toBeDefined()
 
   describe 'with 3 items', ->
     beforeEach ->
       makeThingy($el)
 
-    it 'should contain 3 .items', ->
-      expect($el.find(".item").length).toBe(3)
+    describe 'the 3 items', ->
+      it 'should exist', ->
+        expect($el.find(".item").length).toBe(3)
+
+      it 'should have a data-ts-item attribute with the json', ->
+        # can't use map since jQuery adds additional data (like prevobject) to the result
+        foundItems = []
+        $el.find(".item").each (index, obj) ->
+          foundItems.push $(obj).data('ts-item')
+
+        expect(foundItems).toEqual(items())
 
 
     describe 'Filtering', ->
@@ -131,6 +146,26 @@ describe 'jquery-thingy-picker', ->
           runs ->
             expect($el.find(".items.filter-unselected").length).toBe(0)
 
+
+      describe 'commands', ->
+        describe 'allItems', ->
+          it 'returns all items of all instances', ->
+            expect($el.thingyPicker('allItems')[0].length).toBe(3)
+
+        describe 'getSelectedItems', ->
+          it 'returns the selected items', ->
+            $el.find('.item:first').addClass('selected')
+            expect($el.thingyPicker('getSelectedItems')[0].length).toBe(1)
+
+        describe 'clearSelected', ->
+          it 'returns elements', ->
+            #expect()
+
+          it 'removes .selected from all items', ->
+            $el.find('.item:first').addClass('selected')
+            expect($el.find(".item.selected").length).toBe(1)
+            $el.thingyPicker("clearSelected")
+            expect($el.find(".item.selected").length).toBe(0)
 
 
 

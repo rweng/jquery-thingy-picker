@@ -5,15 +5,16 @@
     var ThingyPicker;
 
     ThingyPicker = function(element, options) {
-      var arrayToObjectGraph, buffer, container, elem, init, item_container, items_per_row, lastSelected, maxSelectedEnabled, obj, selectedClass, selectedCount, settings, updateMaxSelectedMessage;
+      var buffer, container, elem, init, item_container, lastSelected, maxSelectedEnabled, obj, selectedClass, selectedCount, settings, updateMaxSelectedMessage;
 
-      items_per_row = 0;
       elem = $(element);
       obj = this;
       settings = $.extend({
+        debug: false,
         maxSelected: -1,
         preSelectedItems: [],
         excludeItems: [],
+        items: [],
         isItemFiltered: function($item, filterText) {
           var itemName;
 
@@ -46,15 +47,6 @@
         }
       }, options || {});
       lastSelected = void 0;
-      arrayToObjectGraph = function(a) {
-        var i, o, _i, _ref;
-
-        o = {};
-        for (i = _i = 0, _ref = a.length; 0 <= _ref ? _i < _ref : _i > _ref; i = 0 <= _ref ? ++_i : --_i) {
-          o[a[i]] = '';
-        }
-        return o;
-      };
       this.getSelectedIds = function() {
         var ids;
 
@@ -76,8 +68,15 @@
         });
         return selected;
       };
+      this.getSelectedItems = function() {
+        return elem.find('.item.selected');
+      };
+      this.allItems = function() {
+        return elem.find('.item');
+      };
       this.clearSelected = function() {
-        return all_items.removeClass("selected");
+        obj.allItems().removeClass("selected");
+        return elem;
       };
       init = function() {
         var all_items, updateSelectedCount;
@@ -203,31 +202,30 @@
       buffer = [];
       selectedClass = "";
       $.each(settings.items, function(i, item) {
-        return buffer.push(settings.itemToHtml(item));
+        var tmpItem;
+
+        tmpItem = $(settings.itemToHtml(item));
+        item_container.append(tmpItem);
+        return tmpItem.data('ts-item', item);
       });
-      item_container.append(buffer.join(""));
       init();
       return this;
     };
-    return $.fn.thingyPicker = function(options) {
-      return this.each(function() {
-        var element, picker;
+    return $.fn.thingyPicker = function(option) {
+      return this.map(function() {
+        var $this, data;
 
-        options = $.extend({
-          debug: false
-        }, options || {});
-        if (options.debug) {
-          console.log("thingyPicker on: ", this);
+        $this = $(this);
+        data = $this.data('thingyPicker');
+        if (!data) {
+          $this.data('thingyPicker', data = new ThingyPicker(this, option));
+          return this;
+        } else if (typeof option === 'string') {
+          return data[option].call($this);
+        } else {
+          console.log("you should call thingyPicker with initializer or command");
+          return this;
         }
-        element = $(this);
-        if (element.data('thingyPicker')) {
-          return element.data('thingyPicker');
-        }
-        picker = new ThingyPicker(this, options);
-        if (options.debug) {
-          console.log("adding thingyPicker to element", element);
-        }
-        return element.data("thingyPicker", picker);
       });
     };
   })(jQuery);

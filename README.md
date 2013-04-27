@@ -8,10 +8,27 @@ Specs are at [http://jquery-thingy-picker.herokuapp.com/jasmine](http://jquery-t
 
 # Usage
 
-1. Include the css/less and coffeescript/js files in your HTML
-2. call `$(selector).thingyPicker({items: items})` on a dom-node. items must be an array in the format `{id: ..., name: ..., picture: ...}`
-
 See the [example/index.html](https://github.com/rweng/jquery-thingy-picker/blob/master/example/index.html) for examples.
+
+Before all, include the css/less and coffeescript/js files in your HTML.
+
+## Initialization
+
+Call `$(selector).thingyPicker({items: items})` on a dom-node.
+The items must be an array in the format `{id: ..., name: ..., picture: ...}`
+
+## Commands
+
+There are several commands you can use. Commands are invoked via
+
+`$(selector).thingyPicker('command', 'arguments')`
+
+The commands are:
+
+- `allItems`
+- `getSelectedItems`
+- `clearSelected`
+
 
 ## Options:
 
@@ -35,10 +52,10 @@ See the [example/index.html](https://github.com/rweng/jquery-thingy-picker/blob/
 Install and start server:
 
     bundle install
-    rvmsudo bundle exec ghost add jquery-thingy-picker.herokuapp.com
+    rvmsudo ghost add jquery-thingy-picker.herokuapp.com
     rake serve # for starting the server
     guard # during development
 
 Remove from hosts file:
 
-    rvmsudo bundle exec ghost delete jquery-thingy-picker.herokuapp.com
+    rvmsudo ghost delete jquery-thingy-picker.herokuapp.com
