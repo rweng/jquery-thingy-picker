@@ -2,6 +2,12 @@
 # item must be {id: ..., picture: ..., name: ...}
 (($)->
 
+  ###*
+  A ThingyItem is a single, selectable item in a ThingyPicker
+
+  @class ThingyItem
+  @constructor
+  ###
   ThingyItem = (data, picker) ->
     this.$el = $el = $(ThingyItem.itemToHtml(data))
     this.picker = picker
@@ -19,6 +25,10 @@
         $el.addClass('selected')
         $el.trigger('selection-changed')
 
+    ###*
+    @method isSelected
+    @return {Boolean}
+    ###
     this.isSelected = ->
       $el.hasClass("selected")
 

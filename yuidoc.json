@@ -1,0 +1,10 @@
+{
+    "name": "jQuery ThingyPicker",
+    "version": "0.0.1",
+    "options": {
+        "outdir": "doc",
+        "paths": "coffeescript",
+        "extension": ".coffee",
+        "syntaxtype": "coffee"
+    }
+}

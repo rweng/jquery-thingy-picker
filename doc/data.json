@@ -1,0 +1,47 @@
+{
+    "project": {
+        "name": "jQuery ThingyPicker",
+        "version": "0.0.1"
+    },
+    "files": {
+        "coffeescript/jquery-thingy-picker.js.coffee": {
+            "name": "coffeescript/jquery-thingy-picker.js.coffee",
+            "modules": {},
+            "classes": {
+                "ThingyItem": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        }
+    },
+    "modules": {},
+    "classes": {
+        "ThingyItem": {
+            "name": "ThingyItem",
+            "shortname": "ThingyItem",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "file": "coffeescript/jquery-thingy-picker.js.coffee",
+            "line": 5,
+            "description": "A ThingyItem is a single, selectable item in a ThingyPicker",
+            "is_constructor": 1
+        }
+    },
+    "classitems": [
+        {
+            "file": "coffeescript/jquery-thingy-picker.js.coffee",
+            "line": 28,
+            "itemtype": "method",
+            "name": "isSelected",
+            "return": {
+                "description": "",
+                "type": "Boolean"
+            },
+            "class": "ThingyItem"
+        }
+    ],
+    "warnings": []
+}

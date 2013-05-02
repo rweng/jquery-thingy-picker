@@ -17,9 +17,13 @@ class Application < Rails::Application
   config.assets.paths << File.expand_path('css', Rails.root)
   config.secret_token = '9696be98e32a5f213730cb7ed6161c79'
 
+  routes.append do
+    root to: redirect('/example')
+  end
+
   # insert own ActionDispatch::Static
-  config.serve_static_assets = false
-  config.middleware.insert_before ::Rack::Lock, ::ActionDispatch::Static, File.expand_path("../example", __FILE__)
+  # config.serve_static_assets = false
+  # config.middleware.insert_before ::Rack::Lock, ::ActionDispatch::Static, File.expand_path("../example", __FILE__)
 end
 
 Application.initialize!

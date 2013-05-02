@@ -6,6 +6,8 @@ There is a demo at [http://jquery-thingy-picker.herokuapp.com/](http://jquery-th
 
 Specs are at [http://jquery-thingy-picker.herokuapp.com/jasmine](http://jquery-thingy-picker.herokuapp.com/jasmine).
 
+Documentation is at [http://jquery-thingy-picker.herokuapp.com:9292/doc/](http://jquery-thingy-picker.herokuapp.com:9292/doc/).
+
 # Usage
 
 See the [example/index.html](https://github.com/rweng/jquery-thingy-picker/blob/master/example/index.html) for examples.

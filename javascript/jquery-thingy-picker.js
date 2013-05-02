@@ -2,6 +2,13 @@
   var __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
   (function($) {
+    /**
+    A ThingyItem is a single, selectable item in a ThingyPicker
+    
+    @class ThingyItem
+    @constructor
+    */
+
     var ThingyItem, ThingyPicker;
 
     ThingyItem = function(data, picker) {
@@ -23,6 +30,11 @@
           return $el.trigger('selection-changed');
         }
       };
+      /**
+      @method isSelected
+      @return {Boolean}
+      */
+
       this.isSelected = function() {
         return $el.hasClass("selected");
       };
