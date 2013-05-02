@@ -62,11 +62,11 @@ describe 'jquery-thingy-picker', ->
       it 'should exist', ->
         expect($el.find(".item").length).toBe(3)
 
-      it 'should have a data-ts-item attribute with the json', ->
+      it 'has a data-tp-item attribute with ThingyItem instance', ->
         # can't use map since jQuery adds additional data (like prevobject) to the result
         foundItems = []
         $el.find(".item").each (index, obj) ->
-          foundItems.push $(obj).data('ts-item')
+          foundItems.push $(obj).data('tp-item').data
 
         expect(foundItems).toEqual(items())
 
@@ -150,6 +150,21 @@ describe 'jquery-thingy-picker', ->
             expect($el.find(".items.filter-unselected").length).toBe(0)
 
 
+      describe 'events', ->
+        describe 'jfmfs.selection.changed', ->
+          it 'is fired when an element is selected', ->
+            item = $el.find('.item:first').data('tp-item')
+            spy = jasmine.createSpy()
+            $el.on("jfmfs.selection.changed", spy)
+
+            item.select()
+
+            expect(spy).toHaveBeenCalledWith(jasmine.any(jQuery.Event), item)
+
+          it 'is fired when an element is deselected'
+          it 'is fired when the selection is cleared'
+          it 'receives the changed item as argument'
+
       describe 'commands', ->
         describe 'allItems', ->
           it 'returns all items of all instances', ->
@@ -161,8 +176,7 @@ describe 'jquery-thingy-picker', ->
             expect($el.thingyPicker('getSelectedItems')[0].length).toBe(1)
 
         describe 'clearSelected', ->
-          it 'returns elements', ->
-            #expect()
+          it 'returns elements'
 
           it 'removes .selected from all items', ->
             $el.find('.item:first').addClass('selected')

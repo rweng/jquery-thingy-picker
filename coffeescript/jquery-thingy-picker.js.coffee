@@ -1,8 +1,24 @@
 # call with $(el).thingyPicker(items: [item])
 # item must be {id: ..., picture: ..., name: ...}
 (($)->
+
+  ThingyItem = (data, picker) ->
+    this.$node = $node = $(ThingyItem.itemToHtml(data))
+    this.picker = picker
+    this.data = data
+    item = this
+    $node.data("tp-item", this)
+
+    this.select = ->
+      $node.addClass('selected')
+      picker.$el.trigger('jfmfs.selection.changed', item)
+
+    return this
+
+  ThingyItem.itemToHtml = undefined
+
   ThingyPicker = (element, options) ->
-    elem = $(element)
+    this.$el = elem = $(element)
     obj = this
     settings = $.extend({
       debug: false
@@ -14,8 +30,7 @@
         itemName = $item.find(".item-name").text()
         not new RegExp(filterText, "i").test(itemName)
       itemToHtml: (contact) ->
-        selectedClass = if (contact.id in this.preSelectedItems) then "selected" else ""
-        "<div class='item #{selectedClass}' id='#{contact.id}'><img src='#{contact.picture}'/><div class='item-name'>#{contact.name}</div></div>"
+        "<div class='item' id='#{contact.id}'><img src='#{contact.picture}'/><div class='item-name'>#{contact.name}</div></div>"
       sorter: (a, b) ->
         x = a.name.toLowerCase()
         y = b.name.toLowerCase()
@@ -31,6 +46,7 @@
     }, options || {})
 
     lastSelected = undefined # used when shift-click is performed to know where to start from to select multiple elements
+    ThingyItem.itemToHtml = settings.itemToHtml
 
     # ----------+----------+----------+----------+----------+----------+----------+
     # Public functions
@@ -184,6 +200,12 @@
     maxSelectedEnabled = ->
       settings.maxSelected > 0
 
+    # adds a ThingyItem to the ThingyPicker
+    addItem = (item) ->
+      elem.find(".items").append(item.$node)
+      item.select() if item.data.id in settings.preSelectedItems
+
+
     updateMaxSelectedMessage = ->
       message = settings.labels.max_selected_message.replace("{0}", selectedCount()).replace("{1}", settings.maxSelected)
       $(".max-selected-wrapper").html( message )
@@ -208,10 +230,10 @@
     buffer = []
     selectedClass = ""
 
-    $.each(settings.items, (i, item) ->
-      tmpItem = $(settings.itemToHtml(item))
-      item_container.append tmpItem
-      tmpItem.data('ts-item', item)
+    $.each(settings.items, (i, data) ->
+      item = new ThingyItem(data, obj)
+      console.log "item", item
+      addItem(item)
     );
 
     init()

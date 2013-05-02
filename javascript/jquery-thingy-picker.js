@@ -2,12 +2,27 @@
   var __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
   (function($) {
-    var ThingyPicker;
+    var ThingyItem, ThingyPicker;
 
+    ThingyItem = function(data, picker) {
+      var $node, item;
+
+      this.$node = $node = $(ThingyItem.itemToHtml(data));
+      this.picker = picker;
+      this.data = data;
+      item = this;
+      $node.data("tp-item", this);
+      this.select = function() {
+        $node.addClass('selected');
+        return picker.$el.trigger('jfmfs.selection.changed', item);
+      };
+      return this;
+    };
+    ThingyItem.itemToHtml = void 0;
     ThingyPicker = function(element, options) {
-      var buffer, container, elem, init, item_container, lastSelected, maxSelectedEnabled, obj, selectedClass, selectedCount, settings, updateMaxSelectedMessage;
+      var addItem, buffer, container, elem, init, item_container, lastSelected, maxSelectedEnabled, obj, selectedClass, selectedCount, settings, updateMaxSelectedMessage;
 
-      elem = $(element);
+      this.$el = elem = $(element);
       obj = this;
       settings = $.extend({
         debug: false,
@@ -22,10 +37,7 @@
           return !new RegExp(filterText, "i").test(itemName);
         },
         itemToHtml: function(contact) {
-          var selectedClass, _ref;
-
-          selectedClass = (_ref = contact.id, __indexOf.call(this.preSelectedItems, _ref) >= 0) ? "selected" : "";
-          return "<div class='item " + selectedClass + "' id='" + contact.id + "'><img src='" + contact.picture + "'/><div class='item-name'>" + contact.name + "</div></div>";
+          return "<div class='item' id='" + contact.id + "'><img src='" + contact.picture + "'/><div class='item-name'>" + contact.name + "</div></div>";
         },
         sorter: function(a, b) {
           var x, y, _ref, _ref1;
@@ -47,6 +59,7 @@
         }
       }, options || {});
       lastSelected = void 0;
+      ThingyItem.itemToHtml = settings.itemToHtml;
       this.getSelectedIds = function() {
         var ids;
 
@@ -190,6 +203,14 @@
       maxSelectedEnabled = function() {
         return settings.maxSelected > 0;
       };
+      addItem = function(item) {
+        var _ref;
+
+        elem.find(".items").append(item.$node);
+        if (_ref = item.data.id, __indexOf.call(settings.preSelectedItems, _ref) >= 0) {
+          return item.select();
+        }
+      };
       updateMaxSelectedMessage = function() {
         var message;
 
@@ -201,12 +222,12 @@
       container = elem.find(".thingy-picker");
       buffer = [];
       selectedClass = "";
-      $.each(settings.items, function(i, item) {
-        var tmpItem;
+      $.each(settings.items, function(i, data) {
+        var item;
 
-        tmpItem = $(settings.itemToHtml(item));
-        item_container.append(tmpItem);
-        return tmpItem.data('ts-item', item);
+        item = new ThingyItem(data, obj);
+        console.log("item", item);
+        return addItem(item);
       });
       init();
       return this;
