@@ -39,7 +39,7 @@
             "plugin_for": [],
             "extension_for": [],
             "file": "coffeescript/jquery-thingy-picker.js.coffee",
-            "line": 71,
+            "line": 74,
             "description": "Main Class for Picker",
             "is_constructor": 1,
             "params": [
@@ -59,7 +59,14 @@
     "classitems": [
         {
             "file": "coffeescript/jquery-thingy-picker.js.coffee",
-            "line": 23,
+            "line": 19,
+            "itemtype": "event",
+            "name": "selection-changed",
+            "class": "ThingyItem"
+        },
+        {
+            "file": "coffeescript/jquery-thingy-picker.js.coffee",
+            "line": 26,
             "itemtype": "method",
             "name": "on",
             "params": [
@@ -78,14 +85,14 @@
         },
         {
             "file": "coffeescript/jquery-thingy-picker.js.coffee",
-            "line": 31,
+            "line": 34,
             "itemtype": "method",
             "name": "deselect",
             "class": "ThingyItem"
         },
         {
             "file": "coffeescript/jquery-thingy-picker.js.coffee",
-            "line": 39,
+            "line": 42,
             "description": "Marks this item as selected",
             "itemtype": "method",
             "name": "select",
@@ -93,7 +100,7 @@
         },
         {
             "file": "coffeescript/jquery-thingy-picker.js.coffee",
-            "line": 49,
+            "line": 52,
             "itemtype": "method",
             "name": "isSelected",
             "return": {

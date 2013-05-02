@@ -16,6 +16,9 @@
     $el.data("tp-item", this)
     SELECTED_CLASS = 'selected'
     EVENTS = {
+      ###*
+      @event selection-changed
+      ###
       SELECTION_CHANGED: 'selection-changed'
     }
 
