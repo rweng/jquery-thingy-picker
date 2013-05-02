@@ -1,7 +1,8 @@
 YUI.add("yuidoc-meta", function(Y) {
    Y.YUIDoc = { meta: {
     "classes": [
-        "ThingyItem"
+        "ThingyItem",
+        "ThingyPicker"
     ],
     "modules": [],
     "allModules": []

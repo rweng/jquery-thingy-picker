@@ -14,16 +14,37 @@
     this.data = data
     item = this
     $el.data("tp-item", this)
+    SELECTED_CLASS = 'selected'
+    EVENTS = {
+      SELECTION_CHANGED: 'selection-changed'
+    }
 
+
+    ###*
+    @method on
+    @param {jQuery.Event} event
+    @param {Function} handler
+    ###
     this.on = (event, handler) ->
       $el.on(event, handler)
 
+    ###*
+    @method deselect
+    ###
+    this.deselect = ->
+      if item.isSelected()
+        $el.removeClass(SELECTED_CLASS)
+        $el.trigger(EVENTS.SELECTION_CHANGED)
+
+    ###*
+    Marks this item as selected
+
+    @method select
+    ###
     this.select = ->
-      console.log $el.hasClass("selected")
       unless item.isSelected()
-        console.log("selection")
-        $el.addClass('selected')
-        $el.trigger('selection-changed')
+        $el.addClass(SELECTED_CLASS)
+        $el.trigger(EVENTS.SELECTION_CHANGED)
 
     ###*
     @method isSelected
@@ -47,6 +68,14 @@
 
   ThingyItem.itemToHtml = undefined
 
+  ###*
+  Main Class for Picker
+
+  @class ThingyPicker
+  @constructor
+  @param {DomNode} element
+  @param {Object} options
+  ###
   ThingyPicker = (element, options) ->
     this.$el = elem = $(element)
     picker = this
@@ -157,6 +186,7 @@
       item = new ThingyItem(data, picker)
 
       item.$el.on 'selection-changed', ->
+        console.log "triggered"
         updateMaxSelectedMessage()
         updateSelectedCount()
 

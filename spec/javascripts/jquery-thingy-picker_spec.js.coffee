@@ -152,7 +152,7 @@ describe 'jquery-thingy-picker', ->
 
       describe 'events', ->
         describe 'jfmfs.selection.changed', ->
-          it 'is fired when an element is selected', ->
+          it 'is fired when an element is selected or unselected', ->
             item = $el.find('.item:first').data('tp-item')
             spy = jasmine.createSpy()
             $el.on("jfmfs.selection.changed", spy)
@@ -161,7 +161,16 @@ describe 'jquery-thingy-picker', ->
 
             expect(spy).toHaveBeenCalledWith(jasmine.any(jQuery.Event), item)
 
-          it 'is fired when an element is deselected'
+          it 'is fired when an element is deselected', ->
+            item = $el.find('.item:first').data('tp-item')
+            item.select()
+            spy = jasmine.createSpy()
+            $el.on("jfmfs.selection.changed", spy)
+
+            item.deselect()
+
+            expect(spy).toHaveBeenCalledWith(jasmine.any(jQuery.Event), item)
+
           it 'is fired when the selection is cleared'
           it 'receives the changed item as argument'
 

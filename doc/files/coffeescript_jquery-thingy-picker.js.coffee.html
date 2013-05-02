@@ -43,6 +43,8 @@
             
                 <li><a href="../classes/ThingyItem.html">ThingyItem</a></li>
             
+                <li><a href="../classes/ThingyPicker.html">ThingyPicker</a></li>
+            
             </ul>
 
             <ul id="api-modules" class="apis modules">
@@ -102,16 +104,37 @@
     this.data = data
     item = this
     $el.data(&quot;tp-item&quot;, this)
+    SELECTED_CLASS = &#x27;selected&#x27;
+    EVENTS = {
+      SELECTION_CHANGED: &#x27;selection-changed&#x27;
+    }
 
+
+    ###*
+    @method on
+    @param {jQuery.Event} event
+    @param {Function} handler
+    ###
     this.on = (event, handler) -&gt;
       $el.on(event, handler)
 
+    ###*
+    @method deselect
+    ###
+    this.deselect = -&gt;
+      if item.isSelected()
+        $el.removeClass(SELECTED_CLASS)
+        $el.trigger(EVENTS.SELECTION_CHANGED)
+
+    ###*
+    Marks this item as selected
+
+    @method select
+    ###
     this.select = -&gt;
-      console.log $el.hasClass(&quot;selected&quot;)
       unless item.isSelected()
-        console.log(&quot;selection&quot;)
-        $el.addClass(&#x27;selected&#x27;)
-        $el.trigger(&#x27;selection-changed&#x27;)
+        $el.addClass(SELECTED_CLASS)
+        $el.trigger(EVENTS.SELECTION_CHANGED)
 
     ###*
     @method isSelected
@@ -135,6 +158,14 @@
 
   ThingyItem.itemToHtml = undefined
 
+  ###*
+  Main Class for Picker
+
+  @class ThingyPicker
+  @constructor
+  @param {DomNode} element
+  @param {Object} options
+  ###
   ThingyPicker = (element, options) -&gt;
     this.$el = elem = $(element)
     picker = this
@@ -245,6 +276,7 @@
       item = new ThingyItem(data, picker)
 
       item.$el.on &#x27;selection-changed&#x27;, -&gt;
+        console.log &quot;triggered&quot;
         updateMaxSelectedMessage()
         updateSelectedCount()
 

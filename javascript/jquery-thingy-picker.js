@@ -12,22 +12,46 @@
     var ThingyItem, ThingyPicker;
 
     ThingyItem = function(data, picker) {
-      var $el, item;
+      var $el, EVENTS, SELECTED_CLASS, item;
 
       this.$el = $el = $(ThingyItem.itemToHtml(data));
       this.picker = picker;
       this.data = data;
       item = this;
       $el.data("tp-item", this);
+      SELECTED_CLASS = 'selected';
+      EVENTS = {
+        SELECTION_CHANGED: 'selection-changed'
+      };
+      /**
+      @method on
+      @param {jQuery.Event} event
+      @param {Function} handler
+      */
+
       this.on = function(event, handler) {
         return $el.on(event, handler);
       };
+      /**
+      @method deselect
+      */
+
+      this.deselect = function() {
+        if (item.isSelected()) {
+          $el.removeClass(SELECTED_CLASS);
+          return $el.trigger(EVENTS.SELECTION_CHANGED);
+        }
+      };
+      /**
+      Marks this item as selected
+      
+      @method select
+      */
+
       this.select = function() {
-        console.log($el.hasClass("selected"));
         if (!item.isSelected()) {
-          console.log("selection");
-          $el.addClass('selected');
-          return $el.trigger('selection-changed');
+          $el.addClass(SELECTED_CLASS);
+          return $el.trigger(EVENTS.SELECTION_CHANGED);
         }
       };
       /**
@@ -49,6 +73,15 @@
       return this;
     };
     ThingyItem.itemToHtml = void 0;
+    /**
+    Main Class for Picker
+    
+    @class ThingyPicker
+    @constructor
+    @param {DomNode} element
+    @param {Object} options
+    */
+
     ThingyPicker = function(element, options) {
       var addItem, all_items, buffer, container, elem, item_container, lastSelected, maxSelectedEnabled, picker, selectedClass, selectedCount, settings, updateMaxSelectedMessage, updateSelectedCount;
 
@@ -157,6 +190,7 @@
 
         item = new ThingyItem(data, picker);
         item.$el.on('selection-changed', function() {
+          console.log("triggered");
           updateMaxSelectedMessage();
           updateSelectedCount();
           return picker.$el.trigger('jfmfs.selection.changed', item);
