@@ -3,15 +3,35 @@
 (($)->
 
   ThingyItem = (data, picker) ->
-    this.$node = $node = $(ThingyItem.itemToHtml(data))
+    this.$el = $el = $(ThingyItem.itemToHtml(data))
     this.picker = picker
     this.data = data
     item = this
-    $node.data("tp-item", this)
+    $el.data("tp-item", this)
+
+    this.on = (event, handler) ->
+      $el.on(event, handler)
 
     this.select = ->
-      $node.addClass('selected')
-      picker.$el.trigger('jfmfs.selection.changed', item)
+      console.log $el.hasClass("selected")
+      unless item.isSelected()
+        console.log("selection")
+        $el.addClass('selected')
+        $el.trigger('selection-changed')
+
+    this.isSelected = ->
+      $el.hasClass("selected")
+
+    # handle when a item is clicked for selection
+    $el.click (event) ->
+      console.log "clicked"
+      #if the element is being selected, test if the max number of items have
+      #already been selected, if so, just return
+      if picker.hasMaxSelected() and not item.isSelected()
+        console.log("returning since picker.MaxSelected reached")
+        return
+
+      item.select()
 
     return this
 
@@ -19,7 +39,7 @@
 
   ThingyPicker = (element, options) ->
     this.$el = elem = $(element)
-    obj = this
+    picker = this
     settings = $.extend({
       debug: false
       maxSelected: -1
@@ -69,11 +89,14 @@
     this.getSelectedItems = ->
       elem.find('.item.selected')
 
+    this.hasMaxSelected = ->
+      settings.maxSelected >= picker.getSelectedItems().length
+
     this.allItems = ->
       elem.find('.item')
 
     this.clearSelected = ->
-      obj.allItems().removeClass("selected")
+      picker.allItems().removeClass("selected")
       return elem
 
 
@@ -81,118 +104,8 @@
     # Private functions
     # ----------+----------+----------+----------+----------+----------+----------+
 
-    init = ->
-      all_items = $(".item", elem);
-
-      # handle when a item is clicked for selection
-      elem.delegate ".item", 'click', (event) ->
-        onlyOne = settings.maxSelected == 1
-        isSelected = $(this).hasClass("selected")
-        isMaxSelected = $(".item.selected").length >= settings.maxSelected
-        alreadySelected = item_container.find(".selected").attr('id') == $(this).attr('id')
-
-        #if the element is being selected, test if the max number of items have
-        #already been selected, if so, just return
-        if !onlyOne && !isSelected && maxSelectedEnabled() && isMaxSelected
-          return
-
-        # if the max is 1 then unselect the current and select the new
-        if onlyOne && !alreadySelected
-          item_container.find(".selected").removeClass("selected")
-
-        $(this).toggleClass("selected")
-        $(this).removeClass("hover")
-
-        # support shift-click operations to select multiple items at a time
-        if $(this).hasClass("selected")
-          if ( !lastSelected )
-            lastSelected = $(this)
-          else
-            if( event.shiftKey )
-              selIndex = $(this).index()
-              lastIndex = lastSelected.index()
-              end = Math.max(selIndex,lastIndex)
-              start = Math.min(selIndex,lastIndex)
-
-              for i in [start...end]
-                aitem = $( all_items[i] )
-                if !aitem.hasClass("hide-non-selected") && !aitem.hasClass("filtered")
-                  if maxSelectedEnabled() && $(".item.selected").length < settings.maxSelected
-                    $( all_items[i] ).addClass("selected")
-
-
-        # keep track of last selected, this is used for the shift-select functionality
-        lastSelected = $(this)
-
-        # update the count of the total number selected
-        updateSelectedCount()
-
-        if( maxSelectedEnabled() )
-          updateMaxSelectedMessage()
-
-
-        elem.trigger("jfmfs.selection.changed", [obj.getSelectedIdsAndNames()]);
-
-      # filter by selected, hide all non-selected
-      elem.find("[data-tp-action='filterSelected']").click (event) ->
-        event.preventDefault()
-        elem.find(".items").addClass("filter-unselected")
-
-        all_items.not(".selected").addClass("hide-non-selected")
-        $(".filter-link").removeClass("selected")
-        $(this).addClass("selected")
-
-      # remove filter, show all
-      elem.find("[data-tp-action='filterAll']").click (event) ->
-        event.preventDefault()
-        elem.find(".items").removeClass("filter-unselected")
-
-        all_items.removeClass("hide-non-selected")
-        $(".filter-link").removeClass("selected")
-        $(this).addClass("selected")
-
-      # hover effect on items
-      elem.find(".item:not(.selected)").on 'hover', (ev) ->
-        if (ev.type == 'mouseover')
-          $(this).addClass("hover")
-        if (ev.type == 'mouseout')
-          $(this).removeClass("hover")
-
-      # filter as you type
-      elem.find("input.filter").keyup(->
-        filter = $(this).val()
-        clearTimeout(keyUpTimer)
-        keyUpTimer = setTimeout(->
-          all_items.each (index, item) ->
-            $item = $(item)
-            if settings.isItemFiltered($item, filter)
-              $item.addClass('filtered')
-            else
-              $item.removeClass('filtered')
-        , 400)
-      ).focus( ->
-        if $.trim($(this).val()) == 'Start typing a name'
-          $(this).val('')
-      ).blur( ->
-        if($.trim($(this).val()) == '')
-          $(this).val('Start typing a name')
-      )
-
-      # hover states on the buttons
-      elem.find(".button").hover( ->
-        $(this).addClass("button-hover")
-      , ->
-        $(this).removeClass("button-hover")
-      )
-
-      updateSelectedCount = ->
-        elem.find(".selected-count").html( selectedCount() )
-
-
-      updateMaxSelectedMessage()
-      updateSelectedCount()
-      elem.trigger("jfmfs.itemload.finished")
-
+    updateSelectedCount = ->
+      elem.find(".selected-count").html( selectedCount() )
 
     selectedCount = ->
       elem.find(".item.selected").length
@@ -202,7 +115,7 @@
 
     # adds a ThingyItem to the ThingyPicker
     addItem = (item) ->
-      elem.find(".items").append(item.$node)
+      elem.find(".items").append(item.$el)
       item.select() if item.data.id in settings.preSelectedItems
 
 
@@ -231,12 +144,76 @@
     selectedClass = ""
 
     $.each(settings.items, (i, data) ->
-      item = new ThingyItem(data, obj)
+      item = new ThingyItem(data, picker)
+
+      item.$el.on 'selection-changed', ->
+        updateMaxSelectedMessage()
+        updateSelectedCount()
+
+        picker.$el.trigger('jfmfs.selection.changed', item)
+
+
       console.log "item", item
       addItem(item)
     );
 
-    init()
+    all_items = $(".item", elem);
+
+    # filter by selected, hide all non-selected
+    elem.find("[data-tp-action='filterSelected']").click (event) ->
+      event.preventDefault()
+      elem.find(".items").addClass("filter-unselected")
+
+      all_items.not(".selected").addClass("hide-non-selected")
+      $(".filter-link").removeClass("selected")
+      $(this).addClass("selected")
+
+    # remove filter, show all
+    elem.find("[data-tp-action='filterAll']").click (event) ->
+      event.preventDefault()
+      elem.find(".items").removeClass("filter-unselected")
+
+      all_items.removeClass("hide-non-selected")
+      $(".filter-link").removeClass("selected")
+      $(this).addClass("selected")
+
+    # hover effect on items
+    elem.find(".item:not(.selected)").on 'hover', (ev) ->
+      if (ev.type == 'mouseover')
+        $(this).addClass("hover")
+      if (ev.type == 'mouseout')
+        $(this).removeClass("hover")
+
+    # filter as you type
+    elem.find("input.filter").keyup(->
+      filter = $(this).val()
+      clearTimeout(keyUpTimer)
+      keyUpTimer = setTimeout(->
+        all_items.each (index, item) ->
+          $item = $(item)
+          if settings.isItemFiltered($item, filter)
+            $item.addClass('filtered')
+          else
+            $item.removeClass('filtered')
+      , 400)
+    ).focus( ->
+      if $.trim($(this).val()) == 'Start typing a name'
+        $(this).val('')
+    ).blur( ->
+      if($.trim($(this).val()) == '')
+        $(this).val('Start typing a name')
+    )
+
+    # hover states on the buttons
+    elem.find(".button").hover( ->
+      $(this).addClass("button-hover")
+    , ->
+      $(this).removeClass("button-hover")
+    )
+
+    updateMaxSelectedMessage()
+    updateSelectedCount()
+    elem.trigger("jfmfs.itemload.finished")
 
     return this
 

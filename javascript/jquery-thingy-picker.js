@@ -5,25 +5,43 @@
     var ThingyItem, ThingyPicker;
 
     ThingyItem = function(data, picker) {
-      var $node, item;
+      var $el, item;
 
-      this.$node = $node = $(ThingyItem.itemToHtml(data));
+      this.$el = $el = $(ThingyItem.itemToHtml(data));
       this.picker = picker;
       this.data = data;
       item = this;
-      $node.data("tp-item", this);
-      this.select = function() {
-        $node.addClass('selected');
-        return picker.$el.trigger('jfmfs.selection.changed', item);
+      $el.data("tp-item", this);
+      this.on = function(event, handler) {
+        return $el.on(event, handler);
       };
+      this.select = function() {
+        console.log($el.hasClass("selected"));
+        if (!item.isSelected()) {
+          console.log("selection");
+          $el.addClass('selected');
+          return $el.trigger('selection-changed');
+        }
+      };
+      this.isSelected = function() {
+        return $el.hasClass("selected");
+      };
+      $el.click(function(event) {
+        console.log("clicked");
+        if (picker.hasMaxSelected() && !item.isSelected()) {
+          console.log("returning since picker.MaxSelected reached");
+          return;
+        }
+        return item.select();
+      });
       return this;
     };
     ThingyItem.itemToHtml = void 0;
     ThingyPicker = function(element, options) {
-      var addItem, buffer, container, elem, init, item_container, lastSelected, maxSelectedEnabled, obj, selectedClass, selectedCount, settings, updateMaxSelectedMessage;
+      var addItem, all_items, buffer, container, elem, item_container, lastSelected, maxSelectedEnabled, picker, selectedClass, selectedCount, settings, updateMaxSelectedMessage, updateSelectedCount;
 
       this.$el = elem = $(element);
-      obj = this;
+      picker = this;
       settings = $.extend({
         debug: false,
         maxSelected: -1,
@@ -84,118 +102,18 @@
       this.getSelectedItems = function() {
         return elem.find('.item.selected');
       };
+      this.hasMaxSelected = function() {
+        return settings.maxSelected >= picker.getSelectedItems().length;
+      };
       this.allItems = function() {
         return elem.find('.item');
       };
       this.clearSelected = function() {
-        obj.allItems().removeClass("selected");
+        picker.allItems().removeClass("selected");
         return elem;
       };
-      init = function() {
-        var all_items, updateSelectedCount;
-
-        all_items = $(".item", elem);
-        elem.delegate(".item", 'click', function(event) {
-          var aitem, alreadySelected, end, i, isMaxSelected, isSelected, lastIndex, onlyOne, selIndex, start, _i;
-
-          onlyOne = settings.maxSelected === 1;
-          isSelected = $(this).hasClass("selected");
-          isMaxSelected = $(".item.selected").length >= settings.maxSelected;
-          alreadySelected = item_container.find(".selected").attr('id') === $(this).attr('id');
-          if (!onlyOne && !isSelected && maxSelectedEnabled() && isMaxSelected) {
-            return;
-          }
-          if (onlyOne && !alreadySelected) {
-            item_container.find(".selected").removeClass("selected");
-          }
-          $(this).toggleClass("selected");
-          $(this).removeClass("hover");
-          if ($(this).hasClass("selected")) {
-            if (!lastSelected) {
-              lastSelected = $(this);
-            } else {
-              if (event.shiftKey) {
-                selIndex = $(this).index();
-                lastIndex = lastSelected.index();
-                end = Math.max(selIndex, lastIndex);
-                start = Math.min(selIndex, lastIndex);
-                for (i = _i = start; start <= end ? _i < end : _i > end; i = start <= end ? ++_i : --_i) {
-                  aitem = $(all_items[i]);
-                  if (!aitem.hasClass("hide-non-selected") && !aitem.hasClass("filtered")) {
-                    if (maxSelectedEnabled() && $(".item.selected").length < settings.maxSelected) {
-                      $(all_items[i]).addClass("selected");
-                    }
-                  }
-                }
-              }
-            }
-          }
-          lastSelected = $(this);
-          updateSelectedCount();
-          if (maxSelectedEnabled()) {
-            updateMaxSelectedMessage();
-          }
-          return elem.trigger("jfmfs.selection.changed", [obj.getSelectedIdsAndNames()]);
-        });
-        elem.find("[data-tp-action='filterSelected']").click(function(event) {
-          event.preventDefault();
-          elem.find(".items").addClass("filter-unselected");
-          all_items.not(".selected").addClass("hide-non-selected");
-          $(".filter-link").removeClass("selected");
-          return $(this).addClass("selected");
-        });
-        elem.find("[data-tp-action='filterAll']").click(function(event) {
-          event.preventDefault();
-          elem.find(".items").removeClass("filter-unselected");
-          all_items.removeClass("hide-non-selected");
-          $(".filter-link").removeClass("selected");
-          return $(this).addClass("selected");
-        });
-        elem.find(".item:not(.selected)").on('hover', function(ev) {
-          if (ev.type === 'mouseover') {
-            $(this).addClass("hover");
-          }
-          if (ev.type === 'mouseout') {
-            return $(this).removeClass("hover");
-          }
-        });
-        elem.find("input.filter").keyup(function() {
-          var filter, keyUpTimer;
-
-          filter = $(this).val();
-          clearTimeout(keyUpTimer);
-          return keyUpTimer = setTimeout(function() {
-            return all_items.each(function(index, item) {
-              var $item;
-
-              $item = $(item);
-              if (settings.isItemFiltered($item, filter)) {
-                return $item.addClass('filtered');
-              } else {
-                return $item.removeClass('filtered');
-              }
-            });
-          }, 400);
-        }).focus(function() {
-          if ($.trim($(this).val()) === 'Start typing a name') {
-            return $(this).val('');
-          }
-        }).blur(function() {
-          if ($.trim($(this).val()) === '') {
-            return $(this).val('Start typing a name');
-          }
-        });
-        elem.find(".button").hover(function() {
-          return $(this).addClass("button-hover");
-        }, function() {
-          return $(this).removeClass("button-hover");
-        });
-        updateSelectedCount = function() {
-          return elem.find(".selected-count").html(selectedCount());
-        };
-        updateMaxSelectedMessage();
-        updateSelectedCount();
-        return elem.trigger("jfmfs.itemload.finished");
+      updateSelectedCount = function() {
+        return elem.find(".selected-count").html(selectedCount());
       };
       selectedCount = function() {
         return elem.find(".item.selected").length;
@@ -206,7 +124,7 @@
       addItem = function(item) {
         var _ref;
 
-        elem.find(".items").append(item.$node);
+        elem.find(".items").append(item.$el);
         if (_ref = item.data.id, __indexOf.call(settings.preSelectedItems, _ref) >= 0) {
           return item.select();
         }
@@ -225,11 +143,72 @@
       $.each(settings.items, function(i, data) {
         var item;
 
-        item = new ThingyItem(data, obj);
+        item = new ThingyItem(data, picker);
+        item.$el.on('selection-changed', function() {
+          updateMaxSelectedMessage();
+          updateSelectedCount();
+          return picker.$el.trigger('jfmfs.selection.changed', item);
+        });
         console.log("item", item);
         return addItem(item);
       });
-      init();
+      all_items = $(".item", elem);
+      elem.find("[data-tp-action='filterSelected']").click(function(event) {
+        event.preventDefault();
+        elem.find(".items").addClass("filter-unselected");
+        all_items.not(".selected").addClass("hide-non-selected");
+        $(".filter-link").removeClass("selected");
+        return $(this).addClass("selected");
+      });
+      elem.find("[data-tp-action='filterAll']").click(function(event) {
+        event.preventDefault();
+        elem.find(".items").removeClass("filter-unselected");
+        all_items.removeClass("hide-non-selected");
+        $(".filter-link").removeClass("selected");
+        return $(this).addClass("selected");
+      });
+      elem.find(".item:not(.selected)").on('hover', function(ev) {
+        if (ev.type === 'mouseover') {
+          $(this).addClass("hover");
+        }
+        if (ev.type === 'mouseout') {
+          return $(this).removeClass("hover");
+        }
+      });
+      elem.find("input.filter").keyup(function() {
+        var filter, keyUpTimer;
+
+        filter = $(this).val();
+        clearTimeout(keyUpTimer);
+        return keyUpTimer = setTimeout(function() {
+          return all_items.each(function(index, item) {
+            var $item;
+
+            $item = $(item);
+            if (settings.isItemFiltered($item, filter)) {
+              return $item.addClass('filtered');
+            } else {
+              return $item.removeClass('filtered');
+            }
+          });
+        }, 400);
+      }).focus(function() {
+        if ($.trim($(this).val()) === 'Start typing a name') {
+          return $(this).val('');
+        }
+      }).blur(function() {
+        if ($.trim($(this).val()) === '') {
+          return $(this).val('Start typing a name');
+        }
+      });
+      elem.find(".button").hover(function() {
+        return $(this).addClass("button-hover");
+      }, function() {
+        return $(this).removeClass("button-hover");
+      });
+      updateMaxSelectedMessage();
+      updateSelectedCount();
+      elem.trigger("jfmfs.itemload.finished");
       return this;
     };
     return $.fn.thingyPicker = function(option) {

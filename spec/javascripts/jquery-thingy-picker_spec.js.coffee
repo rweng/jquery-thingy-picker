@@ -44,14 +44,14 @@ describe 'jquery-thingy-picker', ->
   afterEach ->
     $hidden.remove()
 
-  it '#element should be defined', ->
+  it '#element is defined', ->
     expect($el.length).toBe(1)
 
-  it 'should be a jquery plugin', ->
+  it 'is a jquery plugin', ->
     expect($el.thingyPicker).toBeDefined()
 
   describe 'with no items', ->
-    it 'should initialize correctly', ->
+    it 'initializes correctly', ->
       expect($el.thingyPicker({debug: true})).toBeDefined()
 
   describe 'with 3 items', ->
@@ -59,7 +59,7 @@ describe 'jquery-thingy-picker', ->
       makeThingy($el)
 
     describe 'the 3 items', ->
-      it 'should exist', ->
+      it 'exists', ->
         expect($el.find(".item").length).toBe(3)
 
       it 'has a data-tp-item attribute with ThingyItem instance', ->
@@ -76,10 +76,10 @@ describe 'jquery-thingy-picker', ->
         _.select $el.find('.item'), (i)->
           $(i).css('display') != 'none'
 
-      it 'should not be filtered by default', ->
+      it 'is not filtered by default', ->
         expect($el.find(".item.filtered").length).toBe(0)
 
-      it 'should filter if s.th. is inserted in the filter input', ->
+      it 'filters if s.th. is inserted in the filter input', ->
         runs ->
           $el.find("input.filter").val("2").trigger('keyup')
 
@@ -88,7 +88,7 @@ describe 'jquery-thingy-picker', ->
         runs ->
           expect($el.find(".item.filtered").length).toBe(2)
 
-      it 'should clear the filter if the filter input is cleared', ->
+      it 'clears the filter if the filter input is cleared', ->
         runs ->
           $el.find(".item").addClass('filtered')
           $el.find("input.filter").val("").trigger('keyup')
@@ -100,7 +100,7 @@ describe 'jquery-thingy-picker', ->
 
 
       describe 'Show Selected link', ->
-        it 'should add .filter-unselected to .items', ->
+        it 'adds .filter-unselected to .items', ->
           runs ->
             $el.find("[data-tp-action='filterSelected']").trigger('click')
 
@@ -109,7 +109,7 @@ describe 'jquery-thingy-picker', ->
           runs ->
             expect($el.find(".items.filter-unselected").length).toBe(1)
 
-        it 'should hide non-selected items', ->
+        it 'hides non-selected items', ->
           runs ->
             $el.find(".item:first").trigger('click')
             $el.find("[data-tp-action='filterSelected']").trigger('click')
@@ -121,7 +121,7 @@ describe 'jquery-thingy-picker', ->
             expect($el.find(".items.filter-unselected").length).toBe(1)
             expect(visibleItems().length).toBe(1)
 
-        it 'should update the count of items are selected', ->
+        it 'updates the count of items are selected', ->
           runs ->
             expect($el.find(".selected-count").text()).toBe("0")
             $el.find(".item:first").trigger('click')
@@ -132,9 +132,9 @@ describe 'jquery-thingy-picker', ->
             expect($el.find(".selected-count").text()).toBe("1")
 
       describe 'Show all link', ->
-        it 'should show all items'
+        it 'shows all items'
 
-        it 'should remove .filter-unselected from .items', ->
+        it 'removes .filter-unselected from .items', ->
           runs ->
             $el.find("[data-tp-action='filterSelected']").trigger('click')
 
