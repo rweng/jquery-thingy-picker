@@ -118,9 +118,9 @@
     */
 
     ThingyPicker = function(element, options) {
-      var addItem, elem, items, lastSelected, maxSelectedEnabled, picker, selectedCount, settings, updateMaxSelectedMessage, updateSelectedCount, updateVisibleItems;
+      var $el, addItem, items, lastSelected, maxSelectedEnabled, picker, selectedCount, settings, updateMaxSelectedMessage, updateSelectedCount, updateVisibleItems;
 
-      this.$el = elem = $(element);
+      this.$el = $el = $(element);
       picker = this;
       settings = $.extend({
         debug: false,
@@ -160,7 +160,7 @@
         var ids;
 
         ids = [];
-        $.each(elem.find(".item.selected"), function(i, item) {
+        $.each($el.find(".item.selected"), function(i, item) {
           return ids.push($(item).attr("id"));
         });
         return ids;
@@ -169,7 +169,7 @@
         var selected;
 
         selected = [];
-        $.each(elem.find(".item.selected"), function(i, item) {
+        $.each($el.find(".item.selected"), function(i, item) {
           return selected.push({
             id: $(item).attr("id"),
             name: $(item).find(".item-name").text()
@@ -178,7 +178,7 @@
         return selected;
       };
       this.getSelectedItems = function() {
-        return elem.find('.item.selected');
+        return $el.find('.item.selected');
       };
       this.hasMaxSelected = function() {
         return settings.maxSelected >= picker.getSelectedItems().length;
@@ -262,10 +262,10 @@
         });
       };
       updateSelectedCount = function() {
-        return elem.find(".selected-count").html(selectedCount());
+        return $el.find(".selected-count").html(selectedCount());
       };
       selectedCount = function() {
-        return elem.find(".item.selected").length;
+        return $el.find(".item.selected").length;
       };
       /**
       @method updateVisibleItems
@@ -295,7 +295,7 @@
       addItem = function(item) {
         var _ref;
 
-        elem.find(".items").append(item.$el);
+        $el.find(".items").append(item.$el);
         if (_ref = item.data.id, __indexOf.call(settings.preSelectedItems, _ref) >= 0) {
           return item.select();
         }
@@ -306,7 +306,7 @@
         message = settings.labels.max_selected_message.replace("{0}", selectedCount()).replace("{1}", settings.maxSelected);
         return $(".max-selected-wrapper").html(message);
       };
-      elem.html("<div class='thingy-picker'>" + "    <div class='inner-header'>" + ("        <span class='filter-label'>" + settings.labels.find_items + "</span><input type='text' placeholder='Start typing a name' class='filter'/>") + ("        <a class='filter-link selected' data-tp-filter='all' href='#'>" + settings.labels.all + "</a>") + ("        <a class='filter-link' data-tp-filter='selected' href='#'>" + settings.labels.selected + " (<span class='selected-count'>0</span>)</a>") + (settings.maxSelected > 0 ? "<div class='max-selected-wrapper'></div>" : "") + "    </div>" + "    <div class='items'></div>" + "</div>");
+      $el.html("<div class='thingy-picker'>" + "    <div class='inner-header'>" + ("        <span class='filter-label'>" + settings.labels.find_items + "</span><input type='text' placeholder='Start typing a name' class='filter'/>") + ("        <a class='filter-link selected' data-tp-filter='all' href='#'>" + settings.labels.all + "</a>") + ("        <a class='filter-link' data-tp-filter='selected' href='#'>" + settings.labels.selected + " (<span class='selected-count'>0</span>)</a>") + (settings.maxSelected > 0 ? "<div class='max-selected-wrapper'></div>" : "") + "    </div>" + "    <div class='items'></div>" + "</div>");
       $.each(settings.items, function(i, data) {
         var item;
 
@@ -335,7 +335,7 @@
         $(this).addClass('selected');
         return updateVisibleItems();
       });
-      elem.find("input.filter").keyup(function() {
+      $el.find("input.filter").keyup(function() {
         return updateVisibleItems();
       });
       updateMaxSelectedMessage();

@@ -108,7 +108,7 @@
   @param {Object} options
   ###
   ThingyPicker = (element, options) ->
-    this.$el = elem = $(element)
+    this.$el = $el = $(element)
     picker = this
     settings = $.extend({
       debug: false
@@ -144,20 +144,20 @@
 
     this.getSelectedIds = ->
       ids = []
-      $.each(elem.find(".item.selected"), (i, item) ->
+      $.each($el.find(".item.selected"), (i, item) ->
         ids.push($(item).attr("id"))
       )
       return ids
 
     this.getSelectedIdsAndNames = ->
       selected = []
-      $.each(elem.find(".item.selected"), (i, item) ->
+      $.each($el.find(".item.selected"), (i, item) ->
         selected.push( {id: $(item).attr("id"), name: $(item).find(".item-name").text()})
       )
       return selected
 
     this.getSelectedItems = ->
-      elem.find('.item.selected')
+      $el.find('.item.selected')
 
     this.hasMaxSelected = ->
       settings.maxSelected >= picker.getSelectedItems().length
@@ -224,10 +224,10 @@
     # ----------+----------+----------+----------+----------+----------+----------+
 
     updateSelectedCount = ->
-      elem.find(".selected-count").html( selectedCount() )
+      $el.find(".selected-count").html( selectedCount() )
 
     selectedCount = ->
-      elem.find(".item.selected").length
+      $el.find(".item.selected").length
 
 
     ###*
@@ -250,7 +250,7 @@
 
     # adds a ThingyItem to the ThingyPicker
     addItem = (item) ->
-      elem.find(".items").append(item.$el)
+      $el.find(".items").append(item.$el)
       item.select() if item.data.id in settings.preSelectedItems
 
 
@@ -259,7 +259,7 @@
       $(".max-selected-wrapper").html( message )
 
     # initialize html
-    elem.html(
+    $el.html(
       "<div class='thingy-picker'>" +
       "    <div class='inner-header'>" +
       "        <span class='filter-label'>#{settings.labels.find_items}</span><input type='text' placeholder='Start typing a name' class='filter'/>" +
@@ -306,7 +306,7 @@
       updateVisibleItems()
 
     # filter as you type
-    elem.find("input.filter").keyup ->
+    $el.find("input.filter").keyup ->
       updateVisibleItems()
 
     updateMaxSelectedMessage()

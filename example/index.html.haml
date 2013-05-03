@@ -99,6 +99,5 @@
         $("#show-items").click(function() {
           console.log("clicked");
           var itemSelector = $(".fb-example .thingy-picker").data('thingyPicker');
-          console.log(itemSelector.getSelectedIds());
-          $("#selected-items").html(itemSelector.getSelectedIds().join(', '));
+          $("#selected-items").html(itemSelector.getSelectedItems().map(function(i, e){e.data.id}).join(', '));
         });
