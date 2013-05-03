@@ -156,30 +156,20 @@
       items = [];
       lastSelected = void 0;
       ThingyItem.itemToHtml = settings.itemToHtml;
-      this.getSelectedIds = function() {
-        var ids;
+      /**
+      @method getSelectedItems
+      */
 
-        ids = [];
-        $.each($el.find(".item.selected"), function(i, item) {
-          return ids.push($(item).attr("id"));
-        });
-        return ids;
-      };
-      this.getSelectedIdsAndNames = function() {
-        var selected;
-
-        selected = [];
-        $.each($el.find(".item.selected"), function(i, item) {
-          return selected.push({
-            id: $(item).attr("id"),
-            name: $(item).find(".item-name").text()
-          });
-        });
-        return selected;
-      };
       this.getSelectedItems = function() {
-        return $el.find('.item.selected');
+        return $.grep(items, function(item) {
+          return item.isSelected();
+        });
       };
+      /**
+      @method hasMaxSelected
+      @return {Boolean}
+      */
+
       this.hasMaxSelected = function() {
         return settings.maxSelected >= picker.getSelectedItems().length;
       };

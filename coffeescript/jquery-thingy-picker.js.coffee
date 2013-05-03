@@ -142,23 +142,19 @@
     # Public functions
     # ----------+----------+----------+----------+----------+----------+----------+
 
-    this.getSelectedIds = ->
-      ids = []
-      $.each($el.find(".item.selected"), (i, item) ->
-        ids.push($(item).attr("id"))
-      )
-      return ids
 
-    this.getSelectedIdsAndNames = ->
-      selected = []
-      $.each($el.find(".item.selected"), (i, item) ->
-        selected.push( {id: $(item).attr("id"), name: $(item).find(".item-name").text()})
-      )
-      return selected
-
+    ###*
+    @method getSelectedItems
+    ###
     this.getSelectedItems = ->
-      $el.find('.item.selected')
+      $.grep items, (item) ->
+        item.isSelected()
 
+
+    ###*
+    @method hasMaxSelected
+    @return {Boolean}
+    ###
     this.hasMaxSelected = ->
       settings.maxSelected >= picker.getSelectedItems().length
 

@@ -198,7 +198,7 @@
   @param {Object} options
   ###
   ThingyPicker = (element, options) -&gt;
-    this.$el = elem = $(element)
+    this.$el = $el = $(element)
     picker = this
     settings = $.extend({
       debug: false
@@ -232,23 +232,19 @@
     # Public functions
     # ----------+----------+----------+----------+----------+----------+----------+
 
-    this.getSelectedIds = -&gt;
-      ids = []
-      $.each(elem.find(&quot;.item.selected&quot;), (i, item) -&gt;
-        ids.push($(item).attr(&quot;id&quot;))
-      )
-      return ids
 
-    this.getSelectedIdsAndNames = -&gt;
-      selected = []
-      $.each(elem.find(&quot;.item.selected&quot;), (i, item) -&gt;
-        selected.push( {id: $(item).attr(&quot;id&quot;), name: $(item).find(&quot;.item-name&quot;).text()})
-      )
-      return selected
-
+    ###*
+    @method getSelectedItems
+    ###
     this.getSelectedItems = -&gt;
-      elem.find(&#x27;.item.selected&#x27;)
+      $.grep items, (item) -&gt;
+        item.isSelected()
 
+
+    ###*
+    @method hasMaxSelected
+    @return {Boolean}
+    ###
     this.hasMaxSelected = -&gt;
       settings.maxSelected &gt;= picker.getSelectedItems().length
 
@@ -314,10 +310,10 @@
     # ----------+----------+----------+----------+----------+----------+----------+
 
     updateSelectedCount = -&gt;
-      elem.find(&quot;.selected-count&quot;).html( selectedCount() )
+      $el.find(&quot;.selected-count&quot;).html( selectedCount() )
 
     selectedCount = -&gt;
-      elem.find(&quot;.item.selected&quot;).length
+      $el.find(&quot;.item.selected&quot;).length
 
 
     ###*
@@ -340,7 +336,7 @@
 
     # adds a ThingyItem to the ThingyPicker
     addItem = (item) -&gt;
-      elem.find(&quot;.items&quot;).append(item.$el)
+      $el.find(&quot;.items&quot;).append(item.$el)
       item.select() if item.data.id in settings.preSelectedItems
 
 
@@ -349,7 +345,7 @@
       $(&quot;.max-selected-wrapper&quot;).html( message )
 
     # initialize html
-    elem.html(
+    $el.html(
       &quot;&lt;div class=&#x27;thingy-picker&#x27;&gt;&quot; +
       &quot;    &lt;div class=&#x27;inner-header&#x27;&gt;&quot; +
       &quot;        &lt;span class=&#x27;filter-label&#x27;&gt;#{settings.labels.find_items}&lt;/span&gt;&lt;input type=&#x27;text&#x27; placeholder=&#x27;Start typing a name&#x27; class=&#x27;filter&#x27;/&gt;&quot; +
@@ -396,7 +392,7 @@
       updateVisibleItems()
 
     # filter as you type
-    elem.find(&quot;input.filter&quot;).keyup -&gt;
+    $el.find(&quot;input.filter&quot;).keyup -&gt;
       updateVisibleItems()
 
     updateMaxSelectedMessage()

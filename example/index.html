@@ -90,10 +90,10 @@
             });
           }
         
-        $("#show-items").click(function() {
-          console.log("clicked");
-          var itemSelector = $(".fb-example .thingy-picker").data('thingyPicker');
-          $("#selected-items").html(itemSelector.getSelectedItems().map(function(i, e){e.data.id}).join(', '));
+        $("#show-items").click(function(e) {
+            e.preventDefault();
+            var itemSelector = $(".fb-example .thingy-picker").data('thingyPicker');
+            $("#selected-items").html(itemSelector.getSelectedItems().map(function(i){return i.data.id;}).join(', '));
         });
       </script>
     </div>
