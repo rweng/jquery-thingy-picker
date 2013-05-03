@@ -298,14 +298,6 @@
         event.preventDefault();
         return picker.showAllItems();
       });
-      elem.find(".item:not(.selected)").on('hover', function(ev) {
-        if (ev.type === 'mouseover') {
-          $(this).addClass("hover");
-        }
-        if (ev.type === 'mouseout') {
-          return $(this).removeClass("hover");
-        }
-      });
       elem.find("input.filter").keyup(function() {
         var filter, keyUpTimer;
 

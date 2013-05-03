@@ -74,6 +74,9 @@ limitations under the License.
   -moz-user-select: none;
   overflow: hidden;
 }
+.thingy-picker .items .item:hover {
+  background-color: #EFF2F7;
+}
 .thingy-picker .items .item.filtered {
   display: none;
 }
@@ -129,9 +132,6 @@ limitations under the License.
   color: #333333;
   font-weight: bold;
   margin: 3px 0 2px;
-}
-.thingy-picker .hover {
-  background-color: #EFF2F7;
 }
 .thingy-picker div.button {
   background: none repeat scroll 0 0 #6D84B4;

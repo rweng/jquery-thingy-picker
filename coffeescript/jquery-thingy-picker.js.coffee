@@ -278,13 +278,6 @@
       event.preventDefault()
       picker.showAllItems()
 
-    # hover effect on items
-    elem.find(".item:not(.selected)").on 'hover', (ev) ->
-      if (ev.type == 'mouseover')
-        $(this).addClass("hover")
-      if (ev.type == 'mouseout')
-        $(this).removeClass("hover")
-
     # filter as you type
     elem.find("input.filter").keyup(->
       filter = $(this).val()
