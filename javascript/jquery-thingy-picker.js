@@ -296,10 +296,7 @@
       });
       elem.find("[data-tp-action='filterAll']").click(function(event) {
         event.preventDefault();
-        elem.find(".items").removeClass("filter-unselected");
-        all_items.removeClass("hide-non-selected");
-        $(".filter-link").removeClass("selected");
-        return $(this).addClass("selected");
+        return picker.showAllItems();
       });
       elem.find(".item:not(.selected)").on('hover', function(ev) {
         if (ev.type === 'mouseover') {

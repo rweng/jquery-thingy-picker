@@ -276,11 +276,7 @@
     # remove filter, show all
     elem.find("[data-tp-action='filterAll']").click (event) ->
       event.preventDefault()
-      elem.find(".items").removeClass("filter-unselected")
-
-      all_items.removeClass("hide-non-selected")
-      $(".filter-link").removeClass("selected")
-      $(this).addClass("selected")
+      picker.showAllItems()
 
     # hover effect on items
     elem.find(".item:not(.selected)").on 'hover', (ev) ->
