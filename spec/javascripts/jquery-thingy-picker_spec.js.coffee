@@ -106,15 +106,6 @@ describe 'jquery-thingy-picker', ->
 
 
       describe 'Show Selected link', ->
-        it 'adds .filter-unselected to .items', ->
-          runs ->
-            $el.find("[data-tp-action='filterSelected']").trigger('click')
-
-          waits WAIT_TIME
-
-          runs ->
-            expect($el.find(".items.filter-unselected").length).toBe(1)
-
         it 'hides non-selected items', ->
           runs ->
             $el.find(".item:first").trigger('click')
@@ -124,7 +115,6 @@ describe 'jquery-thingy-picker', ->
 
           runs ->
             expect($el.find(".item.selected").length).toBe(1)
-            expect($el.find(".items.filter-unselected").length).toBe(1)
             expect(visibleItems().length).toBe(1)
 
         it 'updates the count of items are selected', ->
@@ -147,7 +137,6 @@ describe 'jquery-thingy-picker', ->
           waits WAIT_TIME
 
           runs ->
-            expect($el.find(".items.filter-unselected").length).toBe(1)
             $el.find("[data-tp-action='filterAll']").trigger('click')
 
           waits WAIT_TIME
@@ -195,7 +184,6 @@ describe 'jquery-thingy-picker', ->
             spyOn(item, 'show')
 
           picker.showAllItems()
-
 
           for item in picker.items()
             expect(item.show).toHaveBeenCalled()

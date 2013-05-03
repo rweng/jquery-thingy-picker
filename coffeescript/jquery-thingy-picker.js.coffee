@@ -271,11 +271,7 @@
     all_items = $(".item", elem);
     elem.find("[data-tp-action='filterSelected']").click (event) ->
       event.preventDefault()
-      elem.find(".items").addClass("filter-unselected")
-
-      all_items.not(".selected").addClass("hide-non-selected")
-      $(".filter-link").removeClass("selected")
-      $(this).addClass("selected")
+      picker.showSelectedItemsOnly()
 
     # remove filter, show all
     elem.find("[data-tp-action='filterAll']").click (event) ->

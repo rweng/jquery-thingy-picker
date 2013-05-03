@@ -292,10 +292,7 @@
       all_items = $(".item", elem);
       elem.find("[data-tp-action='filterSelected']").click(function(event) {
         event.preventDefault();
-        elem.find(".items").addClass("filter-unselected");
-        all_items.not(".selected").addClass("hide-non-selected");
-        $(".filter-link").removeClass("selected");
-        return $(this).addClass("selected");
+        return picker.showSelectedItemsOnly();
       });
       elem.find("[data-tp-action='filterAll']").click(function(event) {
         event.preventDefault();
