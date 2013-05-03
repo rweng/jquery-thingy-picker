@@ -319,6 +319,22 @@
     selectedCount = -&gt;
       elem.find(&quot;.item.selected&quot;).length
 
+
+    ###*
+    @method updateVisibleItems
+    ###
+    updateVisibleItems = -&gt;
+      filterText = $el.find(&quot;input.filter&quot;).val()
+      mainFilter = $el.find(&#x27;.filter-link.selected&#x27;).data(&#x27;tp-filter&#x27;)
+
+      for item in items
+        filterLinkSaysShow = mainFilter == &quot;all&quot; or (mainFilter == &quot;selected&quot; and item.isSelected())
+        filterTextSaysShow = not settings.isItemFiltered(item, filterText)
+        if filterLinkSaysShow and filterTextSaysShow
+          item.show()
+        else
+          item.hide()
+
     maxSelectedEnabled = -&gt;
       settings.maxSelected &gt; 0
 
@@ -337,8 +353,8 @@
       &quot;&lt;div class=&#x27;thingy-picker&#x27;&gt;&quot; +
       &quot;    &lt;div class=&#x27;inner-header&#x27;&gt;&quot; +
       &quot;        &lt;span class=&#x27;filter-label&#x27;&gt;#{settings.labels.find_items}&lt;/span&gt;&lt;input type=&#x27;text&#x27; placeholder=&#x27;Start typing a name&#x27; class=&#x27;filter&#x27;/&gt;&quot; +
-      &quot;        &lt;a class=&#x27;filter-link selected&#x27; data-tp-action=&#x27;filterAll&#x27; href=&#x27;#&#x27;&gt;#{settings.labels.all}&lt;/a&gt;&quot; +
-      &quot;        &lt;a class=&#x27;filter-link&#x27; data-tp-action=&#x27;filterSelected&#x27; href=&#x27;#&#x27;&gt;#{settings.labels.selected} (&lt;span class=&#x27;selected-count&#x27;&gt;0&lt;/span&gt;)&lt;/a&gt;&quot; +
+      &quot;        &lt;a class=&#x27;filter-link selected&#x27; data-tp-filter=&#x27;all&#x27; href=&#x27;#&#x27;&gt;#{settings.labels.all}&lt;/a&gt;&quot; +
+      &quot;        &lt;a class=&#x27;filter-link&#x27; data-tp-filter=&#x27;selected&#x27; href=&#x27;#&#x27;&gt;#{settings.labels.selected} (&lt;span class=&#x27;selected-count&#x27;&gt;0&lt;/span&gt;)&lt;/a&gt;&quot; +
       (if settings.maxSelected &gt; 0 then &quot;&lt;div class=&#x27;max-selected-wrapper&#x27;&gt;&lt;/div&gt;&quot; else &quot;&quot;) +
       &quot;    &lt;/div&gt;&quot; +
       &quot;    &lt;div class=&#x27;items&#x27;&gt;&lt;/div&gt;&quot; +
@@ -370,38 +386,18 @@
     # Add event handlers
     ########################################
 
-    # filter by selected, hide all non-selected
-    all_items = $(&quot;.item&quot;, elem);
-    elem.find(&quot;[data-tp-action=&#x27;filterSelected&#x27;]&quot;).click (event) -&gt;
+    # add selected class to the clicked filter link
+    $el.find(&quot;.filter-link&quot;).click (event)-&gt;
+      if debug
+        console.log &quot;filter-link clicked: &quot;, this
       event.preventDefault()
-      picker.showSelectedItemsOnly()
-
-    # remove filter, show all
-    elem.find(&quot;[data-tp-action=&#x27;filterAll&#x27;]&quot;).click (event) -&gt;
-      event.preventDefault()
-      picker.showAllItems()
+      $el.find(&quot;.filter-link&quot;).removeClass(&quot;selected&quot;)
+      $(this).addClass(&#x27;selected&#x27;)
+      updateVisibleItems()
 
     # filter as you type
-    elem.find(&quot;input.filter&quot;).keyup(-&gt;
-      filterText = $(this).val()
-
-      clearTimeout(keyUpTimer)
-
-      keyUpTimer = setTimeout(-&gt;
-        for item in items
-          if settings.isItemFiltered(item, filterText)
-            item.hide()
-          else
-            item.show()
-      , 200)
-    )
-
-    # hover states on the buttons
-    elem.find(&quot;.button&quot;).hover( -&gt;
-      $(this).addClass(&quot;button-hover&quot;)
-    , -&gt;
-      $(this).removeClass(&quot;button-hover&quot;)
-    )
+    elem.find(&quot;input.filter&quot;).keyup -&gt;
+      updateVisibleItems()
 
     updateMaxSelectedMessage()
     updateSelectedCount()

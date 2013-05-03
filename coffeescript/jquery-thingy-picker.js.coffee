@@ -309,13 +309,6 @@
     elem.find("input.filter").keyup ->
       updateVisibleItems()
 
-    # hover states on the buttons
-    elem.find(".button").hover( ->
-      $(this).addClass("button-hover")
-    , ->
-      $(this).removeClass("button-hover")
-    )
-
     updateMaxSelectedMessage()
     updateSelectedCount()
 

@@ -125,22 +125,10 @@ limitations under the License.
 .thingy-picker .inner-header .filter-link {
   float: right;
 }
-.thingy-picker .inner-header div.button-hover {
-  text-decoration: underline;
-}
 .thingy-picker .inner-header span.filter-label {
   color: #333333;
   font-weight: bold;
   margin: 3px 0 2px;
-}
-.thingy-picker div.button {
-  background: none repeat scroll 0 0 #6D84B4;
-  border: 1px solid #3B5998;
-  color: white;
-  cursor: pointer;
-  margin: 4px 5px 0 4px;
-  padding: 2px 5px;
-  text-decoration: none;
 }
 .thingy-picker .filter-link {
   margin: 4px 5px 4px 5px;

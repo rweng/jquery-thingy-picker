@@ -188,7 +188,14 @@
         },
         {
             "file": "coffeescript/jquery-thingy-picker.js.coffee",
-            "line": 268,
+            "line": 233,
+            "itemtype": "method",
+            "name": "updateVisibleItems",
+            "class": "ThingyPicker"
+        },
+        {
+            "file": "coffeescript/jquery-thingy-picker.js.coffee",
+            "line": 284,
             "itemtype": "event",
             "name": "selection.changed",
             "params": [

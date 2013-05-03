@@ -338,11 +338,6 @@
       elem.find("input.filter").keyup(function() {
         return updateVisibleItems();
       });
-      elem.find(".button").hover(function() {
-        return $(this).addClass("button-hover");
-      }, function() {
-        return $(this).removeClass("button-hover");
-      });
       updateMaxSelectedMessage();
       updateSelectedCount();
       return this;
