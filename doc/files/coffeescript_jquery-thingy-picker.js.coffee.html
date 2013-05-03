@@ -91,6 +91,7 @@
 # call with $(el).thingyPicker(items: [item])
 # item must be {id: ..., picture: ..., name: ...}
 (($)-&gt;
+  debug = true
 
   ###*
   A ThingyItem is a single, selectable item in a ThingyPicker
@@ -125,6 +126,8 @@
     @method deselect
     ###
     this.deselect = -&gt;
+      if debug
+        console.log(&quot;deselect called&quot;)
       if item.isSelected()
         $el.removeClass(SELECTED_CLASS)
         $el.trigger(EVENTS.SELECTION_CHANGED)
@@ -144,6 +147,8 @@
     @return {Boolean}
     ###
     this.isSelected = -&gt;
+      if debug
+        console.log &quot;isSelected() in&quot;, $el[0]
       $el.hasClass(&quot;selected&quot;)
 
     # handle when a item is clicked for selection
@@ -196,6 +201,7 @@
         max_selected_message: &quot;{0} of {1} selected&quot;
       }
     }, options || {})
+    items = []
 
     lastSelected = undefined # used when shift-click is performed to know where to start from to select multiple elements
     ThingyItem.itemToHtml = settings.itemToHtml
@@ -224,12 +230,28 @@
     this.hasMaxSelected = -&gt;
       settings.maxSelected &gt;= picker.getSelectedItems().length
 
-    this.allItems = -&gt;
-      elem.find(&#x27;.item&#x27;)
+    ###*
+    @method items
+    @returns {[ThingyItem]} all items
+    ###
+    this.items = -&gt;
+      items
 
-    this.clearSelected = -&gt;
-      picker.allItems().removeClass(&quot;selected&quot;)
-      return elem
+    ###*
+    deselects all items
+
+    @method clearSelection
+    @return {[ThingyItem]} changed items
+    ###
+    this.clearSelection = -&gt;
+      deselected = []
+      for item in items
+        console.log &quot;item&quot;, item.isSelected()
+        deselected.push(item) if item.isSelected()
+        item.deselect()
+
+      deselected
+
 
 
     # ----------+----------+----------+----------+----------+----------+----------+
@@ -277,6 +299,7 @@
 
     $.each(settings.items, (i, data) -&gt;
       item = new ThingyItem(data, picker)
+      items.push item
 
       item.$el.on &#x27;selection-changed&#x27;, -&gt;
         console.log &quot;triggered&quot;
@@ -351,20 +374,29 @@
     return this
 
   $.fn.thingyPicker = (option)-&gt;
-    # kinda like bootstrap does it:
-    # https://github.com/twitter/bootstrap/blob/master/js/bootstrap-dropdown.js#L134
+    # return thingyPicker instance if called without options on one element
+    picker = ($el) -&gt;
+      return $el.data(&#x27;thingyPicker&#x27;) if $el.data(&#x27;thingyPicker&#x27;)
+
+      obj = new ThingyPicker($el[0], option)
+      $el.data(&#x27;thingyPicker&#x27;, obj)
+      obj
+
+    if this.length == 1 and option == undefined
+      return picker($(this))
+
+
+    # else return jQuery obj, optionally execute command
     this.map -&gt;
       $this = $(this)
-      data = $this.data(&#x27;thingyPicker&#x27;)
+      data = picker($this)
 
-      if !data
-        $this.data(&#x27;thingyPicker&#x27;, data = new ThingyPicker(this, option))
-        return this
-      else if (typeof option == &#x27;string&#x27;)
+      # if string given: execute command and return jQuery
+      if (typeof option == &#x27;string&#x27;)
         data[option].call($this)
-      else
-        console.log &quot;you should call thingyPicker with initializer or command&quot;
         return this
+      else # else return ThingyPicker
+        return data
 
 )(jQuery)
     </pre>

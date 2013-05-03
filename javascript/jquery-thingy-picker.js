@@ -2,14 +2,15 @@
   var __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
   (function($) {
+    var ThingyItem, ThingyPicker, debug;
+
+    debug = true;
     /**
     A ThingyItem is a single, selectable item in a ThingyPicker
     
     @class ThingyItem
     @constructor
     */
-
-    var ThingyItem, ThingyPicker;
 
     ThingyItem = function(data, picker) {
       var $el, EVENTS, SELECTED_CLASS, item;
@@ -41,6 +42,9 @@
       */
 
       this.deselect = function() {
+        if (debug) {
+          console.log("deselect called");
+        }
         if (item.isSelected()) {
           $el.removeClass(SELECTED_CLASS);
           return $el.trigger(EVENTS.SELECTION_CHANGED);
@@ -64,6 +68,9 @@
       */
 
       this.isSelected = function() {
+        if (debug) {
+          console.log("isSelected() in", $el[0]);
+        }
         return $el.hasClass("selected");
       };
       $el.click(function(event) {
@@ -87,7 +94,7 @@
     */
 
     ThingyPicker = function(element, options) {
-      var addItem, all_items, buffer, container, elem, item_container, lastSelected, maxSelectedEnabled, picker, selectedClass, selectedCount, settings, updateMaxSelectedMessage, updateSelectedCount;
+      var addItem, all_items, buffer, container, elem, item_container, items, lastSelected, maxSelectedEnabled, picker, selectedClass, selectedCount, settings, updateMaxSelectedMessage, updateSelectedCount;
 
       this.$el = elem = $(element);
       picker = this;
@@ -125,6 +132,7 @@
           max_selected_message: "{0} of {1} selected"
         }
       }, options || {});
+      items = [];
       lastSelected = void 0;
       ThingyItem.itemToHtml = settings.itemToHtml;
       this.getSelectedIds = function() {
@@ -154,12 +162,34 @@
       this.hasMaxSelected = function() {
         return settings.maxSelected >= picker.getSelectedItems().length;
       };
-      this.allItems = function() {
-        return elem.find('.item');
+      /**
+      @method items
+      @returns {[ThingyItem]} all items
+      */
+
+      this.items = function() {
+        return items;
       };
-      this.clearSelected = function() {
-        picker.allItems().removeClass("selected");
-        return elem;
+      /**
+      deselects all items
+      
+      @method clearSelection
+      @return {[ThingyItem]} changed items
+      */
+
+      this.clearSelection = function() {
+        var deselected, item, _i, _len;
+
+        deselected = [];
+        for (_i = 0, _len = items.length; _i < _len; _i++) {
+          item = items[_i];
+          console.log("item", item.isSelected());
+          if (item.isSelected()) {
+            deselected.push(item);
+          }
+          item.deselect();
+        }
+        return deselected;
       };
       updateSelectedCount = function() {
         return elem.find(".selected-count").html(selectedCount());
@@ -193,6 +223,7 @@
         var item;
 
         item = new ThingyItem(data, picker);
+        items.push(item);
         item.$el.on('selection-changed', function() {
           console.log("triggered");
           updateMaxSelectedMessage();
@@ -262,19 +293,31 @@
       return this;
     };
     return $.fn.thingyPicker = function(option) {
+      var picker;
+
+      picker = function($el) {
+        var obj;
+
+        if ($el.data('thingyPicker')) {
+          return $el.data('thingyPicker');
+        }
+        obj = new ThingyPicker($el[0], option);
+        $el.data('thingyPicker', obj);
+        return obj;
+      };
+      if (this.length === 1 && option === void 0) {
+        return picker($(this));
+      }
       return this.map(function() {
         var $this, data;
 
         $this = $(this);
-        data = $this.data('thingyPicker');
-        if (!data) {
-          $this.data('thingyPicker', data = new ThingyPicker(this, option));
+        data = picker($this);
+        if (typeof option === 'string') {
+          data[option].call($this);
           return this;
-        } else if (typeof option === 'string') {
-          return data[option].call($this);
         } else {
-          console.log("you should call thingyPicker with initializer or command");
-          return this;
+          return data;
         }
       });
     };

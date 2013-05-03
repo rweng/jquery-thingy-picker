@@ -2,7 +2,7 @@ describe 'jquery-thingy-picker', ->
   window.$el = undefined
   WAIT_TIME = 500
 
-  items = ->
+  itemData = ->
     [{
       id: 1,
       name: "Item 1",
@@ -20,7 +20,7 @@ describe 'jquery-thingy-picker', ->
   makeThingy = ($el)->
     $el.thingyPicker({
       debug: true
-      items: items()
+      items: itemData()
     })
     $el
 
@@ -68,7 +68,7 @@ describe 'jquery-thingy-picker', ->
         $el.find(".item").each (index, obj) ->
           foundItems.push $(obj).data('tp-item').data
 
-        expect(foundItems).toEqual(items())
+        expect(foundItems).toEqual(itemData())
 
 
     describe 'Filtering', ->
@@ -171,27 +171,41 @@ describe 'jquery-thingy-picker', ->
 
             expect(spy).toHaveBeenCalledWith(jasmine.any(jQuery.Event), item)
 
-          it 'is fired when the selection is cleared'
-          it 'receives the changed item as argument'
+          it 'is fired when the selection is cleared', ->
+            item = $el.find('.item:first').data('tp-item')
+            item.select()
+
+            spy = jasmine.createSpy()
+            $el.on("jfmfs.selection.changed", spy)
+
+            $el.thingyPicker('clearSelection')
+
+            expect(spy).toHaveBeenCalledWith(jasmine.any(jQuery.Event), item)
 
       describe 'commands', ->
-        describe 'allItems', ->
+        describe 'items', ->
           it 'returns all items of all instances', ->
-            expect($el.thingyPicker('allItems')[0].length).toBe(3)
+            expect($el.thingyPicker().items().length).toBe(3)
 
         describe 'getSelectedItems', ->
           it 'returns the selected items', ->
             $el.find('.item:first').addClass('selected')
-            expect($el.thingyPicker('getSelectedItems')[0].length).toBe(1)
+            expect($el.thingyPicker().getSelectedItems().length).toBe(1)
 
-        describe 'clearSelected', ->
-          it 'returns elements'
-
-          it 'removes .selected from all items', ->
+        describe 'clearSelection', ->
+          it 'removes .selected from all items and returns changed items', ->
             $el.find('.item:first').addClass('selected')
             expect($el.find(".item.selected").length).toBe(1)
-            $el.thingyPicker("clearSelected")
+
+
+            console.log "thingyPicker() result", $el.thingyPicker()
+            result = $el.thingyPicker().clearSelection()
+            console.log "result", result
+
             expect($el.find(".item.selected").length).toBe(0)
+            expect(result.length).toBe(1)
+            expect(result[0]).toBe($el.find('.item:first').data('tp-item'))
+
 
 
 

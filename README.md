@@ -19,19 +19,6 @@ Before all, include the css/less and coffeescript/js files in your HTML.
 Call `$(selector).thingyPicker({items: items})` on a dom-node.
 The items must be an array in the format `{id: ..., name: ..., picture: ...}`
 
-## Commands
-
-There are several commands you can use. Commands are invoked via
-
-`$(selector).thingyPicker('command', 'arguments')`
-
-The commands are:
-
-- `allItems`
-- `getSelectedItems`
-- `clearSelected`
-
-
 ## Options:
 
 
