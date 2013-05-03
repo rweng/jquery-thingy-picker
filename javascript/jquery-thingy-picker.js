@@ -38,6 +38,22 @@
         return $el.on(event, handler);
       };
       /**
+      delegates to $el.show
+      @method show
+      */
+
+      this.show = function() {
+        return $el.show();
+      };
+      /**
+      delegates to $el.hide
+      @method hide
+      */
+
+      this.hide = function() {
+        return $el.hide();
+      };
+      /**
       @method deselect
       */
 
@@ -94,7 +110,7 @@
     */
 
     ThingyPicker = function(element, options) {
-      var addItem, all_items, buffer, container, elem, item_container, items, lastSelected, maxSelectedEnabled, picker, selectedClass, selectedCount, settings, updateMaxSelectedMessage, updateSelectedCount;
+      var addItem, all_items, elem, items, lastSelected, maxSelectedEnabled, picker, selectedCount, settings, updateMaxSelectedMessage, updateSelectedCount;
 
       this.$el = elem = $(element);
       picker = this;
@@ -163,6 +179,42 @@
         return settings.maxSelected >= picker.getSelectedItems().length;
       };
       /**
+      calls show on all items
+      
+      @method showAllItems
+      */
+
+      this.showAllItems = function() {
+        var item, _i, _len, _results;
+
+        _results = [];
+        for (_i = 0, _len = items.length; _i < _len; _i++) {
+          item = items[_i];
+          _results.push(item.show());
+        }
+        return _results;
+      };
+      /**
+      hides all items except the selected ones
+      
+      @method showSelectedItemsOnly
+      */
+
+      this.showSelectedItemsOnly = function() {
+        var item, _i, _len, _results;
+
+        _results = [];
+        for (_i = 0, _len = items.length; _i < _len; _i++) {
+          item = items[_i];
+          if (item.isSelected()) {
+            _results.push(item.show());
+          } else {
+            _results.push(item.hide());
+          }
+        }
+        return _results;
+      };
+      /**
       @method items
       @returns {[ThingyItem]} all items
       */
@@ -180,6 +232,9 @@
       this.clearSelection = function() {
         var deselected, item, _i, _len;
 
+        if (debug) {
+          console.log("in: clearSelection");
+        }
         deselected = [];
         for (_i = 0, _len = items.length; _i < _len; _i++) {
           item = items[_i];
@@ -215,10 +270,6 @@
         return $(".max-selected-wrapper").html(message);
       };
       elem.html("<div class='thingy-picker'>" + "    <div class='inner-header'>" + ("        <span class='filter-label'>" + settings.labels.find_items + "</span><input type='text' class='filter' value='" + settings.labels.filter_placeholder + "'/>") + ("        <a class='filter-link selected' data-tp-action='filterAll' href='#'>" + settings.labels.all + "</a>") + ("        <a class='filter-link' data-tp-action='filterSelected' href='#'>" + settings.labels.selected + " (<span class='selected-count'>0</span>)</a>") + (settings.maxSelected > 0 ? "<div class='max-selected-wrapper'></div>" : "") + "    </div>" + "    <div class='items'></div>" + "</div>");
-      item_container = elem.find(".items");
-      container = elem.find(".thingy-picker");
-      buffer = [];
-      selectedClass = "";
       $.each(settings.items, function(i, data) {
         var item;
 
@@ -228,7 +279,12 @@
           console.log("triggered");
           updateMaxSelectedMessage();
           updateSelectedCount();
-          return picker.$el.trigger('jfmfs.selection.changed', item);
+          /**
+          @event selection.changed
+          @param {ThingyItem} item
+          */
+
+          return picker.$el.trigger('selection.changed', item);
         });
         console.log("item", item);
         return addItem(item);
@@ -289,32 +345,31 @@
       });
       updateMaxSelectedMessage();
       updateSelectedCount();
-      elem.trigger("jfmfs.itemload.finished");
       return this;
     };
-    return $.fn.thingyPicker = function(option) {
+    return $.fn.thingyPicker = function(options) {
       var picker;
 
-      picker = function($el) {
+      picker = function($el, options) {
         var obj;
 
         if ($el.data('thingyPicker')) {
           return $el.data('thingyPicker');
         }
-        obj = new ThingyPicker($el[0], option);
+        obj = new ThingyPicker($el[0], options);
         $el.data('thingyPicker', obj);
         return obj;
       };
-      if (this.length === 1 && option === void 0) {
-        return picker($(this));
+      if (this.length === 1 && typeof options !== "string") {
+        return picker($(this), options);
       }
       return this.map(function() {
         var $this, data;
 
         $this = $(this);
         data = picker($this);
-        if (typeof option === 'string') {
-          data[option].call($this);
+        if (typeof options === 'string') {
+          data[options].call($this);
           return this;
         } else {
           return data;

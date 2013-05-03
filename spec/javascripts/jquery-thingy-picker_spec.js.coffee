@@ -1,5 +1,4 @@
 describe 'jquery-thingy-picker', ->
-  window.$el = undefined
   WAIT_TIME = 500
 
   itemData = ->
@@ -17,12 +16,18 @@ describe 'jquery-thingy-picker', ->
       picture: "http://placehold.it/100x50"
     }]
 
+  window.$el = picker = undefined
+
+
   makeThingy = ($el)->
     $el.thingyPicker({
       debug: true
       items: itemData()
     })
     $el
+
+  firstItem = ->
+    picker.items()[0]
 
   beforeEach ->
     window.$el = $('<div id="element" />')
@@ -57,9 +62,10 @@ describe 'jquery-thingy-picker', ->
   describe 'with 3 items', ->
     beforeEach ->
       makeThingy($el)
+      picker = $el.thingyPicker()
 
     describe 'the 3 items', ->
-      it 'exists', ->
+      it 'has 3 .item elements', ->
         expect($el.find(".item").length).toBe(3)
 
       it 'has a data-tp-item attribute with ThingyItem instance', ->
@@ -150,61 +156,80 @@ describe 'jquery-thingy-picker', ->
             expect($el.find(".items.filter-unselected").length).toBe(0)
 
 
-      describe 'events', ->
-        describe 'jfmfs.selection.changed', ->
-          it 'is fired when an element is selected or unselected', ->
-            item = $el.find('.item:first').data('tp-item')
-            spy = jasmine.createSpy()
-            $el.on("jfmfs.selection.changed", spy)
+    describe 'Events', ->
+      describe 'selection.changed', ->
+        it 'is fired when an element is selected or unselected', ->
+          item = $el.find('.item:first').data('tp-item')
+          spy = jasmine.createSpy()
+          $el.on("selection.changed", spy)
 
-            item.select()
+          item.select()
 
-            expect(spy).toHaveBeenCalledWith(jasmine.any(jQuery.Event), item)
+          expect(spy).toHaveBeenCalledWith(jasmine.any(jQuery.Event), item)
 
-          it 'is fired when an element is deselected', ->
-            item = $el.find('.item:first').data('tp-item')
-            item.select()
-            spy = jasmine.createSpy()
-            $el.on("jfmfs.selection.changed", spy)
+        it 'is fired when an element is deselected', ->
+          item = $el.find('.item:first').data('tp-item')
+          item.select()
+          spy = jasmine.createSpy()
+          $el.on("selection.changed", spy)
 
-            item.deselect()
+          item.deselect()
 
-            expect(spy).toHaveBeenCalledWith(jasmine.any(jQuery.Event), item)
+          expect(spy).toHaveBeenCalledWith(jasmine.any(jQuery.Event), item)
 
-          it 'is fired when the selection is cleared', ->
-            item = $el.find('.item:first').data('tp-item')
-            item.select()
+        it 'is fired when the selection is cleared', ->
+          firstItem().select()
 
-            spy = jasmine.createSpy()
-            $el.on("jfmfs.selection.changed", spy)
+          spy = jasmine.createSpy()
+          $el.on("selection.changed", spy)
 
-            $el.thingyPicker('clearSelection')
+          $el.thingyPicker('clearSelection')
 
-            expect(spy).toHaveBeenCalledWith(jasmine.any(jQuery.Event), item)
+          expect(spy).toHaveBeenCalledWith(jasmine.any(jQuery.Event), firstItem())
 
-      describe 'commands', ->
-        describe 'items', ->
-          it 'returns all items of all instances', ->
-            expect($el.thingyPicker().items().length).toBe(3)
+    describe 'Instance Methods / Commands', ->
+      describe 'showAllItems', ->
+        it 'call show on all items', ->
+          console.log "picker", picker
+          for item in picker.items()
+            spyOn(item, 'show')
 
-        describe 'getSelectedItems', ->
-          it 'returns the selected items', ->
-            $el.find('.item:first').addClass('selected')
-            expect($el.thingyPicker().getSelectedItems().length).toBe(1)
-
-        describe 'clearSelection', ->
-          it 'removes .selected from all items and returns changed items', ->
-            $el.find('.item:first').addClass('selected')
-            expect($el.find(".item.selected").length).toBe(1)
+          picker.showAllItems()
 
 
-            console.log "thingyPicker() result", $el.thingyPicker()
-            result = $el.thingyPicker().clearSelection()
-            console.log "result", result
+          for item in picker.items()
+            expect(item.show).toHaveBeenCalled()
 
-            expect($el.find(".item.selected").length).toBe(0)
-            expect(result.length).toBe(1)
-            expect(result[0]).toBe($el.find('.item:first').data('tp-item'))
+
+      describe 'showSelectedItemsOnly', ->
+        it 'should hide non-selected', ->
+          item = $el.find('.item:first').data('tp-item')
+          item.select()
+
+          $el.thingyPicker().showSelectedItemsOnly()
+
+      describe 'items', ->
+        it 'returns all items of all instances', ->
+          expect($el.thingyPicker().items().length).toBe(3)
+
+      describe 'getSelectedItems', ->
+        it 'returns the selected items', ->
+          $el.find('.item:first').addClass('selected')
+          expect($el.thingyPicker().getSelectedItems().length).toBe(1)
+
+      describe 'clearSelection', ->
+        it 'removes .selected from all items and returns changed items', ->
+          $el.find('.item:first').addClass('selected')
+          expect($el.find(".item.selected").length).toBe(1)
+
+
+          console.log "thingyPicker() result", $el.thingyPicker()
+          result = $el.thingyPicker().clearSelection()
+          console.log "result", result
+
+          expect($el.find(".item.selected").length).toBe(0)
+          expect(result.length).toBe(1)
+          expect(result[0]).toBe($el.find('.item:first').data('tp-item'))
 
 
 

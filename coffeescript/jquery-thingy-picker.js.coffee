@@ -32,6 +32,22 @@
     this.on = (event, handler) ->
       $el.on(event, handler)
 
+
+
+    ###*
+    delegates to $el.show
+    @method show
+    ###
+    this.show = ->
+      $el.show()
+
+    ###*
+    delegates to $el.hide
+    @method hide
+    ###
+    this.hide = ->
+      $el.hide()
+
     ###*
     @method deselect
     ###
@@ -140,6 +156,30 @@
     this.hasMaxSelected = ->
       settings.maxSelected >= picker.getSelectedItems().length
 
+
+    ###*
+    calls show on all items
+
+    @method showAllItems
+    ###
+    this.showAllItems = ->
+      for item in items
+        item.show()
+
+
+
+    ###*
+    hides all items except the selected ones
+
+    @method showSelectedItemsOnly
+    ###
+    this.showSelectedItemsOnly = ->
+      for item in items
+        if item.isSelected()
+          item.show()
+        else
+          item.hide()
+
     ###*
     @method items
     @returns {[ThingyItem]} all items
@@ -154,6 +194,8 @@
     @return {[ThingyItem]} changed items
     ###
     this.clearSelection = ->
+      if debug
+        console.log "in: clearSelection"
       deselected = []
       for item in items
         console.log "item", item.isSelected()
@@ -187,9 +229,7 @@
       message = settings.labels.max_selected_message.replace("{0}", selectedCount()).replace("{1}", settings.maxSelected)
       $(".max-selected-wrapper").html( message )
 
-    # ----------+----------+----------+----------+----------+----------+----------+
-    # Initialization of container
-    # ----------+----------+----------+----------+----------+----------+----------+
+    # initialize html
     elem.html(
       "<div class='thingy-picker'>" +
       "    <div class='inner-header'>" +
@@ -202,11 +242,7 @@
       "</div>"
     )
 
-    item_container = elem.find(".items")
-    container = elem.find(".thingy-picker")
-    buffer = []
-    selectedClass = ""
-
+    # create items
     $.each(settings.items, (i, data) ->
       item = new ThingyItem(data, picker)
       items.push item
@@ -216,16 +252,23 @@
         updateMaxSelectedMessage()
         updateSelectedCount()
 
-        picker.$el.trigger('jfmfs.selection.changed', item)
+        ###*
+        @event selection.changed
+        @param {ThingyItem} item
+        ###
+        picker.$el.trigger('selection.changed', item)
 
 
       console.log "item", item
       addItem(item)
     );
 
-    all_items = $(".item", elem);
+    ########################################
+    # Add event handlers
+    ########################################
 
     # filter by selected, hide all non-selected
+    all_items = $(".item", elem);
     elem.find("[data-tp-action='filterSelected']").click (event) ->
       event.preventDefault()
       elem.find(".items").addClass("filter-unselected")
@@ -279,21 +322,20 @@
 
     updateMaxSelectedMessage()
     updateSelectedCount()
-    elem.trigger("jfmfs.itemload.finished")
 
     return this
 
-  $.fn.thingyPicker = (option)->
+  $.fn.thingyPicker = (options)->
     # return thingyPicker instance if called without options on one element
-    picker = ($el) ->
+    picker = ($el, options) ->
       return $el.data('thingyPicker') if $el.data('thingyPicker')
 
-      obj = new ThingyPicker($el[0], option)
+      obj = new ThingyPicker($el[0], options)
       $el.data('thingyPicker', obj)
       obj
 
-    if this.length == 1 and option == undefined
-      return picker($(this))
+    if this.length == 1 and typeof options != "string"
+      return picker($(this), options)
 
 
     # else return jQuery obj, optionally execute command
@@ -302,8 +344,8 @@
       data = picker($this)
 
       # if string given: execute command and return jQuery
-      if (typeof option == 'string')
-        data[option].call($this)
+      if (typeof options == 'string')
+        data[options].call($this)
         return this
       else # else return ThingyPicker
         return data
