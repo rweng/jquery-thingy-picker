@@ -122,6 +122,29 @@
     this.on = (event, handler) -&gt;
       $el.on(event, handler)
 
+
+    ###*
+    @method isVisible
+    @return {Boolean}
+    ###
+    this.isVisible = -&gt;
+      $el.css(&#x27;display&#x27;) != &quot;none&quot;
+
+
+    ###*
+    delegates to $el.show
+    @method show
+    ###
+    this.show = -&gt;
+      $el.show()
+
+    ###*
+    delegates to $el.hide
+    @method hide
+    ###
+    this.hide = -&gt;
+      $el.hide()
+
     ###*
     @method deselect
     ###
@@ -183,9 +206,8 @@
       preSelectedItems: []
       excludeItems: []
       items: []
-      isItemFiltered: ($item, filterText) -&gt;
-        itemName = $item.find(&quot;.item-name&quot;).text()
-        not new RegExp(filterText, &quot;i&quot;).test(itemName)
+      isItemFiltered: (item, filterText) -&gt;
+        not new RegExp(filterText, &quot;i&quot;).test(item.data.name)
       itemToHtml: (contact) -&gt;
         &quot;&lt;div class=&#x27;item&#x27; id=&#x27;#{contact.id}&#x27;&gt;&lt;img src=&#x27;#{contact.picture}&#x27;/&gt;&lt;div class=&#x27;item-name&#x27;&gt;#{contact.name}&lt;/div&gt;&lt;/div&gt;&quot;
       sorter: (a, b) -&gt;
@@ -230,6 +252,30 @@
     this.hasMaxSelected = -&gt;
       settings.maxSelected &gt;= picker.getSelectedItems().length
 
+
+    ###*
+    calls show on all items
+
+    @method showAllItems
+    ###
+    this.showAllItems = -&gt;
+      for item in items
+        item.show()
+
+
+
+    ###*
+    hides all items except the selected ones
+
+    @method showSelectedItemsOnly
+    ###
+    this.showSelectedItemsOnly = -&gt;
+      for item in items
+        if item.isSelected()
+          item.show()
+        else
+          item.hide()
+
     ###*
     @method items
     @returns {[ThingyItem]} all items
@@ -244,6 +290,8 @@
     @return {[ThingyItem]} changed items
     ###
     this.clearSelection = -&gt;
+      if debug
+        console.log &quot;in: clearSelection&quot;
       deselected = []
       for item in items
         console.log &quot;item&quot;, item.isSelected()
@@ -252,6 +300,13 @@
 
       deselected
 
+    ###*
+    @method visibleItems
+    @return {[ThingyItem]}
+    ###
+    this.visibleItems = -&gt;
+      $.grep items, (item) -&gt;
+        item.isVisible()
 
 
     # ----------+----------+----------+----------+----------+----------+----------+
@@ -277,13 +332,11 @@
       message = settings.labels.max_selected_message.replace(&quot;{0}&quot;, selectedCount()).replace(&quot;{1}&quot;, settings.maxSelected)
       $(&quot;.max-selected-wrapper&quot;).html( message )
 
-    # ----------+----------+----------+----------+----------+----------+----------+
-    # Initialization of container
-    # ----------+----------+----------+----------+----------+----------+----------+
+    # initialize html
     elem.html(
       &quot;&lt;div class=&#x27;thingy-picker&#x27;&gt;&quot; +
       &quot;    &lt;div class=&#x27;inner-header&#x27;&gt;&quot; +
-      &quot;        &lt;span class=&#x27;filter-label&#x27;&gt;#{settings.labels.find_items}&lt;/span&gt;&lt;input type=&#x27;text&#x27; class=&#x27;filter&#x27; value=&#x27;#{settings.labels.filter_placeholder}&#x27;/&gt;&quot; +
+      &quot;        &lt;span class=&#x27;filter-label&#x27;&gt;#{settings.labels.find_items}&lt;/span&gt;&lt;input type=&#x27;text&#x27; placeholder=&#x27;Start typing a name&#x27; class=&#x27;filter&#x27;/&gt;&quot; +
       &quot;        &lt;a class=&#x27;filter-link selected&#x27; data-tp-action=&#x27;filterAll&#x27; href=&#x27;#&#x27;&gt;#{settings.labels.all}&lt;/a&gt;&quot; +
       &quot;        &lt;a class=&#x27;filter-link&#x27; data-tp-action=&#x27;filterSelected&#x27; href=&#x27;#&#x27;&gt;#{settings.labels.selected} (&lt;span class=&#x27;selected-count&#x27;&gt;0&lt;/span&gt;)&lt;/a&gt;&quot; +
       (if settings.maxSelected &gt; 0 then &quot;&lt;div class=&#x27;max-selected-wrapper&#x27;&gt;&lt;/div&gt;&quot; else &quot;&quot;) +
@@ -292,11 +345,7 @@
       &quot;&lt;/div&gt;&quot;
     )
 
-    item_container = elem.find(&quot;.items&quot;)
-    container = elem.find(&quot;.thingy-picker&quot;)
-    buffer = []
-    selectedClass = &quot;&quot;
-
+    # create items
     $.each(settings.items, (i, data) -&gt;
       item = new ThingyItem(data, picker)
       items.push item
@@ -306,58 +355,45 @@
         updateMaxSelectedMessage()
         updateSelectedCount()
 
-        picker.$el.trigger(&#x27;jfmfs.selection.changed&#x27;, item)
+        ###*
+        @event selection.changed
+        @param {ThingyItem} item
+        ###
+        picker.$el.trigger(&#x27;selection.changed&#x27;, item)
 
 
       console.log &quot;item&quot;, item
       addItem(item)
     );
 
-    all_items = $(&quot;.item&quot;, elem);
+    ########################################
+    # Add event handlers
+    ########################################
 
     # filter by selected, hide all non-selected
+    all_items = $(&quot;.item&quot;, elem);
     elem.find(&quot;[data-tp-action=&#x27;filterSelected&#x27;]&quot;).click (event) -&gt;
       event.preventDefault()
-      elem.find(&quot;.items&quot;).addClass(&quot;filter-unselected&quot;)
-
-      all_items.not(&quot;.selected&quot;).addClass(&quot;hide-non-selected&quot;)
-      $(&quot;.filter-link&quot;).removeClass(&quot;selected&quot;)
-      $(this).addClass(&quot;selected&quot;)
+      picker.showSelectedItemsOnly()
 
     # remove filter, show all
     elem.find(&quot;[data-tp-action=&#x27;filterAll&#x27;]&quot;).click (event) -&gt;
       event.preventDefault()
-      elem.find(&quot;.items&quot;).removeClass(&quot;filter-unselected&quot;)
-
-      all_items.removeClass(&quot;hide-non-selected&quot;)
-      $(&quot;.filter-link&quot;).removeClass(&quot;selected&quot;)
-      $(this).addClass(&quot;selected&quot;)
-
-    # hover effect on items
-    elem.find(&quot;.item:not(.selected)&quot;).on &#x27;hover&#x27;, (ev) -&gt;
-      if (ev.type == &#x27;mouseover&#x27;)
-        $(this).addClass(&quot;hover&quot;)
-      if (ev.type == &#x27;mouseout&#x27;)
-        $(this).removeClass(&quot;hover&quot;)
+      picker.showAllItems()
 
     # filter as you type
     elem.find(&quot;input.filter&quot;).keyup(-&gt;
-      filter = $(this).val()
+      filterText = $(this).val()
+
       clearTimeout(keyUpTimer)
+
       keyUpTimer = setTimeout(-&gt;
-        all_items.each (index, item) -&gt;
-          $item = $(item)
-          if settings.isItemFiltered($item, filter)
-            $item.addClass(&#x27;filtered&#x27;)
+        for item in items
+          if settings.isItemFiltered(item, filterText)
+            item.hide()
           else
-            $item.removeClass(&#x27;filtered&#x27;)
-      , 400)
-    ).focus( -&gt;
-      if $.trim($(this).val()) == &#x27;Start typing a name&#x27;
-        $(this).val(&#x27;&#x27;)
-    ).blur( -&gt;
-      if($.trim($(this).val()) == &#x27;&#x27;)
-        $(this).val(&#x27;Start typing a name&#x27;)
+            item.show()
+      , 200)
     )
 
     # hover states on the buttons
@@ -369,21 +405,20 @@
 
     updateMaxSelectedMessage()
     updateSelectedCount()
-    elem.trigger(&quot;jfmfs.itemload.finished&quot;)
 
     return this
 
-  $.fn.thingyPicker = (option)-&gt;
+  $.fn.thingyPicker = (options)-&gt;
     # return thingyPicker instance if called without options on one element
-    picker = ($el) -&gt;
+    picker = ($el, options) -&gt;
       return $el.data(&#x27;thingyPicker&#x27;) if $el.data(&#x27;thingyPicker&#x27;)
 
-      obj = new ThingyPicker($el[0], option)
+      obj = new ThingyPicker($el[0], options)
       $el.data(&#x27;thingyPicker&#x27;, obj)
       obj
 
-    if this.length == 1 and option == undefined
-      return picker($(this))
+    if this.length == 1 and typeof options != &quot;string&quot;
+      return picker($(this), options)
 
 
     # else return jQuery obj, optionally execute command
@@ -392,8 +427,8 @@
       data = picker($this)
 
       # if string given: execute command and return jQuery
-      if (typeof option == &#x27;string&#x27;)
-        data[option].call($this)
+      if (typeof options == &#x27;string&#x27;)
+        data[options].call($this)
         return this
       else # else return ThingyPicker
         return data

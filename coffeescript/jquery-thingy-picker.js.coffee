@@ -33,6 +33,13 @@
       $el.on(event, handler)
 
 
+    ###*
+    @method isVisible
+    @return {Boolean}
+    ###
+    this.isVisible = ->
+      $el.css('display') != "none"
+
 
     ###*
     delegates to $el.show
@@ -109,9 +116,8 @@
       preSelectedItems: []
       excludeItems: []
       items: []
-      isItemFiltered: ($item, filterText) ->
-        itemName = $item.find(".item-name").text()
-        not new RegExp(filterText, "i").test(itemName)
+      isItemFiltered: (item, filterText) ->
+        not new RegExp(filterText, "i").test(item.data.name)
       itemToHtml: (contact) ->
         "<div class='item' id='#{contact.id}'><img src='#{contact.picture}'/><div class='item-name'>#{contact.name}</div></div>"
       sorter: (a, b) ->
@@ -204,6 +210,13 @@
 
       deselected
 
+    ###*
+    @method visibleItems
+    @return {[ThingyItem]}
+    ###
+    this.visibleItems = ->
+      $.grep items, (item) ->
+        item.isVisible()
 
 
     # ----------+----------+----------+----------+----------+----------+----------+
@@ -280,18 +293,17 @@
 
     # filter as you type
     elem.find("input.filter").keyup(->
-      filter = $(this).val()
+      filterText = $(this).val()
 
       clearTimeout(keyUpTimer)
 
       keyUpTimer = setTimeout(->
-        all_items.each (index, item) ->
-          $item = $(item)
-          if settings.isItemFiltered($item, filter)
-            $item.addClass('filtered')
+        for item in items
+          if settings.isItemFiltered(item, filterText)
+            item.hide()
           else
-            $item.removeClass('filtered')
-      , 400)
+            item.show()
+      , 200)
     )
 
     # hover states on the buttons

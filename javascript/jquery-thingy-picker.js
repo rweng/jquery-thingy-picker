@@ -38,6 +38,14 @@
         return $el.on(event, handler);
       };
       /**
+      @method isVisible
+      @return {Boolean}
+      */
+
+      this.isVisible = function() {
+        return $el.css('display') !== "none";
+      };
+      /**
       delegates to $el.show
       @method show
       */
@@ -120,11 +128,8 @@
         preSelectedItems: [],
         excludeItems: [],
         items: [],
-        isItemFiltered: function($item, filterText) {
-          var itemName;
-
-          itemName = $item.find(".item-name").text();
-          return !new RegExp(filterText, "i").test(itemName);
+        isItemFiltered: function(item, filterText) {
+          return !new RegExp(filterText, "i").test(item.data.name);
         },
         itemToHtml: function(contact) {
           return "<div class='item' id='" + contact.id + "'><img src='" + contact.picture + "'/><div class='item-name'>" + contact.name + "</div></div>";
@@ -246,6 +251,16 @@
         }
         return deselected;
       };
+      /**
+      @method visibleItems
+      @return {[ThingyItem]}
+      */
+
+      this.visibleItems = function() {
+        return $.grep(items, function(item) {
+          return item.isVisible();
+        });
+      };
       updateSelectedCount = function() {
         return elem.find(".selected-count").html(selectedCount());
       };
@@ -299,22 +314,24 @@
         return picker.showAllItems();
       });
       elem.find("input.filter").keyup(function() {
-        var filter, keyUpTimer;
+        var filterText, keyUpTimer;
 
-        filter = $(this).val();
+        filterText = $(this).val();
         clearTimeout(keyUpTimer);
         return keyUpTimer = setTimeout(function() {
-          return all_items.each(function(index, item) {
-            var $item;
+          var item, _i, _len, _results;
 
-            $item = $(item);
-            if (settings.isItemFiltered($item, filter)) {
-              return $item.addClass('filtered');
+          _results = [];
+          for (_i = 0, _len = items.length; _i < _len; _i++) {
+            item = items[_i];
+            if (settings.isItemFiltered(item, filterText)) {
+              _results.push(item.hide());
             } else {
-              return $item.removeClass('filtered');
+              _results.push(item.show());
             }
-          });
-        }, 400);
+          }
+          return _results;
+        }, 200);
       });
       elem.find(".button").hover(function() {
         return $(this).addClass("button-hover");

@@ -78,10 +78,6 @@ describe 'jquery-thingy-picker', ->
 
 
     describe 'Filtering', ->
-      visibleItems = ->
-        _.select $el.find('.item'), (i)->
-          $(i).css('display') != 'none'
-
       it 'is not filtered by default', ->
         expect($el.find(".item.filtered").length).toBe(0)
 
@@ -92,7 +88,7 @@ describe 'jquery-thingy-picker', ->
         waits WAIT_TIME
 
         runs ->
-          expect($el.find(".item.filtered").length).toBe(2)
+          expect(picker.visibleItems().length).toBe(1)
 
       it 'clears the filter if the filter input is cleared', ->
         runs ->
@@ -102,7 +98,7 @@ describe 'jquery-thingy-picker', ->
         waits WAIT_TIME
 
         runs ->
-          expect($el.find(".filtered").length).toBe(0)
+          expect(picker.visibleItems().length).toBe(3)
 
 
       describe 'Show Selected link', ->
@@ -115,7 +111,7 @@ describe 'jquery-thingy-picker', ->
 
           runs ->
             expect($el.find(".item.selected").length).toBe(1)
-            expect(visibleItems().length).toBe(1)
+            expect(picker.visibleItems().length).toBe(1)
 
         it 'updates the count of items are selected', ->
           runs ->
@@ -204,6 +200,11 @@ describe 'jquery-thingy-picker', ->
         it 'returns the selected items', ->
           $el.find('.item:first').addClass('selected')
           expect($el.thingyPicker().getSelectedItems().length).toBe(1)
+
+      describe 'visibleItems', ->
+        it 'returns visible items', ->
+          firstItem().hide()
+          expect(picker.visibleItems().length).toBe(2)
 
       describe 'clearSelection', ->
         it 'removes .selected from all items and returns changed items', ->
