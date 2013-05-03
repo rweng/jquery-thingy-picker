@@ -233,7 +233,7 @@
     elem.html(
       "<div class='thingy-picker'>" +
       "    <div class='inner-header'>" +
-      "        <span class='filter-label'>#{settings.labels.find_items}</span><input type='text' class='filter' value='#{settings.labels.filter_placeholder}'/>" +
+      "        <span class='filter-label'>#{settings.labels.find_items}</span><input type='text' placeholder='Start typing a name' class='filter'/>" +
       "        <a class='filter-link selected' data-tp-action='filterAll' href='#'>#{settings.labels.all}</a>" +
       "        <a class='filter-link' data-tp-action='filterSelected' href='#'>#{settings.labels.selected} (<span class='selected-count'>0</span>)</a>" +
       (if settings.maxSelected > 0 then "<div class='max-selected-wrapper'></div>" else "") +
@@ -281,7 +281,9 @@
     # filter as you type
     elem.find("input.filter").keyup(->
       filter = $(this).val()
+
       clearTimeout(keyUpTimer)
+
       keyUpTimer = setTimeout(->
         all_items.each (index, item) ->
           $item = $(item)
@@ -290,12 +292,6 @@
           else
             $item.removeClass('filtered')
       , 400)
-    ).focus( ->
-      if $.trim($(this).val()) == 'Start typing a name'
-        $(this).val('')
-    ).blur( ->
-      if($.trim($(this).val()) == '')
-        $(this).val('Start typing a name')
     )
 
     # hover states on the buttons

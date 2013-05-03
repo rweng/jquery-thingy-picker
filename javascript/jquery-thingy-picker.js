@@ -269,7 +269,7 @@
         message = settings.labels.max_selected_message.replace("{0}", selectedCount()).replace("{1}", settings.maxSelected);
         return $(".max-selected-wrapper").html(message);
       };
-      elem.html("<div class='thingy-picker'>" + "    <div class='inner-header'>" + ("        <span class='filter-label'>" + settings.labels.find_items + "</span><input type='text' class='filter' value='" + settings.labels.filter_placeholder + "'/>") + ("        <a class='filter-link selected' data-tp-action='filterAll' href='#'>" + settings.labels.all + "</a>") + ("        <a class='filter-link' data-tp-action='filterSelected' href='#'>" + settings.labels.selected + " (<span class='selected-count'>0</span>)</a>") + (settings.maxSelected > 0 ? "<div class='max-selected-wrapper'></div>" : "") + "    </div>" + "    <div class='items'></div>" + "</div>");
+      elem.html("<div class='thingy-picker'>" + "    <div class='inner-header'>" + ("        <span class='filter-label'>" + settings.labels.find_items + "</span><input type='text' placeholder='Start typing a name' class='filter'/>") + ("        <a class='filter-link selected' data-tp-action='filterAll' href='#'>" + settings.labels.all + "</a>") + ("        <a class='filter-link' data-tp-action='filterSelected' href='#'>" + settings.labels.selected + " (<span class='selected-count'>0</span>)</a>") + (settings.maxSelected > 0 ? "<div class='max-selected-wrapper'></div>" : "") + "    </div>" + "    <div class='items'></div>" + "</div>");
       $.each(settings.items, function(i, data) {
         var item;
 
@@ -315,14 +315,6 @@
             }
           });
         }, 400);
-      }).focus(function() {
-        if ($.trim($(this).val()) === 'Start typing a name') {
-          return $(this).val('');
-        }
-      }).blur(function() {
-        if ($.trim($(this).val()) === '') {
-          return $(this).val('Start typing a name');
-        }
       });
       elem.find(".button").hover(function() {
         return $(this).addClass("button-hover");
