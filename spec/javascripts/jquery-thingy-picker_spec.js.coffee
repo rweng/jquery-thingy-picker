@@ -1,6 +1,4 @@
 describe 'jquery-thingy-picker', ->
-  WAIT_TIME = 500
-
   itemData = ->
     [{
       id: 1,
@@ -82,63 +80,41 @@ describe 'jquery-thingy-picker', ->
         expect($el.find(".item.filtered").length).toBe(0)
 
       it 'filters if s.th. is inserted in the filter input', ->
-        runs ->
-          $el.find("input.filter").val("2").trigger('keyup')
+        $el.find("input.filter").val("2").trigger('keyup')
 
-        waits WAIT_TIME
-
-        runs ->
-          expect(picker.visibleItems().length).toBe(1)
+        expect(picker.visibleItems().length).toBe(1)
 
       it 'clears the filter if the filter input is cleared', ->
-        runs ->
-          $el.find(".item").addClass('filtered')
-          $el.find("input.filter").val("").trigger('keyup')
+        $el.find(".item").addClass('filtered')
+        $el.find("input.filter").val("").trigger('keyup')
 
-        waits WAIT_TIME
-
-        runs ->
-          expect(picker.visibleItems().length).toBe(3)
+        expect(picker.visibleItems().length).toBe(3)
 
 
       describe 'Show Selected link', ->
         it 'hides non-selected items', ->
-          runs ->
-            $el.find(".item:first").trigger('click')
-            $el.find("[data-tp-action='filterSelected']").trigger('click')
+          $el.find(".item:first").trigger('click')
+          $el.find("[data-tp-filter='selected']").trigger('click')
 
-          waits WAIT_TIME
-
-          runs ->
-            expect($el.find(".item.selected").length).toBe(1)
-            expect(picker.visibleItems().length).toBe(1)
+          expect($el.find(".item.selected").length).toBe(1)
+          expect(picker.visibleItems().length).toBe(1)
 
         it 'updates the count of items are selected', ->
-          runs ->
-            expect($el.find(".selected-count").text()).toBe("0")
-            $el.find(".item:first").trigger('click')
+          expect($el.find(".selected-count").text()).toBe("0")
 
-          waits WAIT_TIME
+          $el.find(".item:first").trigger('click')
 
-          runs ->
-            expect($el.find(".selected-count").text()).toBe("1")
+          expect($el.find(".selected-count").text()).toBe("1")
 
       describe 'Show all link', ->
         it 'shows all items'
 
-        it 'removes .filter-unselected from .items', ->
-          runs ->
-            $el.find("[data-tp-action='filterSelected']").trigger('click')
+        it 'removes .filter-unselected from .items', ->          runs ->
+          $el.find("[data-tp-action='filterSelected']").trigger('click')
 
-          waits WAIT_TIME
+          $el.find("[data-tp-action='filterAll']").trigger('click')
 
-          runs ->
-            $el.find("[data-tp-action='filterAll']").trigger('click')
-
-          waits WAIT_TIME
-
-          runs ->
-            expect($el.find(".items.filter-unselected").length).toBe(0)
+          expect($el.find(".items.filter-unselected").length).toBe(0)
 
 
     describe 'Events', ->

@@ -229,6 +229,22 @@
     selectedCount = ->
       elem.find(".item.selected").length
 
+
+    ###*
+    @method updateVisibleItems
+    ###
+    updateVisibleItems = ->
+      filterText = $el.find("input.filter").val()
+      mainFilter = $el.find('.filter-link.selected').data('tp-filter')
+
+      for item in items
+        filterLinkSaysShow = mainFilter == "all" or (mainFilter == "selected" and item.isSelected())
+        filterTextSaysShow = not settings.isItemFiltered(item, filterText)
+        if filterLinkSaysShow and filterTextSaysShow
+          item.show()
+        else
+          item.hide()
+
     maxSelectedEnabled = ->
       settings.maxSelected > 0
 
@@ -247,8 +263,8 @@
       "<div class='thingy-picker'>" +
       "    <div class='inner-header'>" +
       "        <span class='filter-label'>#{settings.labels.find_items}</span><input type='text' placeholder='Start typing a name' class='filter'/>" +
-      "        <a class='filter-link selected' data-tp-action='filterAll' href='#'>#{settings.labels.all}</a>" +
-      "        <a class='filter-link' data-tp-action='filterSelected' href='#'>#{settings.labels.selected} (<span class='selected-count'>0</span>)</a>" +
+      "        <a class='filter-link selected' data-tp-filter='all' href='#'>#{settings.labels.all}</a>" +
+      "        <a class='filter-link' data-tp-filter='selected' href='#'>#{settings.labels.selected} (<span class='selected-count'>0</span>)</a>" +
       (if settings.maxSelected > 0 then "<div class='max-selected-wrapper'></div>" else "") +
       "    </div>" +
       "    <div class='items'></div>" +
@@ -280,31 +296,18 @@
     # Add event handlers
     ########################################
 
-    # filter by selected, hide all non-selected
-    all_items = $(".item", elem);
-    elem.find("[data-tp-action='filterSelected']").click (event) ->
+    # add selected class to the clicked filter link
+    $el.find(".filter-link").click (event)->
+      if debug
+        console.log "filter-link clicked: ", this
       event.preventDefault()
-      picker.showSelectedItemsOnly()
-
-    # remove filter, show all
-    elem.find("[data-tp-action='filterAll']").click (event) ->
-      event.preventDefault()
-      picker.showAllItems()
+      $el.find(".filter-link").removeClass("selected")
+      $(this).addClass('selected')
+      updateVisibleItems()
 
     # filter as you type
-    elem.find("input.filter").keyup(->
-      filterText = $(this).val()
-
-      clearTimeout(keyUpTimer)
-
-      keyUpTimer = setTimeout(->
-        for item in items
-          if settings.isItemFiltered(item, filterText)
-            item.hide()
-          else
-            item.show()
-      , 200)
-    )
+    elem.find("input.filter").keyup ->
+      updateVisibleItems()
 
     # hover states on the buttons
     elem.find(".button").hover( ->

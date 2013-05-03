@@ -118,7 +118,7 @@
     */
 
     ThingyPicker = function(element, options) {
-      var addItem, all_items, elem, items, lastSelected, maxSelectedEnabled, picker, selectedCount, settings, updateMaxSelectedMessage, updateSelectedCount;
+      var addItem, elem, items, lastSelected, maxSelectedEnabled, picker, selectedCount, settings, updateMaxSelectedMessage, updateSelectedCount, updateVisibleItems;
 
       this.$el = elem = $(element);
       picker = this;
@@ -267,6 +267,28 @@
       selectedCount = function() {
         return elem.find(".item.selected").length;
       };
+      /**
+      @method updateVisibleItems
+      */
+
+      updateVisibleItems = function() {
+        var filterLinkSaysShow, filterText, filterTextSaysShow, item, mainFilter, _i, _len, _results;
+
+        filterText = $el.find("input.filter").val();
+        mainFilter = $el.find('.filter-link.selected').data('tp-filter');
+        _results = [];
+        for (_i = 0, _len = items.length; _i < _len; _i++) {
+          item = items[_i];
+          filterLinkSaysShow = mainFilter === "all" || (mainFilter === "selected" && item.isSelected());
+          filterTextSaysShow = !settings.isItemFiltered(item, filterText);
+          if (filterLinkSaysShow && filterTextSaysShow) {
+            _results.push(item.show());
+          } else {
+            _results.push(item.hide());
+          }
+        }
+        return _results;
+      };
       maxSelectedEnabled = function() {
         return settings.maxSelected > 0;
       };
@@ -284,7 +306,7 @@
         message = settings.labels.max_selected_message.replace("{0}", selectedCount()).replace("{1}", settings.maxSelected);
         return $(".max-selected-wrapper").html(message);
       };
-      elem.html("<div class='thingy-picker'>" + "    <div class='inner-header'>" + ("        <span class='filter-label'>" + settings.labels.find_items + "</span><input type='text' placeholder='Start typing a name' class='filter'/>") + ("        <a class='filter-link selected' data-tp-action='filterAll' href='#'>" + settings.labels.all + "</a>") + ("        <a class='filter-link' data-tp-action='filterSelected' href='#'>" + settings.labels.selected + " (<span class='selected-count'>0</span>)</a>") + (settings.maxSelected > 0 ? "<div class='max-selected-wrapper'></div>" : "") + "    </div>" + "    <div class='items'></div>" + "</div>");
+      elem.html("<div class='thingy-picker'>" + "    <div class='inner-header'>" + ("        <span class='filter-label'>" + settings.labels.find_items + "</span><input type='text' placeholder='Start typing a name' class='filter'/>") + ("        <a class='filter-link selected' data-tp-filter='all' href='#'>" + settings.labels.all + "</a>") + ("        <a class='filter-link' data-tp-filter='selected' href='#'>" + settings.labels.selected + " (<span class='selected-count'>0</span>)</a>") + (settings.maxSelected > 0 ? "<div class='max-selected-wrapper'></div>" : "") + "    </div>" + "    <div class='items'></div>" + "</div>");
       $.each(settings.items, function(i, data) {
         var item;
 
@@ -304,34 +326,17 @@
         console.log("item", item);
         return addItem(item);
       });
-      all_items = $(".item", elem);
-      elem.find("[data-tp-action='filterSelected']").click(function(event) {
+      $el.find(".filter-link").click(function(event) {
+        if (debug) {
+          console.log("filter-link clicked: ", this);
+        }
         event.preventDefault();
-        return picker.showSelectedItemsOnly();
-      });
-      elem.find("[data-tp-action='filterAll']").click(function(event) {
-        event.preventDefault();
-        return picker.showAllItems();
+        $el.find(".filter-link").removeClass("selected");
+        $(this).addClass('selected');
+        return updateVisibleItems();
       });
       elem.find("input.filter").keyup(function() {
-        var filterText, keyUpTimer;
-
-        filterText = $(this).val();
-        clearTimeout(keyUpTimer);
-        return keyUpTimer = setTimeout(function() {
-          var item, _i, _len, _results;
-
-          _results = [];
-          for (_i = 0, _len = items.length; _i < _len; _i++) {
-            item = items[_i];
-            if (settings.isItemFiltered(item, filterText)) {
-              _results.push(item.hide());
-            } else {
-              _results.push(item.show());
-            }
-          }
-          return _results;
-        }, 200);
+        return updateVisibleItems();
       });
       elem.find(".button").hover(function() {
         return $(this).addClass("button-hover");
