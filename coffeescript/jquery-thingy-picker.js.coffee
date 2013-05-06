@@ -2,18 +2,24 @@
 # item must be {id: ..., picture: ..., name: ...}
 (($)->
   debug = true
+  window.ThingyPicker = {
+    itemToHtml: (contact) ->
+      "<div class='item' id='#{contact.id}'><img src='#{contact.picture}'/><div class='item-name'>#{contact.name}</div></div>"
+  }
 
   ###*
   A ThingyItem is a single, selectable item in a ThingyPicker
 
   @class ThingyItem
   @constructor
+  @param {Object} data
+  @param {Object} options
   ###
-  ThingyItem = (data, picker) ->
-    this.$el = $el = $(ThingyItem.itemToHtml(data))
-    this.picker = picker
+  window.ThingyPicker.ThingyItem = ThingyItem = (data, options) ->
+    this.$el = $el = $(window.ThingyPicker.itemToHtml(data))
     this.data = data
     item = this
+    options ||= {}
     $el.data("tp-item", this)
     SELECTED_CLASS = 'selected'
     EVENTS = {
@@ -23,6 +29,14 @@
       SELECTION_CHANGED: 'selection-changed'
     }
 
+    ###*
+    calls options.canBeSelected or returns true
+
+    @method canBeSelected
+    @return {Boolean}
+    ###
+    this.canBeSelected = ->
+      if options.canBeSelected then options.canBeSelected(item) else true
 
     ###*
     @method on
@@ -32,6 +46,14 @@
     this.on = (event, handler) ->
       $el.on(event, handler)
 
+    ###*
+    selects the item if it is unselected, unselects if it is selected
+
+    @method toggle
+    @return {ThingyItem} this
+    ###
+    this.toggle = ->
+      if @isSelected() then @deselect() else @select()
 
     ###*
     @method isVisible
@@ -71,7 +93,7 @@
     @method select
     ###
     this.select = ->
-      unless item.isSelected()
+      if @canBeSelected() and not @isSelected()
         $el.addClass(SELECTED_CLASS)
         $el.trigger(EVENTS.SELECTION_CHANGED)
 
@@ -86,14 +108,7 @@
 
     # handle when a item is clicked for selection
     $el.click (event) ->
-      console.log "clicked"
-      #if the element is being selected, test if the max number of items have
-      #already been selected, if so, just return
-      if picker.hasMaxSelected() and not item.isSelected()
-        console.log("returning since picker.MaxSelected reached")
-        return
-
-      item.select()
+      item.toggle()
 
     return this
 
@@ -107,7 +122,7 @@
   @param {DomNode} element
   @param {Object} options
   ###
-  ThingyPicker = (element, options) ->
+  window.ThingyPicker.ThingyPicker = ThingyPicker = (element, options) ->
     this.$el = $el = $(element)
     picker = this
     settings = $.extend({
@@ -118,8 +133,6 @@
       items: []
       isItemFiltered: (item, filterText) ->
         not new RegExp(filterText, "i").test(item.data.name)
-      itemToHtml: (contact) ->
-        "<div class='item' id='#{contact.id}'><img src='#{contact.picture}'/><div class='item-name'>#{contact.name}</div></div>"
       sorter: (a, b) ->
         x = a.name.toLowerCase()
         y = b.name.toLowerCase()
@@ -136,7 +149,7 @@
     items = []
 
     lastSelected = undefined # used when shift-click is performed to know where to start from to select multiple elements
-    ThingyItem.itemToHtml = settings.itemToHtml
+    ThingyPicker.itemToHtml = settings.itemToHtml if settings.itemToHtml
 
     # ----------+----------+----------+----------+----------+----------+----------+
     # Public functions

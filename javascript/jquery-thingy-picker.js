@@ -5,20 +5,27 @@
     var ThingyItem, ThingyPicker, debug;
 
     debug = true;
+    window.ThingyPicker = {
+      itemToHtml: function(contact) {
+        return "<div class='item' id='" + contact.id + "'><img src='" + contact.picture + "'/><div class='item-name'>" + contact.name + "</div></div>";
+      }
+    };
     /**
     A ThingyItem is a single, selectable item in a ThingyPicker
     
     @class ThingyItem
     @constructor
+    @param {Object} data
+    @param {Object} options
     */
 
-    ThingyItem = function(data, picker) {
+    window.ThingyPicker.ThingyItem = ThingyItem = function(data, options) {
       var $el, EVENTS, SELECTED_CLASS, item;
 
-      this.$el = $el = $(ThingyItem.itemToHtml(data));
-      this.picker = picker;
+      this.$el = $el = $(window.ThingyPicker.itemToHtml(data));
       this.data = data;
       item = this;
+      options || (options = {});
       $el.data("tp-item", this);
       SELECTED_CLASS = 'selected';
       EVENTS = {
@@ -29,6 +36,20 @@
         SELECTION_CHANGED: 'selection-changed'
       };
       /**
+      calls options.canBeSelected or returns true
+      
+      @method canBeSelected
+      @return {Boolean}
+      */
+
+      this.canBeSelected = function() {
+        if (options.canBeSelected) {
+          return options.canBeSelected(item);
+        } else {
+          return true;
+        }
+      };
+      /**
       @method on
       @param {jQuery.Event} event
       @param {Function} handler
@@ -36,6 +57,20 @@
 
       this.on = function(event, handler) {
         return $el.on(event, handler);
+      };
+      /**
+      selects the item if it is unselected, unselects if it is selected
+      
+      @method toggle
+      @return {ThingyItem} this
+      */
+
+      this.toggle = function() {
+        if (this.isSelected()) {
+          return this.deselect();
+        } else {
+          return this.select();
+        }
       };
       /**
       @method isVisible
@@ -81,7 +116,7 @@
       */
 
       this.select = function() {
-        if (!item.isSelected()) {
+        if (this.canBeSelected() && !this.isSelected()) {
           $el.addClass(SELECTED_CLASS);
           return $el.trigger(EVENTS.SELECTION_CHANGED);
         }
@@ -98,12 +133,7 @@
         return $el.hasClass("selected");
       };
       $el.click(function(event) {
-        console.log("clicked");
-        if (picker.hasMaxSelected() && !item.isSelected()) {
-          console.log("returning since picker.MaxSelected reached");
-          return;
-        }
-        return item.select();
+        return item.toggle();
       });
       return this;
     };
@@ -117,7 +147,7 @@
     @param {Object} options
     */
 
-    ThingyPicker = function(element, options) {
+    window.ThingyPicker.ThingyPicker = ThingyPicker = function(element, options) {
       var $el, addItem, items, lastSelected, maxSelectedEnabled, picker, selectedCount, settings, updateMaxSelectedMessage, updateSelectedCount, updateVisibleItems;
 
       this.$el = $el = $(element);
@@ -130,9 +160,6 @@
         items: [],
         isItemFiltered: function(item, filterText) {
           return !new RegExp(filterText, "i").test(item.data.name);
-        },
-        itemToHtml: function(contact) {
-          return "<div class='item' id='" + contact.id + "'><img src='" + contact.picture + "'/><div class='item-name'>" + contact.name + "</div></div>";
         },
         sorter: function(a, b) {
           var x, y, _ref, _ref1;
@@ -155,7 +182,9 @@
       }, options || {});
       items = [];
       lastSelected = void 0;
-      ThingyItem.itemToHtml = settings.itemToHtml;
+      if (settings.itemToHtml) {
+        ThingyPicker.itemToHtml = settings.itemToHtml;
+      }
       /**
       @method getSelectedItems
       */
