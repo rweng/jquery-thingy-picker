@@ -1,7 +1,7 @@
 # call with $(el).thingyPicker(items: [item])
 # item must be {id: ..., picture: ..., name: ...}
 (($)->
-  debug = true
+  debug = false
   window.ThingyPicker = {
     itemToHtml: (contact) ->
       "<div class='item' id='#{contact.id}'><img src='#{contact.picture}'/><div class='item-name'>#{contact.name}</div></div>"
