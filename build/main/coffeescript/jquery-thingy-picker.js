@@ -4,7 +4,7 @@
   (function($) {
     var ThingyItem, ThingyPicker, debug;
 
-    debug = true;
+    debug = false;
     window.ThingyPicker = {
       itemToHtml: function(contact) {
         return "<div class='item' id='" + contact.id + "'><img src='" + contact.picture + "'/><div class='item-name'>" + contact.name + "</div></div>";

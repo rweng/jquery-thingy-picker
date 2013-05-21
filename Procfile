@@ -1,1 +1,1 @@
-web: rake serve
+web: node build/server.js

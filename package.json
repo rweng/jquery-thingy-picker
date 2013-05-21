@@ -1,0 +1,17 @@
+{
+  "name": "jquery-thingy-picker",
+  "version": "0.0.1",
+  "author": "Robin Wenglewski <robin@wenglewski.de>",
+  "description": "A jquery picker for any kind of items, e.g. contacts.",
+  "devDependencies": {
+    "grunt-contrib-jasmine": "~0.4.2",
+    "grunt-contrib-coffee": "~0.7.0",
+    "grunt-contrib-copy": "~0.4.1",
+    "grunt-contrib-less": "~0.5.1",
+    "grunt-contrib-haml": "~0.1.0",
+    "grunt-contrib-watch": "~0.4.3"
+  },
+  "dependencies": {
+    "node-static": "~0.6.9"
+  }
+}
