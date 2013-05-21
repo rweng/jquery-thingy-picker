@@ -1,3 +1,6 @@
+[![Build Status](https://travis-ci.org/rweng/jquery-thingy-picker.png)](https://travis-ci.org/rweng/jquery-thingy-picker)
+
+
 # Introduction
 
 This is a contact-/anything-picker based on [Mike Brevoort's excellent jquery-facebook-multi-friend-selector](https://github.com/mbrevoort/jquery-facebook-multi-friend-selector).
