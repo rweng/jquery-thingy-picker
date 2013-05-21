@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>coffeescript/jquery-thingy-picker.js.coffee - jQuery ThingyPicker</title>
+    <title>src/main/coffeescript/jquery-thingy-picker.js.coffee</title>
     <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
     <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
     <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
@@ -15,11 +15,11 @@
     <div id="hd" class="yui3-g header">
         <div class="yui3-u-3-4">
             
-                <h1><img src="../assets/css/logo.png" title="jQuery ThingyPicker"></h1>
+                <h1><img src="../assets/css/logo.png" title=""></h1>
             
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 0.0.1</em>
+            <em>API Docs for: </em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -84,26 +84,32 @@
             <div class="apidocs">
                 <div id="docs-main">
                     <div class="content">
-                        <h1 class="file-heading">File: coffeescript/jquery-thingy-picker.js.coffee</h1>
+                        <h1 class="file-heading">File: src/main/coffeescript/jquery-thingy-picker.js.coffee</h1>
 
 <div class="file">
     <pre class="code prettyprint linenums">
 # call with $(el).thingyPicker(items: [item])
 # item must be {id: ..., picture: ..., name: ...}
 (($)-&gt;
-  debug = true
+  debug = false
+  window.ThingyPicker = {
+    itemToHtml: (contact) -&gt;
+      &quot;&lt;div class=&#x27;item&#x27; id=&#x27;#{contact.id}&#x27;&gt;&lt;img src=&#x27;#{contact.picture}&#x27;/&gt;&lt;div class=&#x27;item-name&#x27;&gt;#{contact.name}&lt;/div&gt;&lt;/div&gt;&quot;
+  }
 
   ###*
   A ThingyItem is a single, selectable item in a ThingyPicker
 
   @class ThingyItem
   @constructor
+  @param {Object} data
+  @param {Object} options
   ###
-  ThingyItem = (data, picker) -&gt;
-    this.$el = $el = $(ThingyItem.itemToHtml(data))
-    this.picker = picker
+  window.ThingyPicker.ThingyItem = ThingyItem = (data, options) -&gt;
+    this.$el = $el = $(window.ThingyPicker.itemToHtml(data))
     this.data = data
     item = this
+    options ||= {}
     $el.data(&quot;tp-item&quot;, this)
     SELECTED_CLASS = &#x27;selected&#x27;
     EVENTS = {
@@ -113,6 +119,14 @@
       SELECTION_CHANGED: &#x27;selection-changed&#x27;
     }
 
+    ###*
+    calls options.canBeSelected or returns true
+
+    @method canBeSelected
+    @return {Boolean}
+    ###
+    this.canBeSelected = -&gt;
+      if options.canBeSelected then options.canBeSelected(item) else true
 
     ###*
     @method on
@@ -122,6 +136,14 @@
     this.on = (event, handler) -&gt;
       $el.on(event, handler)
 
+    ###*
+    selects the item if it is unselected, unselects if it is selected
+
+    @method toggle
+    @return {ThingyItem} this
+    ###
+    this.toggle = -&gt;
+      if @isSelected() then @deselect() else @select()
 
     ###*
     @method isVisible
@@ -161,7 +183,7 @@
     @method select
     ###
     this.select = -&gt;
-      unless item.isSelected()
+      if @canBeSelected() and not @isSelected()
         $el.addClass(SELECTED_CLASS)
         $el.trigger(EVENTS.SELECTION_CHANGED)
 
@@ -176,14 +198,7 @@
 
     # handle when a item is clicked for selection
     $el.click (event) -&gt;
-      console.log &quot;clicked&quot;
-      #if the element is being selected, test if the max number of items have
-      #already been selected, if so, just return
-      if picker.hasMaxSelected() and not item.isSelected()
-        console.log(&quot;returning since picker.MaxSelected reached&quot;)
-        return
-
-      item.select()
+      item.toggle()
 
     return this
 
@@ -197,7 +212,7 @@
   @param {DomNode} element
   @param {Object} options
   ###
-  ThingyPicker = (element, options) -&gt;
+  window.ThingyPicker.ThingyPicker = ThingyPicker = (element, options) -&gt;
     this.$el = $el = $(element)
     picker = this
     settings = $.extend({
@@ -208,8 +223,6 @@
       items: []
       isItemFiltered: (item, filterText) -&gt;
         not new RegExp(filterText, &quot;i&quot;).test(item.data.name)
-      itemToHtml: (contact) -&gt;
-        &quot;&lt;div class=&#x27;item&#x27; id=&#x27;#{contact.id}&#x27;&gt;&lt;img src=&#x27;#{contact.picture}&#x27;/&gt;&lt;div class=&#x27;item-name&#x27;&gt;#{contact.name}&lt;/div&gt;&lt;/div&gt;&quot;
       sorter: (a, b) -&gt;
         x = a.name.toLowerCase()
         y = b.name.toLowerCase()
@@ -226,7 +239,7 @@
     items = []
 
     lastSelected = undefined # used when shift-click is performed to know where to start from to select multiple elements
-    ThingyItem.itemToHtml = settings.itemToHtml
+    ThingyPicker.itemToHtml = settings.itemToHtml if settings.itemToHtml
 
     # ----------+----------+----------+----------+----------+----------+----------+
     # Public functions

@@ -14,7 +14,8 @@
     "grunt-contrib-less": "~0.5.1",
     "grunt-contrib-haml": "~0.1.0",
     "grunt-contrib-watch": "~0.4.3",
-    "grunt": "~0.4.1"
+    "grunt": "~0.4.1",
+    "grunt-contrib-yuidoc": "~0.4.0"
   },
   "dependencies": {
     "node-static": "~0.6.9"

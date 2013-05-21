@@ -43,14 +43,13 @@ module.exports = (grunt) ->
     watch:
       coffee:
         files: 'src/**/*.coffee'
-        tasks: 'coffee'
+        tasks: ['coffee', 'yuidoc']
       haml:
         files: "src/example/*.haml"
         tasks: ["haml"]
       specs:
         files: ["<config:jasmine.specs>", "javascript/*.(js|js.coffee|coffee)"]
         tasks: "jasmine"
-
       less:
         files: "src/less/*.less"
         tasks: ["less"]
@@ -68,6 +67,18 @@ module.exports = (grunt) ->
         src: "src/less/jquery-thingy-picker.less"
         dest: "build/css/jquery-thingy-picker.css"
 
+    yuidoc:  
+      name: "<%= pkg.name %>"
+      description: "<%= pkg.description %>"
+      version: "<%= pkg.version %>"
+      url: "<%= pkg.homepage %>"
+      options:
+        paths: "src/main/coffeescript/"
+        outdir: "build/docs/"
+        extension: ".coffee",
+        syntaxtype: "coffee"
+
+
   
   # These plugins provide necessary tasks.
   grunt.loadNpmTasks "grunt-contrib-watch"
@@ -76,6 +87,8 @@ module.exports = (grunt) ->
   grunt.loadNpmTasks "grunt-contrib-less"
   grunt.loadNpmTasks('grunt-contrib-coffee');
   grunt.loadNpmTasks('grunt-contrib-copy');
+  grunt.loadNpmTasks('grunt-contrib-yuidoc');
+
 
   grunt.registerTask 'symlink', 'Creates symlinks', ->
     relink = (src, dest) ->
@@ -86,5 +99,6 @@ module.exports = (grunt) ->
     relink '../css', 'build/example/css'
     relink '../main/javascript', 'build/example/js'
   
-  # Default task.
-  grunt.registerTask "default", ["watch"]
+  grunt.registerTask 'compile', "Compiles everything", ['coffee', 'haml', 'less', 'copy', 'symlink', 'yuidoc']
+  grunt.registerTask "default", ['compile', "watch"]
+

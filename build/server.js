@@ -5,7 +5,7 @@
 
   example = new nStatic.Server('build/example');
 
-  docs = new nStatic.Server('doc');
+  docs = new nStatic.Server('build/docs');
 
   require('http').createServer(function(request, response) {
     return request.addListener('end', function() {

@@ -1,11 +1,8 @@
 {
-    "project": {
-        "name": "jQuery ThingyPicker",
-        "version": "0.0.1"
-    },
+    "project": {},
     "files": {
-        "coffeescript/jquery-thingy-picker.js.coffee": {
-            "name": "coffeescript/jquery-thingy-picker.js.coffee",
+        "src/main/coffeescript/jquery-thingy-picker.js.coffee": {
+            "name": "src/main/coffeescript/jquery-thingy-picker.js.coffee",
             "modules": {},
             "classes": {
                 "ThingyItem": 1,
@@ -25,10 +22,22 @@
             "extensions": [],
             "plugin_for": [],
             "extension_for": [],
-            "file": "coffeescript/jquery-thingy-picker.js.coffee",
-            "line": 6,
+            "file": "src/main/coffeescript/jquery-thingy-picker.js.coffee",
+            "line": 10,
             "description": "A ThingyItem is a single, selectable item in a ThingyPicker",
-            "is_constructor": 1
+            "is_constructor": 1,
+            "params": [
+                {
+                    "name": "data",
+                    "description": "",
+                    "type": "Object"
+                },
+                {
+                    "name": "options",
+                    "description": "",
+                    "type": "Object"
+                }
+            ]
         },
         "ThingyPicker": {
             "name": "ThingyPicker",
@@ -38,8 +47,8 @@
             "extensions": [],
             "plugin_for": [],
             "extension_for": [],
-            "file": "coffeescript/jquery-thingy-picker.js.coffee",
-            "line": 102,
+            "file": "src/main/coffeescript/jquery-thingy-picker.js.coffee",
+            "line": 117,
             "description": "Main Class for Picker",
             "is_constructor": 1,
             "params": [
@@ -58,15 +67,27 @@
     },
     "classitems": [
         {
-            "file": "coffeescript/jquery-thingy-picker.js.coffee",
-            "line": 20,
+            "file": "src/main/coffeescript/jquery-thingy-picker.js.coffee",
+            "line": 26,
             "itemtype": "event",
             "name": "selection-changed",
             "class": "ThingyItem"
         },
         {
-            "file": "coffeescript/jquery-thingy-picker.js.coffee",
-            "line": 27,
+            "file": "src/main/coffeescript/jquery-thingy-picker.js.coffee",
+            "line": 32,
+            "description": "calls options.canBeSelected or returns true",
+            "itemtype": "method",
+            "name": "canBeSelected",
+            "return": {
+                "description": "",
+                "type": "Boolean"
+            },
+            "class": "ThingyItem"
+        },
+        {
+            "file": "src/main/coffeescript/jquery-thingy-picker.js.coffee",
+            "line": 41,
             "itemtype": "method",
             "name": "on",
             "params": [
@@ -84,8 +105,20 @@
             "class": "ThingyItem"
         },
         {
-            "file": "coffeescript/jquery-thingy-picker.js.coffee",
-            "line": 36,
+            "file": "src/main/coffeescript/jquery-thingy-picker.js.coffee",
+            "line": 49,
+            "description": "selects the item if it is unselected, unselects if it is selected",
+            "itemtype": "method",
+            "name": "toggle",
+            "return": {
+                "description": "this",
+                "type": "ThingyItem"
+            },
+            "class": "ThingyItem"
+        },
+        {
+            "file": "src/main/coffeescript/jquery-thingy-picker.js.coffee",
+            "line": 58,
             "itemtype": "method",
             "name": "isVisible",
             "return": {
@@ -95,39 +128,39 @@
             "class": "ThingyItem"
         },
         {
-            "file": "coffeescript/jquery-thingy-picker.js.coffee",
-            "line": 44,
+            "file": "src/main/coffeescript/jquery-thingy-picker.js.coffee",
+            "line": 66,
             "description": "delegates to $el.show",
             "itemtype": "method",
             "name": "show",
             "class": "ThingyItem"
         },
         {
-            "file": "coffeescript/jquery-thingy-picker.js.coffee",
-            "line": 51,
+            "file": "src/main/coffeescript/jquery-thingy-picker.js.coffee",
+            "line": 73,
             "description": "delegates to $el.hide",
             "itemtype": "method",
             "name": "hide",
             "class": "ThingyItem"
         },
         {
-            "file": "coffeescript/jquery-thingy-picker.js.coffee",
-            "line": 58,
+            "file": "src/main/coffeescript/jquery-thingy-picker.js.coffee",
+            "line": 80,
             "itemtype": "method",
             "name": "deselect",
             "class": "ThingyItem"
         },
         {
-            "file": "coffeescript/jquery-thingy-picker.js.coffee",
-            "line": 68,
+            "file": "src/main/coffeescript/jquery-thingy-picker.js.coffee",
+            "line": 90,
             "description": "Marks this item as selected",
             "itemtype": "method",
             "name": "select",
             "class": "ThingyItem"
         },
         {
-            "file": "coffeescript/jquery-thingy-picker.js.coffee",
-            "line": 78,
+            "file": "src/main/coffeescript/jquery-thingy-picker.js.coffee",
+            "line": 100,
             "itemtype": "method",
             "name": "isSelected",
             "return": {
@@ -137,15 +170,15 @@
             "class": "ThingyItem"
         },
         {
-            "file": "coffeescript/jquery-thingy-picker.js.coffee",
-            "line": 146,
+            "file": "src/main/coffeescript/jquery-thingy-picker.js.coffee",
+            "line": 159,
             "itemtype": "method",
             "name": "getSelectedItems",
             "class": "ThingyPicker"
         },
         {
-            "file": "coffeescript/jquery-thingy-picker.js.coffee",
-            "line": 154,
+            "file": "src/main/coffeescript/jquery-thingy-picker.js.coffee",
+            "line": 167,
             "itemtype": "method",
             "name": "hasMaxSelected",
             "return": {
@@ -155,24 +188,24 @@
             "class": "ThingyPicker"
         },
         {
-            "file": "coffeescript/jquery-thingy-picker.js.coffee",
-            "line": 162,
+            "file": "src/main/coffeescript/jquery-thingy-picker.js.coffee",
+            "line": 175,
             "description": "calls show on all items",
             "itemtype": "method",
             "name": "showAllItems",
             "class": "ThingyPicker"
         },
         {
-            "file": "coffeescript/jquery-thingy-picker.js.coffee",
-            "line": 173,
+            "file": "src/main/coffeescript/jquery-thingy-picker.js.coffee",
+            "line": 186,
             "description": "hides all items except the selected ones",
             "itemtype": "method",
             "name": "showSelectedItemsOnly",
             "class": "ThingyPicker"
         },
         {
-            "file": "coffeescript/jquery-thingy-picker.js.coffee",
-            "line": 185,
+            "file": "src/main/coffeescript/jquery-thingy-picker.js.coffee",
+            "line": 198,
             "itemtype": "method",
             "name": "items",
             "return": {
@@ -182,8 +215,8 @@
             "class": "ThingyPicker"
         },
         {
-            "file": "coffeescript/jquery-thingy-picker.js.coffee",
-            "line": 192,
+            "file": "src/main/coffeescript/jquery-thingy-picker.js.coffee",
+            "line": 205,
             "description": "deselects all items",
             "itemtype": "method",
             "name": "clearSelection",
@@ -194,8 +227,8 @@
             "class": "ThingyPicker"
         },
         {
-            "file": "coffeescript/jquery-thingy-picker.js.coffee",
-            "line": 209,
+            "file": "src/main/coffeescript/jquery-thingy-picker.js.coffee",
+            "line": 222,
             "itemtype": "method",
             "name": "visibleItems",
             "return": {
@@ -205,15 +238,15 @@
             "class": "ThingyPicker"
         },
         {
-            "file": "coffeescript/jquery-thingy-picker.js.coffee",
-            "line": 229,
+            "file": "src/main/coffeescript/jquery-thingy-picker.js.coffee",
+            "line": 242,
             "itemtype": "method",
             "name": "updateVisibleItems",
             "class": "ThingyPicker"
         },
         {
-            "file": "coffeescript/jquery-thingy-picker.js.coffee",
-            "line": 280,
+            "file": "src/main/coffeescript/jquery-thingy-picker.js.coffee",
+            "line": 293,
             "itemtype": "event",
             "name": "selection.changed",
             "params": [
@@ -229,7 +262,7 @@
     "warnings": [
         {
             "message": "replacing incorrect tag: returns with return",
-            "line": " coffeescript/jquery-thingy-picker.js.coffee:185"
+            "line": " src/main/coffeescript/jquery-thingy-picker.js.coffee:198"
         }
     ]
 }
