@@ -4,8 +4,8 @@
   "author": "Robin Wenglewski <robin@wenglewski.de>",
   "description": "A jquery picker for any kind of items, e.g. contacts.",
   "engines": {
-  	"node": "0.10.x",
-  	"npm": "1.2.x"
+    "node": "0.10.x",
+    "npm": "1.2.x"
   },
   "devDependencies": {
     "grunt-contrib-jasmine": "~0.4.2",
@@ -13,9 +13,13 @@
     "grunt-contrib-copy": "~0.4.1",
     "grunt-contrib-less": "~0.5.1",
     "grunt-contrib-haml": "~0.1.0",
-    "grunt-contrib-watch": "~0.4.3"
+    "grunt-contrib-watch": "~0.4.3",
+    "grunt": "~0.4.1"
   },
   "dependencies": {
     "node-static": "~0.6.9"
+  },
+  "scripts": {
+    "test": "grunt jasmine"
   }
 }
