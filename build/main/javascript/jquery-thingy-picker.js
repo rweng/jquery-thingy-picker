@@ -2,9 +2,8 @@
   var __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
   (function($) {
-    var ThingyItem, ThingyPicker, debug;
+    var ThingyItem, ThingyPicker;
 
-    debug = false;
     window.ThingyPicker = {
       itemToHtml: function(contact) {
         return "<div class='item' id='" + contact.id + "'><img src='" + contact.picture + "'/><div class='item-name'>" + contact.name + "</div></div>";
@@ -20,12 +19,13 @@
     */
 
     window.ThingyPicker.ThingyItem = ThingyItem = function(data, options) {
-      var $el, EVENTS, SELECTED_CLASS, item;
+      var $el, EVENTS, SELECTED_CLASS, debug, item;
 
       this.$el = $el = $(window.ThingyPicker.itemToHtml(data));
       this.data = data;
       item = this;
       options || (options = {});
+      debug = options.debug || false;
       $el.data("tp-item", this);
       SELECTED_CLASS = 'selected';
       EVENTS = {
@@ -148,10 +148,11 @@
     */
 
     window.ThingyPicker.ThingyPicker = ThingyPicker = function(element, options) {
-      var $el, addItem, items, lastSelected, maxSelectedEnabled, picker, selectedCount, settings, updateMaxSelectedMessage, updateSelectedCount, updateVisibleItems;
+      var $el, addItem, debug, items, lastSelected, maxSelectedEnabled, picker, selectedCount, settings, updateMaxSelectedMessage, updateSelectedCount, updateVisibleItems;
 
       this.$el = $el = $(element);
       picker = this;
+      debug = options.debug || false;
       settings = $.extend({
         debug: false,
         maxSelected: -1,

@@ -43,12 +43,12 @@ module.exports = (grunt) ->
     watch:
       coffee:
         files: 'src/**/*.coffee'
-        tasks: ['coffee', 'yuidoc']
+        tasks: ['coffee']
       haml:
         files: "src/example/*.haml"
         tasks: ["haml"]
       specs:
-        files: ["<config:jasmine.specs>", "javascript/*.(js|js.coffee|coffee)"]
+        files: ["build/**/*.js"]
         tasks: "jasmine"
       less:
         files: "src/less/*.less"
@@ -67,16 +67,17 @@ module.exports = (grunt) ->
         src: "src/less/jquery-thingy-picker.less"
         dest: "build/css/jquery-thingy-picker.css"
 
-    yuidoc:  
-      name: "<%= pkg.name %>"
-      description: "<%= pkg.description %>"
-      version: "<%= pkg.version %>"
-      url: "<%= pkg.homepage %>"
-      options:
-        paths: "src/main/coffeescript/"
-        outdir: "build/docs/"
-        extension: ".coffee",
-        syntaxtype: "coffee"
+    yuidoc:
+      compile:
+        name: "<%= pkg.name %>"
+        description: "<%= pkg.description %>"
+        version: "<%= pkg.version %>"
+        url: "<%= pkg.homepage %>"
+        options:
+          paths: "src/main/coffeescript/"
+          outdir: "build/docs/"
+          extension: ".coffee",
+          syntaxtype: "coffee"
 
 
   
@@ -100,5 +101,5 @@ module.exports = (grunt) ->
     relink '../main/javascript', 'build/example/js'
   
   grunt.registerTask 'compile', "Compiles everything", ['coffee', 'haml', 'less', 'copy', 'symlink', 'yuidoc']
-  grunt.registerTask "default", ['compile', "watch"]
+  grunt.registerTask "default", ['compile', 'jasmine', "watch"]
 

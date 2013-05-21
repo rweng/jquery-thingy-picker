@@ -1,7 +1,6 @@
 # call with $(el).thingyPicker(items: [item])
 # item must be {id: ..., picture: ..., name: ...}
 (($)->
-  debug = false
   window.ThingyPicker = {
     itemToHtml: (contact) ->
       "<div class='item' id='#{contact.id}'><img src='#{contact.picture}'/><div class='item-name'>#{contact.name}</div></div>"
@@ -20,6 +19,7 @@
     this.data = data
     item = this
     options ||= {}
+    debug = options.debug || false
     $el.data("tp-item", this)
     SELECTED_CLASS = 'selected'
     EVENTS = {
@@ -125,6 +125,7 @@
   window.ThingyPicker.ThingyPicker = ThingyPicker = (element, options) ->
     this.$el = $el = $(element)
     picker = this
+    debug = options.debug || false
     settings = $.extend({
       debug: false
       maxSelected: -1
