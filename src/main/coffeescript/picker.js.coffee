@@ -1,10 +1,6 @@
 # call with $(el).thingyPicker(items: [item])
 # item must be {id: ..., picture: ..., name: ...}
 (($)->
-  window.ThingyPicker = $.extend (window.ThingyPicker || {}),
-    itemToHtml: (contact) ->
-      "<div class='item' id='#{contact.id}'><img src='#{contact.picture}'/><div class='item-name'>#{contact.name}</div></div>"
-
 
   ###*
   Main Class for Picker
@@ -183,7 +179,7 @@
       item = new ThingyPicker.ThingyItem(data, picker)
       items.push item
 
-      item.$el().on 'selection-changed', ->
+      item.$el.on 'selection-changed', ->
         console.log "triggered"
         updateMaxSelectedMessage()
         updateSelectedCount()

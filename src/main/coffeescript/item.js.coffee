@@ -11,24 +11,35 @@
   @param {Object} data
   @param {Object} options
   ###
-  ThingyItem = ThingyPicker.ThingyItem = (data, options) ->
-    $el = $(window.ThingyPicker.itemToHtml(data))
-    this.data = data
-    self = this
-    options ||= {}
-    debug = (options || {}).debug || false
-    $el.data("tp-item", this)
-    SELECTED_CLASS = 'selected'
-    EVENTS = {
+  class ThingyItem
+    @itemToHtml: (contact) ->
+      "<div class='item' id='#{contact.id}'><img src='#{contact.picture}'/><div class='item-name'>#{contact.name}</div></div>"
+
+
+    @EVENTS:
       ###*
       @event selection-changed
       ###
       SELECTION_CHANGED: 'selection-changed'
-    }
 
-    jQueryElement = $el
-    this.$el = ->
-      jQueryElement
+    @SELECTED_CLASS = 'selected'
+
+    constructor:  (@data, @options) ->
+      @options ||= {}
+      @$el = $(ThingyItem.itemToHtml(data))
+      @debug = @options.debug || false
+      this.data = data
+      self = this
+      @$el.data("tp-item", this)
+
+
+      # handle when a item is clicked for selection
+      @$el.click (event) ->
+        self.toggle()
+
+
+    toJSON: ->
+      @data
 
     ###*
     calls options.canBeSelected or returns true
@@ -36,16 +47,16 @@
     @method canBeSelected
     @return {Boolean}
     ###
-    this.canBeSelected = ->
-      if options.canBeSelected then options.canBeSelected(self) else true
+    canBeSelected: ->
+      if @options.canBeSelected then @options.canBeSelected(self) else true
 
     ###*
     @method on
     @param {jQuery.Event} event
     @param {Function} handler
     ###
-    this.on = (event, handler) ->
-      $el.on(event, handler)
+    on: (event, handler) ->
+      @$el.on(event, handler)
 
     ###*
     selects the item if it is unselected, unselects if it is selected
@@ -53,65 +64,59 @@
     @method toggle
     @return {ThingyItem} this
     ###
-    this.toggle = ->
+    toggle: ->
       if @isSelected() then @deselect() else @select()
 
     ###*
     @method isVisible
     @return {Boolean}
     ###
-    this.isVisible = ->
-      $el.css('display') != "none"
+    isVisible: ->
+      @$el.css('display') != "none"
 
 
     ###*
     delegates to $el.show
     @method show
     ###
-    this.show = ->
-      $el.show()
+    show: ->
+      @$el.show()
 
     ###*
     delegates to $el.hide
     @method hide
     ###
-    this.hide = ->
-      $el.hide()
+    hide: ->
+      @$el.hide()
 
     ###*
     @method deselect
     ###
-    this.deselect = ->
-      if debug
+    deselect: ->
+      if @debug
         console.log("deselect called")
-      if self.isSelected()
-        $el.removeClass(SELECTED_CLASS)
-        $el.trigger(EVENTS.SELECTION_CHANGED)
+      if @isSelected()
+        @$el.removeClass(ThingyItem.SELECTED_CLASS)
+        @$el.trigger(ThingyItem.EVENTS.SELECTION_CHANGED)
 
     ###*
     Marks this item as selected
 
     @method select
     ###
-    this.select = ->
+    select: ->
       if @canBeSelected() and not @isSelected()
-        $el.addClass(SELECTED_CLASS)
-        $el.trigger(EVENTS.SELECTION_CHANGED)
+        @$el.addClass(ThingyItem.SELECTED_CLASS)
+        @$el.trigger(ThingyItem.EVENTS.SELECTION_CHANGED)
 
     ###*
     @method isSelected
     @return {Boolean}
     ###
-    this.isSelected = ->
-      if debug
+    isSelected: ->
+      if @debug
         console.log "isSelected() in", $el[0]
-      $el.hasClass("selected")
+      @$el.hasClass("selected")
 
-    # handle when a item is clicked for selection
-    $el.click (event) ->
-      self.toggle()
-
-    return this
-
-  ThingyItem.itemToHtml = undefined
+  ThingyPicker.ThingyItem = ThingyItem
 )()

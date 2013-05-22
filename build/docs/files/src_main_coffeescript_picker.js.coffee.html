@@ -91,10 +91,6 @@
 # call with $(el).thingyPicker(items: [item])
 # item must be {id: ..., picture: ..., name: ...}
 (($)-&gt;
-  window.ThingyPicker = $.extend (window.ThingyPicker || {}),
-    itemToHtml: (contact) -&gt;
-      &quot;&lt;div class=&#x27;item&#x27; id=&#x27;#{contact.id}&#x27;&gt;&lt;img src=&#x27;#{contact.picture}&#x27;/&gt;&lt;div class=&#x27;item-name&#x27;&gt;#{contact.name}&lt;/div&gt;&lt;/div&gt;&quot;
-
 
   ###*
   Main Class for Picker

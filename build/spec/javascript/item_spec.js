@@ -12,7 +12,7 @@
     });
     it('should call toggle if $el is clicked', function() {
       spyOn(item, 'toggle');
-      item.$el().trigger("click");
+      item.$el.trigger("click");
       return expect(item.toggle).toHaveBeenCalled();
     });
     return describe('#toggle', function() {
@@ -23,7 +23,7 @@
         return expect(item.select).toHaveBeenCalled();
       });
       return it('calls deselect() if selected', function() {
-        item.select();
+        debugger;        item.select();
         spyOn(item, 'deselect');
         item.toggle();
         return expect(item.deselect).toHaveBeenCalled();

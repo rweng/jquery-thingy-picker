@@ -14,27 +14,41 @@
     @param {Object} options
     */
 
-    ThingyItem = ThingyPicker.ThingyItem = function(data, options) {
-      var $el, EVENTS, SELECTED_CLASS, debug, jQueryElement, self;
+    ThingyItem = (function() {
+      ThingyItem.itemToHtml = function(contact) {
+        return "<div class='item' id='" + contact.id + "'><img src='" + contact.picture + "'/><div class='item-name'>" + contact.name + "</div></div>";
+      };
 
-      $el = $(window.ThingyPicker.itemToHtml(data));
-      this.data = data;
-      self = this;
-      options || (options = {});
-      debug = (options || {}).debug || false;
-      $el.data("tp-item", this);
-      SELECTED_CLASS = 'selected';
-      EVENTS = {
+      ThingyItem.EVENTS = {
         /**
         @event selection-changed
         */
 
         SELECTION_CHANGED: 'selection-changed'
       };
-      jQueryElement = $el;
-      this.$el = function() {
-        return jQueryElement;
+
+      ThingyItem.SELECTED_CLASS = 'selected';
+
+      function ThingyItem(data, options) {
+        var self;
+
+        this.data = data;
+        this.options = options;
+        this.options || (this.options = {});
+        this.$el = $(ThingyItem.itemToHtml(data));
+        this.debug = this.options.debug || false;
+        this.data = data;
+        self = this;
+        this.$el.data("tp-item", this);
+        this.$el.click(function(event) {
+          return self.toggle();
+        });
+      }
+
+      ThingyItem.prototype.toJSON = function() {
+        return this.data;
       };
+
       /**
       calls options.canBeSelected or returns true
       
@@ -42,22 +56,26 @@
       @return {Boolean}
       */
 
-      this.canBeSelected = function() {
-        if (options.canBeSelected) {
-          return options.canBeSelected(self);
+
+      ThingyItem.prototype.canBeSelected = function() {
+        if (this.options.canBeSelected) {
+          return this.options.canBeSelected(self);
         } else {
           return true;
         }
       };
+
       /**
       @method on
       @param {jQuery.Event} event
       @param {Function} handler
       */
 
-      this.on = function(event, handler) {
-        return $el.on(event, handler);
+
+      ThingyItem.prototype.on = function(event, handler) {
+        return this.$el.on(event, handler);
       };
+
       /**
       selects the item if it is unselected, unselects if it is selected
       
@@ -65,79 +83,91 @@
       @return {ThingyItem} this
       */
 
-      this.toggle = function() {
+
+      ThingyItem.prototype.toggle = function() {
         if (this.isSelected()) {
           return this.deselect();
         } else {
           return this.select();
         }
       };
+
       /**
       @method isVisible
       @return {Boolean}
       */
 
-      this.isVisible = function() {
-        return $el.css('display') !== "none";
+
+      ThingyItem.prototype.isVisible = function() {
+        return this.$el.css('display') !== "none";
       };
+
       /**
       delegates to $el.show
       @method show
       */
 
-      this.show = function() {
-        return $el.show();
+
+      ThingyItem.prototype.show = function() {
+        return this.$el.show();
       };
+
       /**
       delegates to $el.hide
       @method hide
       */
 
-      this.hide = function() {
-        return $el.hide();
+
+      ThingyItem.prototype.hide = function() {
+        return this.$el.hide();
       };
+
       /**
       @method deselect
       */
 
-      this.deselect = function() {
-        if (debug) {
+
+      ThingyItem.prototype.deselect = function() {
+        if (this.debug) {
           console.log("deselect called");
         }
-        if (self.isSelected()) {
-          $el.removeClass(SELECTED_CLASS);
-          return $el.trigger(EVENTS.SELECTION_CHANGED);
+        if (this.isSelected()) {
+          this.$el.removeClass(ThingyItem.SELECTED_CLASS);
+          return this.$el.trigger(ThingyItem.EVENTS.SELECTION_CHANGED);
         }
       };
+
       /**
       Marks this item as selected
       
       @method select
       */
 
-      this.select = function() {
+
+      ThingyItem.prototype.select = function() {
         if (this.canBeSelected() && !this.isSelected()) {
-          $el.addClass(SELECTED_CLASS);
-          return $el.trigger(EVENTS.SELECTION_CHANGED);
+          this.$el.addClass(ThingyItem.SELECTED_CLASS);
+          return this.$el.trigger(ThingyItem.EVENTS.SELECTION_CHANGED);
         }
       };
+
       /**
       @method isSelected
       @return {Boolean}
       */
 
-      this.isSelected = function() {
-        if (debug) {
+
+      ThingyItem.prototype.isSelected = function() {
+        if (this.debug) {
           console.log("isSelected() in", $el[0]);
         }
-        return $el.hasClass("selected");
+        return this.$el.hasClass("selected");
       };
-      $el.click(function(event) {
-        return self.toggle();
-      });
-      return this;
-    };
-    return ThingyItem.itemToHtml = void 0;
+
+      return ThingyItem;
+
+    })();
+    return ThingyPicker.ThingyItem = ThingyItem;
   })();
 
 }).call(this);
@@ -146,11 +176,6 @@
   var __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
   (function($) {
-    window.ThingyPicker = $.extend(window.ThingyPicker || {}, {
-      itemToHtml: function(contact) {
-        return "<div class='item' id='" + contact.id + "'><img src='" + contact.picture + "'/><div class='item-name'>" + contact.name + "</div></div>";
-      }
-    });
     /**
     Main Class for Picker
     
@@ -159,7 +184,6 @@
     @param {DomNode} element
     @param {Object} options
     */
-
     return window.ThingyPicker.ThingyPicker = function(element, options) {
       var $el, addItem, debug, items, jQueryElement, lastSelected, maxSelectedEnabled, picker, selectedCount, settings, updateMaxSelectedMessage, updateSelectedCount, updateVisibleItems;
 
@@ -349,7 +373,7 @@
 
         item = new ThingyPicker.ThingyItem(data, picker);
         items.push(item);
-        item.$el().on('selection-changed', function() {
+        item.$el.on('selection-changed', function() {
           console.log("triggered");
           updateMaxSelectedMessage();
           updateSelectedCount();

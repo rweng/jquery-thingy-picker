@@ -6,7 +6,7 @@ describe 'ThingyItem', ->
   it 'should call toggle if $el is clicked', ->
     spyOn(item, 'toggle')
 
-    item.$el().trigger("click")
+    item.$el.trigger("click")
 
     expect(item.toggle).toHaveBeenCalled()
 
@@ -20,6 +20,7 @@ describe 'ThingyItem', ->
       expect(item.select).toHaveBeenCalled()
 
     it 'calls deselect() if selected', ->
+      debugger
       item.select()
       spyOn(item, 'deselect')
 
