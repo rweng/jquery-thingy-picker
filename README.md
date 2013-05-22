@@ -7,7 +7,7 @@ This is a contact-/anything-picker based on [Mike Brevoort's excellent jquery-fa
 
 There is a demo at [http://jquery-thingy-picker.herokuapp.com/](http://jquery-thingy-picker.herokuapp.com/).
 
-Documentation is at [http://jquery-thingy-picker.herokuapp.com/doc/](http://jquery-thingy-picker.herokuapp.com/doc/).
+Documentation is at [http://jquery-thingy-picker.herokuapp.com/docs/](http://jquery-thingy-picker.herokuapp.com/docs/).
 
 # Usage
 
@@ -39,13 +39,4 @@ The items must be an array in the format `{id: ..., name: ..., picture: ...}`
 
 # Development
 
-Install and start server:
-
-    bundle install
-    rvmsudo ghost add jquery-thingy-picker.herokuapp.com
-    rake serve # for starting the server
-    guard # during development
-
-Remove from hosts file:
-
-    rvmsudo ghost delete jquery-thingy-picker.herokuapp.com
+    grunt watch
