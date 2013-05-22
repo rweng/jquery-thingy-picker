@@ -15,7 +15,8 @@
     "grunt-contrib-watch": "~0.4.3",
     "grunt": "~0.4.1",
     "grunt-contrib-yuidoc": "~0.4.0",
-    "grunt-karma": "~0.4.4"
+    "grunt-karma": "~0.4.4",
+    "grunt-exec": "~0.4.0"
   },
   "dependencies": {
     "node-static": "~0.6.9"

@@ -84,10 +84,12 @@ module.exports = (grunt) ->
       chrome:
         browsers: ['Chrome']
 
+    exec:
+      push_github:
+        cmd: 'git push origin master'
+      push_heroku:
+        cmd: 'git push heroku master'
 
-
-
-  
   # These plugins provide necessary tasks.
   grunt.loadNpmTasks "grunt-contrib-watch"
   grunt.loadNpmTasks "grunt-contrib-haml"
@@ -96,8 +98,7 @@ module.exports = (grunt) ->
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-contrib-yuidoc');
   grunt.loadNpmTasks('grunt-karma');
-
-
+  grunt.loadNpmTasks('grunt-exec');
 
   grunt.registerTask 'symlink', 'Creates symlinks', ->
     relink = (src, dest) ->
@@ -108,16 +109,7 @@ module.exports = (grunt) ->
     relink '../css', 'build/example/css'
     relink '../main/javascript', 'build/example/js'
 
-  grunt.registerTask 'push', 'Push to github and heroku', ->
-    sys = require('sys')
-    exec = require('child_process').exec
-    puts = (error, stdout, stderr) ->
-      sys.puts(stdout)
-
-    exec("git push origin master", puts)
-    exec("git push heroku master", puts)
-
-  
+  grunt.registerTask 'push', 'Push to Github and Heroku', ['exec:push_github', 'exec:push_heroku']
   grunt.registerTask 'compile', "Compiles everything", ['coffee', 'haml', 'less', 'copy', 'symlink', 'yuidoc']
   grunt.registerTask "default", ['compile', 'karma:all', "watch"]
 
