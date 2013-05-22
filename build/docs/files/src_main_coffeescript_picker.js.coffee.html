@@ -155,8 +155,7 @@ class Picker
     @$el.find(&quot;.filter-link&quot;).click (event) =&gt;
       event.preventDefault()
       @$el.find(&quot;.filter-link&quot;).removeClass(&quot;selected&quot;)
-      debugger # use event target here
-      $(this).addClass(&#x27;selected&#x27;)
+      $(event.target).addClass(&#x27;selected&#x27;)
       @updateVisibleItems()
 
     # filter as you type
@@ -282,7 +281,7 @@ class Picker
 
   # adds a ThingyItem to the ThingyPicker
   addItem: (item) =&gt;
-    $el.find(&quot;.items&quot;).append(item.$el)
+    @$el.find(&quot;.items&quot;).append(item.$el)
     item.select() if item.data.id in @preSelectedItems
 
 

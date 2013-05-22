@@ -229,14 +229,14 @@
         },
         {
             "file": "src/main/coffeescript/picker.js.coffee",
-            "line": 103,
+            "line": 102,
             "itemtype": "method",
             "name": "getSelectedItems",
             "class": "Picker"
         },
         {
             "file": "src/main/coffeescript/picker.js.coffee",
-            "line": 111,
+            "line": 110,
             "itemtype": "method",
             "name": "hasMaxSelected",
             "return": {
@@ -247,7 +247,7 @@
         },
         {
             "file": "src/main/coffeescript/picker.js.coffee",
-            "line": 119,
+            "line": 118,
             "description": "calls show on all items",
             "itemtype": "method",
             "name": "showAllItems",
@@ -255,7 +255,7 @@
         },
         {
             "file": "src/main/coffeescript/picker.js.coffee",
-            "line": 130,
+            "line": 129,
             "description": "hides all items except the selected ones",
             "itemtype": "method",
             "name": "showSelectedItemsOnly",
@@ -263,7 +263,7 @@
         },
         {
             "file": "src/main/coffeescript/picker.js.coffee",
-            "line": 142,
+            "line": 141,
             "description": "deselects all items",
             "itemtype": "method",
             "name": "clearSelection",
@@ -275,7 +275,7 @@
         },
         {
             "file": "src/main/coffeescript/picker.js.coffee",
-            "line": 159,
+            "line": 158,
             "itemtype": "method",
             "name": "visibleItems",
             "return": {
@@ -286,7 +286,7 @@
         },
         {
             "file": "src/main/coffeescript/picker.js.coffee",
-            "line": 175,
+            "line": 174,
             "itemtype": "method",
             "name": "updateVisibleItems",
             "class": "Picker"
