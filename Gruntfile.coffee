@@ -31,7 +31,7 @@ module.exports = (grunt) ->
       files:
         expand: true
         cwd: 'src'
-        src: "**/*.js"
+        src: "**/*.(js|coffee)"
         dest: 'build/'
 
     watch:
@@ -109,7 +109,7 @@ module.exports = (grunt) ->
     relink '../css', 'build/example/css'
     relink '../main/javascript', 'build/example/js'
 
-  grunt.registerTask 'push', 'Push to Github and Heroku', ['exec:push_github', 'exec:push_heroku']
+  grunt.registerTask 'push', 'Push to Github and Heroku', ['karma:all', 'exec:push_github', 'exec:push_heroku']
   grunt.registerTask 'compile', "Compiles everything", ['coffee', 'haml', 'less', 'copy', 'symlink', 'yuidoc']
   grunt.registerTask "default", ['compile', 'karma:all', "watch"]
 
