@@ -1,4 +1,6 @@
 (function() {
+  var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
+
   (function() {
     var $, ThingyItem, root;
 
@@ -36,18 +38,26 @@
       ThingyItem.SELECTED_CLASS = 'selected';
 
       function ThingyItem(data, options) {
-        var self;
+        var _this = this;
 
         this.data = data;
         this.options = options;
+        this.isSelected = __bind(this.isSelected, this);
+        this.select = __bind(this.select, this);
+        this.deselect = __bind(this.deselect, this);
+        this.hide = __bind(this.hide, this);
+        this.show = __bind(this.show, this);
+        this.isVisible = __bind(this.isVisible, this);
+        this.toggle = __bind(this.toggle, this);
+        this.on = __bind(this.on, this);
+        this.canBeSelected = __bind(this.canBeSelected, this);
+        this.toJSON = __bind(this.toJSON, this);
         this.options || (this.options = {});
         this.$el = $(this.options.itemToHtml ? this.options.itemToHtml(data) : ThingyItem.itemToHtml(data));
         this.debug = this.options.debug || false;
-        this.data = data;
-        self = this;
         this.$el.data("tp-item", this);
         this.$el.click(function(event) {
-          return self.toggle();
+          return _this.toggle();
         });
       }
 

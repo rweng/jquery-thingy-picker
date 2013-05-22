@@ -34,16 +34,13 @@
       @options ||= {}
       @$el = $(if @options.itemToHtml then @options.itemToHtml(data) else ThingyItem.itemToHtml(data))
       @debug = @options.debug || false
-      this.data = data
-      self = this
       @$el.data("tp-item", this)
 
-
       # handle when a item is clicked for selection
-      @$el.click (event) ->
-        self.toggle()
+      @$el.click (event) =>
+        @toggle()
 
-    toJSON: ->
+    toJSON: =>
       @data
 
     ###*
@@ -52,7 +49,7 @@
     @method canBeSelected
     @return {Boolean}
     ###
-    canBeSelected: ->
+    canBeSelected: =>
       if @options.canBeSelected then @options.canBeSelected(self) else true
 
     ###*
@@ -60,7 +57,7 @@
     @param {jQuery.Event} event
     @param {Function} handler
     ###
-    on: (event, handler) ->
+    on: (event, handler) =>
       @$el.on(event, handler)
 
     ###*
@@ -69,14 +66,14 @@
     @method toggle
     @return {ThingyItem} this
     ###
-    toggle: ->
+    toggle: =>
       if @isSelected() then @deselect() else @select()
 
     ###*
     @method isVisible
     @return {Boolean}
     ###
-    isVisible: ->
+    isVisible: =>
       @$el.css('display') != "none"
 
 
@@ -84,20 +81,20 @@
     delegates to $el.show
     @method show
     ###
-    show: ->
+    show: =>
       @$el.show()
 
     ###*
     delegates to $el.hide
     @method hide
     ###
-    hide: ->
+    hide: =>
       @$el.hide()
 
     ###*
     @method deselect
     ###
-    deselect: ->
+    deselect: =>
       if @debug
         console.log("deselect called")
       if @isSelected()
@@ -109,7 +106,7 @@
 
     @method select
     ###
-    select: ->
+    select: =>
       if @canBeSelected() and not @isSelected()
         @$el.addClass(ThingyItem.SELECTED_CLASS)
         @$el.trigger(ThingyItem.EVENTS.SELECTION_CHANGED)
@@ -118,7 +115,7 @@
     @method isSelected
     @return {Boolean}
     ###
-    isSelected: ->
+    isSelected: =>
       if @debug
         console.log "isSelected() in", $el[0]
       @$el.hasClass("selected")
