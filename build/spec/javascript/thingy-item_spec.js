@@ -12,7 +12,7 @@
     });
     it('should call toggle if $el is clicked', function() {
       spyOn(item, 'toggle');
-      item.$el.trigger("click");
+      item.$el().trigger("click");
       return expect(item.toggle).toHaveBeenCalled();
     });
     return describe('#toggle', function() {

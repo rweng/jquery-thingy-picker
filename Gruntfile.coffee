@@ -34,22 +34,16 @@ module.exports = (grunt) ->
         src: "**/*.js"
         dest: 'build/'
 
-    jasmine:
-      src: "build/main/javascript/jquery-thingy-picker.js"
-      options:
-        vendor: 'build/spec/lib/*.js'
-        specs: "build/spec/javascript/*.js"
-
     watch:
       coffee:
         files: 'src/**/*.coffee'
-        tasks: ['coffee']
+        tasks: ['coffee', 'copy']
       haml:
         files: "src/example/*.haml"
         tasks: ["haml"]
       specs:
         files: ["build/**/*.js"]
-        tasks: "jasmine"
+        tasks: ["karma:chrome"]
       less:
         files: "src/less/*.less"
         tasks: ["less"]
@@ -79,16 +73,30 @@ module.exports = (grunt) ->
           extension: ".coffee",
           syntaxtype: "coffee"
 
+    karma:
+      options:
+        configFile: 'karma.conf.js'
+        singleRun: true
+
+      all: {}
+      phantom:
+        browsers: ['PhantomJS']
+      chrome:
+        browsers: ['Chrome']
+
+
+
 
   
   # These plugins provide necessary tasks.
   grunt.loadNpmTasks "grunt-contrib-watch"
-  grunt.loadNpmTasks "grunt-contrib-jasmine"
   grunt.loadNpmTasks "grunt-contrib-haml"
   grunt.loadNpmTasks "grunt-contrib-less"
   grunt.loadNpmTasks('grunt-contrib-coffee');
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-contrib-yuidoc');
+  grunt.loadNpmTasks('grunt-karma');
+
 
 
   grunt.registerTask 'symlink', 'Creates symlinks', ->
@@ -99,7 +107,17 @@ module.exports = (grunt) ->
     console.log "creating symlinks ..."
     relink '../css', 'build/example/css'
     relink '../main/javascript', 'build/example/js'
+
+  grunt.registerTask 'push', 'Push to github and heroku', ->
+    sys = require('sys')
+    exec = require('child_process').exec
+    puts = (error, stdout, stderr) ->
+      sys.puts(stdout)
+
+    exec("git push origin master", puts)
+    exec("git push heroku master", puts)
+
   
   grunt.registerTask 'compile', "Compiles everything", ['coffee', 'haml', 'less', 'copy', 'symlink', 'yuidoc']
-  grunt.registerTask "default", ['compile', 'jasmine', "watch"]
+  grunt.registerTask "default", ['compile', 'karma:all', "watch"]
 

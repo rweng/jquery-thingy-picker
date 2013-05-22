@@ -19,13 +19,13 @@
     */
 
     window.ThingyPicker.ThingyItem = ThingyItem = function(data, options) {
-      var $el, EVENTS, SELECTED_CLASS, debug, item;
+      var $el, EVENTS, SELECTED_CLASS, debug, jQueryElement, self;
 
-      this.$el = $el = $(window.ThingyPicker.itemToHtml(data));
+      $el = $(window.ThingyPicker.itemToHtml(data));
       this.data = data;
-      item = this;
+      self = this;
       options || (options = {});
-      debug = options.debug || false;
+      debug = (options || {}).debug || false;
       $el.data("tp-item", this);
       SELECTED_CLASS = 'selected';
       EVENTS = {
@@ -34,6 +34,10 @@
         */
 
         SELECTION_CHANGED: 'selection-changed'
+      };
+      jQueryElement = $el;
+      this.$el = function() {
+        return jQueryElement;
       };
       /**
       calls options.canBeSelected or returns true
@@ -44,7 +48,7 @@
 
       this.canBeSelected = function() {
         if (options.canBeSelected) {
-          return options.canBeSelected(item);
+          return options.canBeSelected(self);
         } else {
           return true;
         }
@@ -104,7 +108,7 @@
         if (debug) {
           console.log("deselect called");
         }
-        if (item.isSelected()) {
+        if (self.isSelected()) {
           $el.removeClass(SELECTED_CLASS);
           return $el.trigger(EVENTS.SELECTION_CHANGED);
         }
@@ -133,7 +137,7 @@
         return $el.hasClass("selected");
       };
       $el.click(function(event) {
-        return item.toggle();
+        return self.toggle();
       });
       return this;
     };
@@ -148,9 +152,9 @@
     */
 
     window.ThingyPicker.ThingyPicker = ThingyPicker = function(element, options) {
-      var $el, addItem, debug, items, lastSelected, maxSelectedEnabled, picker, selectedCount, settings, updateMaxSelectedMessage, updateSelectedCount, updateVisibleItems;
+      var $el, addItem, debug, items, jQueryElement, lastSelected, maxSelectedEnabled, picker, selectedCount, settings, updateMaxSelectedMessage, updateSelectedCount, updateVisibleItems;
 
-      this.$el = $el = $(element);
+      $el = jQueryElement = $(element);
       picker = this;
       debug = options.debug || false;
       settings = $.extend({
@@ -186,6 +190,9 @@
       if (settings.itemToHtml) {
         ThingyPicker.itemToHtml = settings.itemToHtml;
       }
+      this.$el = function() {
+        return jQueryElement;
+      };
       /**
       @method getSelectedItems
       */
@@ -332,7 +339,7 @@
 
         item = new ThingyItem(data, picker);
         items.push(item);
-        item.$el.on('selection-changed', function() {
+        item.$el().on('selection-changed', function() {
           console.log("triggered");
           updateMaxSelectedMessage();
           updateSelectedCount();
@@ -341,15 +348,12 @@
           @param {ThingyItem} item
           */
 
-          return picker.$el.trigger('selection.changed', item);
+          return picker.$el().trigger('selection.changed', item);
         });
         console.log("item", item);
         return addItem(item);
       });
       $el.find(".filter-link").click(function(event) {
-        if (debug) {
-          console.log("filter-link clicked: ", this);
-        }
         event.preventDefault();
         $el.find(".filter-link").removeClass("selected");
         $(this).addClass('selected');

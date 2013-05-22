@@ -15,11 +15,11 @@
   @param {Object} options
   ###
   window.ThingyPicker.ThingyItem = ThingyItem = (data, options) ->
-    this.$el = $el = $(window.ThingyPicker.itemToHtml(data))
+    $el = $(window.ThingyPicker.itemToHtml(data))
     this.data = data
-    item = this
+    self = this
     options ||= {}
-    debug = options.debug || false
+    debug = (options || {}).debug || false
     $el.data("tp-item", this)
     SELECTED_CLASS = 'selected'
     EVENTS = {
@@ -29,6 +29,10 @@
       SELECTION_CHANGED: 'selection-changed'
     }
 
+    jQueryElement = $el
+    this.$el = ->
+      jQueryElement
+
     ###*
     calls options.canBeSelected or returns true
 
@@ -36,7 +40,7 @@
     @return {Boolean}
     ###
     this.canBeSelected = ->
-      if options.canBeSelected then options.canBeSelected(item) else true
+      if options.canBeSelected then options.canBeSelected(self) else true
 
     ###*
     @method on
@@ -83,7 +87,7 @@
     this.deselect = ->
       if debug
         console.log("deselect called")
-      if item.isSelected()
+      if self.isSelected()
         $el.removeClass(SELECTED_CLASS)
         $el.trigger(EVENTS.SELECTION_CHANGED)
 
@@ -108,7 +112,7 @@
 
     # handle when a item is clicked for selection
     $el.click (event) ->
-      item.toggle()
+      self.toggle()
 
     return this
 
@@ -123,7 +127,7 @@
   @param {Object} options
   ###
   window.ThingyPicker.ThingyPicker = ThingyPicker = (element, options) ->
-    this.$el = $el = $(element)
+    $el = jQueryElement = $(element)
     picker = this
     debug = options.debug || false
     settings = $.extend({
@@ -156,6 +160,9 @@
     # Public functions
     # ----------+----------+----------+----------+----------+----------+----------+
 
+
+    this.$el = ->
+      jQueryElement
 
     ###*
     @method getSelectedItems
@@ -286,7 +293,7 @@
       item = new ThingyItem(data, picker)
       items.push item
 
-      item.$el.on 'selection-changed', ->
+      item.$el().on 'selection-changed', ->
         console.log "triggered"
         updateMaxSelectedMessage()
         updateSelectedCount()
@@ -295,12 +302,13 @@
         @event selection.changed
         @param {ThingyItem} item
         ###
-        picker.$el.trigger('selection.changed', item)
+        picker.$el().trigger('selection.changed', item)
 
 
       console.log "item", item
       addItem(item)
     );
+
 
     ########################################
     # Add event handlers
@@ -308,8 +316,6 @@
 
     # add selected class to the clicked filter link
     $el.find(".filter-link").click (event)->
-      if debug
-        console.log "filter-link clicked: ", this
       event.preventDefault()
       $el.find(".filter-link").removeClass("selected")
       $(this).addClass('selected')

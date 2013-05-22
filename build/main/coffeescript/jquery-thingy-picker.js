@@ -20,11 +20,11 @@
     */
 
     window.ThingyPicker.ThingyItem = ThingyItem = function(data, options) {
-      var $el, EVENTS, SELECTED_CLASS, item;
+      var $el, EVENTS, SELECTED_CLASS, self;
 
       this.$el = $el = $(window.ThingyPicker.itemToHtml(data));
       this.data = data;
-      item = this;
+      self = this;
       options || (options = {});
       $el.data("tp-item", this);
       SELECTED_CLASS = 'selected';
@@ -44,7 +44,7 @@
 
       this.canBeSelected = function() {
         if (options.canBeSelected) {
-          return options.canBeSelected(item);
+          return options.canBeSelected(self);
         } else {
           return true;
         }
@@ -104,7 +104,7 @@
         if (debug) {
           console.log("deselect called");
         }
-        if (item.isSelected()) {
+        if (self.isSelected()) {
           $el.removeClass(SELECTED_CLASS);
           return $el.trigger(EVENTS.SELECTION_CHANGED);
         }
@@ -133,7 +133,7 @@
         return $el.hasClass("selected");
       };
       $el.click(function(event) {
-        return item.toggle();
+        return self.toggle();
       });
       return this;
     };
