@@ -269,7 +269,7 @@
       item = new ThingyPicker.ThingyItem(data, picker)
       items.push item
 
-      item.$el().on &#x27;selection-changed&#x27;, -&gt;
+      item.$el.on &#x27;selection-changed&#x27;, -&gt;
         console.log &quot;triggered&quot;
         updateMaxSelectedMessage()
         updateSelectedCount()

@@ -123,5 +123,5 @@ module.exports = (grunt) ->
   grunt.registerTask 'serve', ['exec:serve']
   grunt.registerTask 'push', 'Push to Github and Heroku', ['karma:all', 'exec:push_github', 'exec:push_heroku']
   grunt.registerTask 'compile', "Compiles everything", ['coffee', 'copy', 'haml', 'less', 'symlink', 'yuidoc']
-  grunt.registerTask "default", ['compile', 'karma:all', "watch"]
+  grunt.registerTask "default", ['compile', 'karma:chrome', "watch"]
 

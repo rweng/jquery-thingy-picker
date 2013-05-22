@@ -12,6 +12,12 @@
   @param {Object} options
   ###
   class ThingyItem
+    ###*
+    @static
+    @method itemToHtml
+    @param {Object} data
+    @return {String} html string
+    ###
     @itemToHtml: (contact) ->
       "<div class='item' id='#{contact.id}'><img src='#{contact.picture}'/><div class='item-name'>#{contact.name}</div></div>"
 
@@ -26,7 +32,7 @@
 
     constructor:  (@data, @options) ->
       @options ||= {}
-      @$el = $(ThingyItem.itemToHtml(data))
+      @$el = $(if @options.itemToHtml then @options.itemToHtml(data) else ThingyItem.itemToHtml(data))
       @debug = @options.debug || false
       this.data = data
       self = this
@@ -36,7 +42,6 @@
       # handle when a item is clicked for selection
       @$el.click (event) ->
         self.toggle()
-
 
     toJSON: ->
       @data

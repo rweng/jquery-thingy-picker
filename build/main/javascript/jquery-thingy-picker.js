@@ -15,6 +15,12 @@
     */
 
     ThingyItem = (function() {
+      /**
+      @static
+      @method itemToHtml
+      @param {Object} data
+      @return {String} html string
+      */
       ThingyItem.itemToHtml = function(contact) {
         return "<div class='item' id='" + contact.id + "'><img src='" + contact.picture + "'/><div class='item-name'>" + contact.name + "</div></div>";
       };
@@ -35,7 +41,7 @@
         this.data = data;
         this.options = options;
         this.options || (this.options = {});
-        this.$el = $(ThingyItem.itemToHtml(data));
+        this.$el = $(this.options.itemToHtml ? this.options.itemToHtml(data) : ThingyItem.itemToHtml(data));
         this.debug = this.options.debug || false;
         this.data = data;
         self = this;

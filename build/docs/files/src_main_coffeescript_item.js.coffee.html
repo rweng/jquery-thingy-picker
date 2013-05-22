@@ -114,7 +114,7 @@
 
     @SELECTED_CLASS = &#x27;selected&#x27;
 
-    constructor:  (data, @options) -&gt;
+    constructor:  (@data, @options) -&gt;
       @options ||= {}
       @$el = $(ThingyItem.itemToHtml(data))
       @debug = @options.debug || false
@@ -127,9 +127,8 @@
       @$el.click (event) -&gt;
         self.toggle()
 
-
     toJSON: -&gt;
-      &quot;bal&quot;
+      @data
 
     ###*
     calls options.canBeSelected or returns true
@@ -185,7 +184,7 @@
     deselect: -&gt;
       if @debug
         console.log(&quot;deselect called&quot;)
-      if self.isSelected()
+      if @isSelected()
         @$el.removeClass(ThingyItem.SELECTED_CLASS)
         @$el.trigger(ThingyItem.EVENTS.SELECTION_CHANGED)
 
