@@ -23,7 +23,7 @@
       %h1 JavaScript Example
       .picker
       :javascript
-        $('.js-example .picker').thingyPicker({items: [{
+        $('.js-example .picker').thingyPicker({data: [{
           id: 1,
           name: "50x50",
           picture: "http://placehold.it/50x50"
@@ -91,7 +91,7 @@
                     picture: e.picture.data.url
                   };
                 });
-                $(".fb-example .thingy-picker").thingyPicker({items: items});
+                $(".fb-example .thingy-picker").thingyPicker({data: items});
               });
             });
           }

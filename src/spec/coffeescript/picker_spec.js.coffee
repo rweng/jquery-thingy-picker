@@ -19,13 +19,12 @@ describe 'jquery-thingy-picker', ->
 
   makeThingy = ($el)->
     $el.thingyPicker({
-      debug: true
-      items: itemData()
+      data: itemData()
     })
     $el
 
   firstItem = ->
-    picker.items()[0]
+    picker.items[0]
 
   beforeEach ->
     window.$el = $('<div id="element" />')
@@ -152,12 +151,12 @@ describe 'jquery-thingy-picker', ->
       describe 'showAllItems', ->
         it 'call show on all items', ->
 
-          for item in picker.items()
+          for item in picker.items
             spyOn(item, 'show')
 
           picker.showAllItems()
 
-          for item in picker.items()
+          for item in picker.items
             expect(item.show).toHaveBeenCalled()
 
 
@@ -170,7 +169,7 @@ describe 'jquery-thingy-picker', ->
 
       describe 'items', ->
         it 'returns all items of all instances', ->
-          expect($el.thingyPicker().items().length).toBe(3)
+          expect($el.thingyPicker().items.length).toBe(3)
 
       describe 'getSelectedItems', ->
         it 'returns the selected items', ->

@@ -3,7 +3,7 @@ $.fn.thingyPicker = (options)->
   picker = ($el, options) ->
     return $el.data('thingyPicker') if $el.data('thingyPicker')
 
-    obj = new ThingyPicker.ThingyPicker($el[0], options)
+    obj = new Picker($el[0], options)
     $el.data('thingyPicker', obj)
     obj
 

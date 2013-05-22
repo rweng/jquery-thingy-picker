@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>ThingyItem - jquery-thingy-picker</title>
+    <title>Item - jquery-thingy-picker</title>
     <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
     <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
     <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
@@ -41,9 +41,9 @@
         <div id="api-tabview-panel">
             <ul id="api-classes" class="apis classes">
             
-                <li><a href="../classes/ThingyItem.html">ThingyItem</a></li>
+                <li><a href="../classes/Item.html">Item</a></li>
             
-                <li><a href="../classes/ThingyPicker.html">ThingyPicker</a></li>
+                <li><a href="../classes/Picker.html">Picker</a></li>
             
             </ul>
 
@@ -84,7 +84,7 @@
             <div class="apidocs">
                 <div id="docs-main">
                     <div class="content">
-                        <h1>ThingyItem Class</h1>
+                        <h1>Item Class</h1>
 <div class="box meta">
     
 
@@ -92,7 +92,7 @@
 
     
         <div class="foundat">
-            Defined in: <a href="../files/src_main_coffeescript_item.js.coffee.html#l6"><code>src&#x2F;main&#x2F;coffeescript&#x2F;item.js.coffee:6</code></a>
+            Defined in: <a href="../files/src_main_coffeescript_item.js.coffee.html#l9"><code>src&#x2F;main&#x2F;coffeescript&#x2F;item.js.coffee:9</code></a>
         </div>
     
 
@@ -104,14 +104,14 @@
 
 
 <div class="box intro">
-    <p>A ThingyItem is a single, selectable item in a ThingyPicker</p>
+    <p>A Item is a single, selectable item in a ThingyPicker</p>
 </div>
 
 
     <div class="constructor">
         <h2>Constructor</h2>
-        <div id="method_ThingyItem" class="method item">
-    <h3 class="name"><code>ThingyItem</code></h3>
+        <div id="method_Item" class="method item">
+    <h3 class="name"><code>Item</code></h3>
 
     
         <div class="args">
@@ -158,7 +158,7 @@
             
         
         
-        <a href="../files/src_main_coffeescript_item.js.coffee.html#l6"><code>src&#x2F;main&#x2F;coffeescript&#x2F;item.js.coffee:6</code></a>
+        <a href="../files/src_main_coffeescript_item.js.coffee.html#l9"><code>src&#x2F;main&#x2F;coffeescript&#x2F;item.js.coffee:9</code></a>
         
         </p>
 
@@ -280,6 +280,15 @@
                             </li>
                         
                             <li class="index-item method">
+                                <a href="#method_itemToHtml">itemToHtml</a>
+
+                                
+                                    <span class="flag static">static</span>
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
                                 <a href="#method_on">on</a>
 
                                 
@@ -302,6 +311,13 @@
                         
                             <li class="index-item method">
                                 <a href="#method_toggle">toggle</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_toJSON">toJSON</a>
 
                                 
                                 
@@ -374,7 +390,7 @@
             
         
         
-        <a href="../files/src_main_coffeescript_item.js.coffee.html#l43"><code>src&#x2F;main&#x2F;coffeescript&#x2F;item.js.coffee:43</code></a>
+        <a href="../files/src_main_coffeescript_item.js.coffee.html#l59"><code>src&#x2F;main&#x2F;coffeescript&#x2F;item.js.coffee:59</code></a>
         
         </p>
 
@@ -385,7 +401,7 @@
     </div>
 
     <div class="description">
-        <p>calls options.canBeSelected or returns true</p>
+        <p>true if not overwritten</p>
     </div>
 
     
@@ -440,7 +456,7 @@
             
         
         
-        <a href="../files/src_main_coffeescript_item.js.coffee.html#l91"><code>src&#x2F;main&#x2F;coffeescript&#x2F;item.js.coffee:91</code></a>
+        <a href="../files/src_main_coffeescript_item.js.coffee.html#l107"><code>src&#x2F;main&#x2F;coffeescript&#x2F;item.js.coffee:107</code></a>
         
         </p>
 
@@ -494,7 +510,7 @@
             
         
         
-        <a href="../files/src_main_coffeescript_item.js.coffee.html#l84"><code>src&#x2F;main&#x2F;coffeescript&#x2F;item.js.coffee:84</code></a>
+        <a href="../files/src_main_coffeescript_item.js.coffee.html#l100"><code>src&#x2F;main&#x2F;coffeescript&#x2F;item.js.coffee:100</code></a>
         
         </p>
 
@@ -552,7 +568,7 @@
             
         
         
-        <a href="../files/src_main_coffeescript_item.js.coffee.html#l111"><code>src&#x2F;main&#x2F;coffeescript&#x2F;item.js.coffee:111</code></a>
+        <a href="../files/src_main_coffeescript_item.js.coffee.html#l127"><code>src&#x2F;main&#x2F;coffeescript&#x2F;item.js.coffee:127</code></a>
         
         </p>
 
@@ -622,7 +638,7 @@
             
         
         
-        <a href="../files/src_main_coffeescript_item.js.coffee.html#l69"><code>src&#x2F;main&#x2F;coffeescript&#x2F;item.js.coffee:69</code></a>
+        <a href="../files/src_main_coffeescript_item.js.coffee.html#l85"><code>src&#x2F;main&#x2F;coffeescript&#x2F;item.js.coffee:85</code></a>
         
         </p>
 
@@ -647,6 +663,112 @@
                     
                         <span class="type">Boolean</span>:
                     
+                
+            </div>
+        </div>
+    
+
+    
+</div>
+
+                
+                    <div id="method_itemToHtml" class="method item">
+    <h3 class="name"><code>itemToHtml</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>data</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+        <span class="returns-inline">
+            <span class="type">String</span>
+        </span>
+    
+
+    
+
+    
+
+    
+
+    
+        <span class="flag static">static</span>
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/src_main_coffeescript_item.js.coffee.html#l18"><code>src&#x2F;main&#x2F;coffeescript&#x2F;item.js.coffee:18</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">data</code>
+                        <span class="type">Object</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                         
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                
+                    
+                        <span class="type">String</span>:
+                    
+                    html string
                 
             </div>
         </div>
@@ -704,7 +826,7 @@
             
         
         
-        <a href="../files/src_main_coffeescript_item.js.coffee.html#l52"><code>src&#x2F;main&#x2F;coffeescript&#x2F;item.js.coffee:52</code></a>
+        <a href="../files/src_main_coffeescript_item.js.coffee.html#l68"><code>src&#x2F;main&#x2F;coffeescript&#x2F;item.js.coffee:68</code></a>
         
         </p>
 
@@ -796,7 +918,7 @@
             
         
         
-        <a href="../files/src_main_coffeescript_item.js.coffee.html#l101"><code>src&#x2F;main&#x2F;coffeescript&#x2F;item.js.coffee:101</code></a>
+        <a href="../files/src_main_coffeescript_item.js.coffee.html#l117"><code>src&#x2F;main&#x2F;coffeescript&#x2F;item.js.coffee:117</code></a>
         
         </p>
 
@@ -850,7 +972,7 @@
             
         
         
-        <a href="../files/src_main_coffeescript_item.js.coffee.html#l77"><code>src&#x2F;main&#x2F;coffeescript&#x2F;item.js.coffee:77</code></a>
+        <a href="../files/src_main_coffeescript_item.js.coffee.html#l93"><code>src&#x2F;main&#x2F;coffeescript&#x2F;item.js.coffee:93</code></a>
         
         </p>
 
@@ -881,7 +1003,7 @@
 
     
         <span class="returns-inline">
-            <span class="type"><a href="../classes/ThingyItem.html" class="crosslink">ThingyItem</a></span>
+            <span class="type"><a href="../classes/Item.html" class="crosslink">Item</a></span>
         </span>
     
 
@@ -908,7 +1030,7 @@
             
         
         
-        <a href="../files/src_main_coffeescript_item.js.coffee.html#l60"><code>src&#x2F;main&#x2F;coffeescript&#x2F;item.js.coffee:60</code></a>
+        <a href="../files/src_main_coffeescript_item.js.coffee.html#l76"><code>src&#x2F;main&#x2F;coffeescript&#x2F;item.js.coffee:76</code></a>
         
         </p>
 
@@ -931,9 +1053,79 @@
             <div class="returns-description">
                 
                     
-                        <span class="type"><a href="../classes/ThingyItem.html" class="crosslink">ThingyItem</a></span>:
+                        <span class="type"><a href="../classes/Item.html" class="crosslink">Item</a></span>:
                     
                     this
+                
+            </div>
+        </div>
+    
+
+    
+</div>
+
+                
+                    <div id="method_toJSON" class="method item">
+    <h3 class="name"><code>toJSON</code></h3>
+
+    
+        <span class="paren">()</span>
+    
+
+    
+        <span class="returns-inline">
+            <span class="type">Object</span>
+        </span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/src_main_coffeescript_item.js.coffee.html#l50"><code>src&#x2F;main&#x2F;coffeescript&#x2F;item.js.coffee:50</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>this.data</p>
+    </div>
+
+    
+
+    
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                
+                    
+                        <span class="type">Object</span>:
+                    
                 
             </div>
         </div>
@@ -978,7 +1170,7 @@
             
         
         
-        <a href="../files/src_main_coffeescript_item.js.coffee.html#l20"><code>src&#x2F;main&#x2F;coffeescript&#x2F;item.js.coffee:20</code></a>
+        <a href="../files/src_main_coffeescript_item.js.coffee.html#l29"><code>src&#x2F;main&#x2F;coffeescript&#x2F;item.js.coffee:29</code></a>
         
         </p>
 

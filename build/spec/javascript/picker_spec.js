@@ -22,13 +22,12 @@
     window.$el = picker = void 0;
     makeThingy = function($el) {
       $el.thingyPicker({
-        debug: true,
-        items: itemData()
+        data: itemData()
       });
       return $el;
     };
     firstItem = function() {
-      return picker.items()[0];
+      return picker.items[0];
     };
     beforeEach(function() {
       var post, pre;
@@ -151,13 +150,13 @@
           return it('call show on all items', function() {
             var item, _i, _j, _len, _len1, _ref, _ref1, _results;
 
-            _ref = picker.items();
+            _ref = picker.items;
             for (_i = 0, _len = _ref.length; _i < _len; _i++) {
               item = _ref[_i];
               spyOn(item, 'show');
             }
             picker.showAllItems();
-            _ref1 = picker.items();
+            _ref1 = picker.items;
             _results = [];
             for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
               item = _ref1[_j];
@@ -177,7 +176,7 @@
         });
         describe('items', function() {
           return it('returns all items of all instances', function() {
-            return expect($el.thingyPicker().items().length).toBe(3);
+            return expect($el.thingyPicker().items.length).toBe(3);
           });
         });
         describe('getSelectedItems', function() {

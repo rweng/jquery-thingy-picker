@@ -18,7 +18,12 @@ module.exports = (grunt) ->
           ascii_only: true
 
     coffee:
-      compile:
+      server:
+        files:
+          'build/server.js': 'src/server.coffee'
+      main:
+        options:
+          join: true
         files:
           'build/main/javascript/jquery-thingy-picker.js': 'src/main/coffeescript/*.coffee',
       specs:
@@ -120,7 +125,7 @@ module.exports = (grunt) ->
     relink '../css', 'build/example/css'
     relink '../main/javascript', 'build/example/js'
 
-  grunt.registerTask 'serve', ['exec:serve']
+  grunt.registerTask 'serve', ['compile', 'exec:serve']
   grunt.registerTask 'push', 'Push to Github and Heroku', ['karma:all', 'exec:push_github', 'exec:push_heroku']
   grunt.registerTask 'compile', "Compiles everything", ['coffee', 'copy', 'haml', 'less', 'symlink', 'yuidoc']
   grunt.registerTask "default", ['compile', 'karma:chrome', "watch"]

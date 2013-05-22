@@ -41,9 +41,9 @@
         <div id="api-tabview-panel">
             <ul id="api-classes" class="apis classes">
             
-                <li><a href="../classes/ThingyItem.html">ThingyItem</a></li>
+                <li><a href="../classes/Item.html">Item</a></li>
             
-                <li><a href="../classes/ThingyPicker.html">ThingyPicker</a></li>
+                <li><a href="../classes/Picker.html">Picker</a></li>
             
             </ul>
 
@@ -88,201 +88,62 @@
 
 <div class="file">
     <pre class="code prettyprint linenums">
-# call with $(el).thingyPicker(items: [item])
-# item must be {id: ..., picture: ..., name: ...}
-(($)-&gt;
+###*
+Main Class for Picker
 
-  ###*
-  Main Class for Picker
-
-  @class ThingyPicker
-  @constructor
-  @param {DomNode} element
-  @param {Object} options
-  ###
-  window.ThingyPicker.ThingyPicker = (element, options) -&gt;
-    options ||= {}
-    $el = jQueryElement = $(element)
-    picker = this
-    debug = options.debug || false
-
-    settings = $.extend({
-      debug: false
-      maxSelected: -1
-      preSelectedItems: []
-      excludeItems: []
-      items: []
-      isItemFiltered: (item, filterText) -&gt;
-        not new RegExp(filterText, &quot;i&quot;).test(item.data.name)
-      sorter: (a, b) -&gt;
-        x = a.name.toLowerCase()
-        y = b.name.toLowerCase()
-        ((x &lt; y) ? -1 : ((x &gt; y) ? 1 : 0))
-      ,
-      labels: {
-        selected: &quot;Selected&quot;,
-        filter_placeholder: &quot;Start typing a name&quot;,
-        find_items: &quot;Find items:&quot;,
-        all: &quot;All&quot;,
-        max_selected_message: &quot;{0} of {1} selected&quot;
-      }
-    }, options || {})
-    items = []
-
-    lastSelected = undefined # used when shift-click is performed to know where to start from to select multiple elements
-    ThingyPicker.itemToHtml = settings.itemToHtml if settings.itemToHtml
-
-    # ----------+----------+----------+----------+----------+----------+----------+
-    # Public functions
-    # ----------+----------+----------+----------+----------+----------+----------+
-
-
-    this.$el = -&gt;
-      jQueryElement
-
+@class Picker
+@constructor
+@param {DomNode} element
+@param {Object} options
+###
+class Picker
+  @EVENTS:
     ###*
-    @method getSelectedItems
+    @event selection.changed
+    @param {ThingyItem} item
     ###
-    this.getSelectedItems = -&gt;
-      $.grep items, (item) -&gt;
-        item.isSelected()
+    SELECTION_CHANGED: &#x27;selection.changed&#x27;
 
+  constructor: (element, options) -&gt;
+    $.extend(@, options) if options
 
-    ###*
-    @method hasMaxSelected
-    @return {Boolean}
-    ###
-    this.hasMaxSelected = -&gt;
-      settings.maxSelected &gt;= picker.getSelectedItems().length
-
-
-    ###*
-    calls show on all items
-
-    @method showAllItems
-    ###
-    this.showAllItems = -&gt;
-      for item in items
-        item.show()
-
-
-
-    ###*
-    hides all items except the selected ones
-
-    @method showSelectedItemsOnly
-    ###
-    this.showSelectedItemsOnly = -&gt;
-      for item in items
-        if item.isSelected()
-          item.show()
-        else
-          item.hide()
-
-    ###*
-    @method items
-    @returns {[ThingyItem]} all items
-    ###
-    this.items = -&gt;
-      items
-
-    ###*
-    deselects all items
-
-    @method clearSelection
-    @return {[ThingyItem]} changed items
-    ###
-    this.clearSelection = -&gt;
-      if debug
-        console.log &quot;in: clearSelection&quot;
-      deselected = []
-      for item in items
-        console.log &quot;item&quot;, item.isSelected()
-        deselected.push(item) if item.isSelected()
-        item.deselect()
-
-      deselected
-
-    ###*
-    @method visibleItems
-    @return {[ThingyItem]}
-    ###
-    this.visibleItems = -&gt;
-      $.grep items, (item) -&gt;
-        item.isVisible()
-
-
-    # ----------+----------+----------+----------+----------+----------+----------+
-    # Private functions
-    # ----------+----------+----------+----------+----------+----------+----------+
-
-    updateSelectedCount = -&gt;
-      $el.find(&quot;.selected-count&quot;).html( selectedCount() )
-
-    selectedCount = -&gt;
-      $el.find(&quot;.item.selected&quot;).length
-
-
-    ###*
-    @method updateVisibleItems
-    ###
-    updateVisibleItems = -&gt;
-      filterText = $el.find(&quot;input.filter&quot;).val()
-      mainFilter = $el.find(&#x27;.filter-link.selected&#x27;).data(&#x27;tp-filter&#x27;)
-
-      for item in items
-        filterLinkSaysShow = mainFilter == &quot;all&quot; or (mainFilter == &quot;selected&quot; and item.isSelected())
-        filterTextSaysShow = not settings.isItemFiltered(item, filterText)
-        if filterLinkSaysShow and filterTextSaysShow
-          item.show()
-        else
-          item.hide()
-
-    maxSelectedEnabled = -&gt;
-      settings.maxSelected &gt; 0
-
-    # adds a ThingyItem to the ThingyPicker
-    addItem = (item) -&gt;
-      $el.find(&quot;.items&quot;).append(item.$el)
-      item.select() if item.data.id in settings.preSelectedItems
-
-
-    updateMaxSelectedMessage = -&gt;
-      message = settings.labels.max_selected_message.replace(&quot;{0}&quot;, selectedCount()).replace(&quot;{1}&quot;, settings.maxSelected)
-      $(&quot;.max-selected-wrapper&quot;).html( message )
+    @$el = $(element)
+    @debug ||= false
+    @maxSelected ||= false
+    @preSelectedItems ||= []
+    @data ||= []
+    @items ||= []
 
     # initialize html
-    $el.html(
+    @$el.html(
       &quot;&lt;div class=&#x27;thingy-picker&#x27;&gt;&quot; +
       &quot;    &lt;div class=&#x27;inner-header&#x27;&gt;&quot; +
-      &quot;        &lt;span class=&#x27;filter-label&#x27;&gt;#{settings.labels.find_items}&lt;/span&gt;&lt;input type=&#x27;text&#x27; placeholder=&#x27;Start typing a name&#x27; class=&#x27;filter&#x27;/&gt;&quot; +
-      &quot;        &lt;a class=&#x27;filter-link selected&#x27; data-tp-filter=&#x27;all&#x27; href=&#x27;#&#x27;&gt;#{settings.labels.all}&lt;/a&gt;&quot; +
-      &quot;        &lt;a class=&#x27;filter-link&#x27; data-tp-filter=&#x27;selected&#x27; href=&#x27;#&#x27;&gt;#{settings.labels.selected} (&lt;span class=&#x27;selected-count&#x27;&gt;0&lt;/span&gt;)&lt;/a&gt;&quot; +
-      (if settings.maxSelected &gt; 0 then &quot;&lt;div class=&#x27;max-selected-wrapper&#x27;&gt;&lt;/div&gt;&quot; else &quot;&quot;) +
+      &quot;        &lt;span class=&#x27;filter-label&#x27;&gt;#{@labels.find_items}&lt;/span&gt;&lt;input type=&#x27;text&#x27; placeholder=&#x27;Start typing a name&#x27; class=&#x27;filter&#x27;/&gt;&quot; +
+      &quot;        &lt;a class=&#x27;filter-link selected&#x27; data-tp-filter=&#x27;all&#x27; href=&#x27;#&#x27;&gt;#{@labels.all}&lt;/a&gt;&quot; +
+      &quot;        &lt;a class=&#x27;filter-link&#x27; data-tp-filter=&#x27;selected&#x27; href=&#x27;#&#x27;&gt;#{@labels.selected} (&lt;span class=&#x27;selected-count&#x27;&gt;0&lt;/span&gt;)&lt;/a&gt;&quot; +
+      (if @maxSelected then &quot;&lt;div class=&#x27;max-selected-wrapper&#x27;&gt;&lt;/div&gt;&quot; else &quot;&quot;) +
       &quot;    &lt;/div&gt;&quot; +
       &quot;    &lt;div class=&#x27;items&#x27;&gt;&lt;/div&gt;&quot; +
       &quot;&lt;/div&gt;&quot;
     )
 
     # create items
-    $.each(settings.items, (i, data) -&gt;
-      item = new ThingyPicker.ThingyItem(data, picker)
-      items.push item
+    $.each(@data, (i, data) =&gt;
+      item = new Item(data)
+      @items.push item
 
-      item.$el.on &#x27;selection-changed&#x27;, -&gt;
-        console.log &quot;triggered&quot;
-        updateMaxSelectedMessage()
-        updateSelectedCount()
+      item.$el.on Item.EVENTS.SELECTION_CHANGED, =&gt;
+        console.log &quot;triggered&quot; if @debug
 
-        ###*
-        @event selection.changed
-        @param {ThingyItem} item
-        ###
-        picker.$el().trigger(&#x27;selection.changed&#x27;, item)
+        @updateMaxSelectedMessage()
+        @updateSelectedCount()
+
+        @$el.trigger(Picker.EVENTS.SELECTION_CHANGED, item)
 
 
-      console.log &quot;item&quot;, item
-      addItem(item)
+
+      console.log &quot;item&quot;, item if @debug
+      @addItem(item)
     );
 
 
@@ -291,22 +152,147 @@
     ########################################
 
     # add selected class to the clicked filter link
-    $el.find(&quot;.filter-link&quot;).click (event)-&gt;
+    @$el.find(&quot;.filter-link&quot;).click (event) =&gt;
       event.preventDefault()
-      $el.find(&quot;.filter-link&quot;).removeClass(&quot;selected&quot;)
+      @$el.find(&quot;.filter-link&quot;).removeClass(&quot;selected&quot;)
+      debugger # use event target here
       $(this).addClass(&#x27;selected&#x27;)
-      updateVisibleItems()
+      @updateVisibleItems()
 
     # filter as you type
-    $el.find(&quot;input.filter&quot;).keyup -&gt;
-      updateVisibleItems()
+    @$el.find(&quot;input.filter&quot;).keyup =&gt;
+      @updateVisibleItems()
 
-    updateMaxSelectedMessage()
-    updateSelectedCount()
+    @updateMaxSelectedMessage()
+    @updateSelectedCount()
 
-    return this
+  # ----------+----------+----------+----------+----------+----------+----------+
+  # Public functions
+  # ----------+----------+----------+----------+----------+----------+----------+
 
-)(jQuery)
+  labels:
+    selected: &quot;Selected&quot;,
+    filter_placeholder: &quot;Start typing a name&quot;,
+    find_items: &quot;Find items:&quot;,
+    all: &quot;All&quot;,
+    max_selected_message: &quot;{0} of {1} selected&quot;
+
+
+  toJSON: =&gt;
+    @items
+
+  sorter: (a, b) -&gt;
+    x = a.name.toLowerCase()
+    y = b.name.toLowerCase()
+    ((x &lt; y) ? -1 : ((x &gt; y) ? 1 : 0))
+
+
+  isItemFiltered: (item, filterText) -&gt;
+    not new RegExp(filterText, &quot;i&quot;).test(item.data.name)
+
+  ###*
+  @method getSelectedItems
+  ###
+  getSelectedItems: =&gt;
+    $.grep @items, (item) -&gt;
+      item.isSelected()
+
+
+  ###*
+  @method hasMaxSelected
+  @return {Boolean}
+  ###
+  hasMaxSelected: -&gt;
+    @maxSelected &gt; 0
+
+
+  ###*
+  calls show on all items
+
+  @method showAllItems
+  ###
+  showAllItems: =&gt;
+    for item in @items
+      item.show()
+
+
+
+  ###*
+  hides all items except the selected ones
+
+  @method showSelectedItemsOnly
+  ###
+  showSelectedItemsOnly: =&gt;
+    for item in @items
+      if item.isSelected()
+        item.show()
+      else
+        item.hide()
+
+  ###*
+  deselects all items
+
+  @method clearSelection
+  @return {[ThingyItem]} changed items
+  ###
+  clearSelection: =&gt;
+    console.log &quot;in: clearSelection&quot; if @debug
+
+    deselected = []
+    for item in @items
+      console.log &quot;item&quot;, item.isSelected() if @debug
+      deselected.push(item) if item.isSelected()
+      item.deselect()
+
+    deselected
+
+  ###*
+  @method visibleItems
+  @return {[ThingyItem]}
+  ###
+  visibleItems: =&gt;
+    $.grep @items, (item) -&gt;
+      item.isVisible()
+
+  selectedCount: =&gt;
+    @$el.find(&quot;.item.selected&quot;).length
+
+  updateSelectedCount: =&gt;
+    @$el.find(&quot;.selected-count&quot;).html( @selectedCount() )
+
+
+
+  ###*
+  @method updateVisibleItems
+  ###
+  updateVisibleItems: =&gt;
+    filterText = $el.find(&quot;input.filter&quot;).val()
+    mainFilter = $el.find(&#x27;.filter-link.selected&#x27;).data(&#x27;tp-filter&#x27;)
+
+    for item in @items
+      filterLinkSaysShow = mainFilter == &quot;all&quot; or (mainFilter == &quot;selected&quot; and item.isSelected())
+      filterTextSaysShow = not @isItemFiltered(item, filterText)
+      if filterLinkSaysShow and filterTextSaysShow
+        item.show()
+      else
+        item.hide()
+
+  maxSelectedEnabled: =&gt;
+    @hasMaxSelected()
+
+  # adds a ThingyItem to the ThingyPicker
+  addItem: (item) =&gt;
+    $el.find(&quot;.items&quot;).append(item.$el)
+    item.select() if item.data.id in @preSelectedItems
+
+
+  updateMaxSelectedMessage: =&gt;
+    message = @labels.max_selected_message.replace(&quot;{0}&quot;, @selectedCount()).replace(&quot;{1}&quot;, @maxSelected)
+    $(&quot;.max-selected-wrapper&quot;).html( message )
+
+
+
+window.ThingyPicker.Picker = Picker
     </pre>
 </div>
 
