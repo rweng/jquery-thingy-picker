@@ -1,14 +1,10 @@
 (function() {
-  var __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
+  (function() {
+    var $, ThingyItem, root;
 
-  (function($) {
-    var ThingyItem, ThingyPicker;
-
-    window.ThingyPicker = {
-      itemToHtml: function(contact) {
-        return "<div class='item' id='" + contact.id + "'><img src='" + contact.picture + "'/><div class='item-name'>" + contact.name + "</div></div>";
-      }
-    };
+    root = window;
+    $ = root.jQuery;
+    root.ThingyPicker || (root.ThingyPicker = {});
     /**
     A ThingyItem is a single, selectable item in a ThingyPicker
     
@@ -18,7 +14,7 @@
     @param {Object} options
     */
 
-    window.ThingyPicker.ThingyItem = ThingyItem = function(data, options) {
+    ThingyItem = ThingyPicker.ThingyItem = function(data, options) {
       var $el, EVENTS, SELECTED_CLASS, debug, jQueryElement, self;
 
       $el = $(window.ThingyPicker.itemToHtml(data));
@@ -141,7 +137,20 @@
       });
       return this;
     };
-    ThingyItem.itemToHtml = void 0;
+    return ThingyItem.itemToHtml = void 0;
+  })();
+
+}).call(this);
+
+(function() {
+  var __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
+
+  (function($) {
+    window.ThingyPicker = $.extend(window.ThingyPicker || {}, {
+      itemToHtml: function(contact) {
+        return "<div class='item' id='" + contact.id + "'><img src='" + contact.picture + "'/><div class='item-name'>" + contact.name + "</div></div>";
+      }
+    });
     /**
     Main Class for Picker
     
@@ -151,9 +160,10 @@
     @param {Object} options
     */
 
-    window.ThingyPicker.ThingyPicker = ThingyPicker = function(element, options) {
+    return window.ThingyPicker.ThingyPicker = function(element, options) {
       var $el, addItem, debug, items, jQueryElement, lastSelected, maxSelectedEnabled, picker, selectedCount, settings, updateMaxSelectedMessage, updateSelectedCount, updateVisibleItems;
 
+      options || (options = {});
       $el = jQueryElement = $(element);
       picker = this;
       debug = options.debug || false;
@@ -337,7 +347,7 @@
       $.each(settings.items, function(i, data) {
         var item;
 
-        item = new ThingyItem(data, picker);
+        item = new ThingyPicker.ThingyItem(data, picker);
         items.push(item);
         item.$el().on('selection-changed', function() {
           console.log("triggered");
@@ -366,35 +376,39 @@
       updateSelectedCount();
       return this;
     };
-    return $.fn.thingyPicker = function(options) {
-      var picker;
-
-      picker = function($el, options) {
-        var obj;
-
-        if ($el.data('thingyPicker')) {
-          return $el.data('thingyPicker');
-        }
-        obj = new ThingyPicker($el[0], options);
-        $el.data('thingyPicker', obj);
-        return obj;
-      };
-      if (this.length === 1 && typeof options !== "string") {
-        return picker($(this), options);
-      }
-      return this.map(function() {
-        var $this, data;
-
-        $this = $(this);
-        data = picker($this);
-        if (typeof options === 'string') {
-          data[options].call($this);
-          return this;
-        } else {
-          return data;
-        }
-      });
-    };
   })(jQuery);
+
+}).call(this);
+
+(function() {
+  $.fn.thingyPicker = function(options) {
+    var picker;
+
+    picker = function($el, options) {
+      var obj;
+
+      if ($el.data('thingyPicker')) {
+        return $el.data('thingyPicker');
+      }
+      obj = new ThingyPicker.ThingyPicker($el[0], options);
+      $el.data('thingyPicker', obj);
+      return obj;
+    };
+    if (this.length === 1 && typeof options !== "string") {
+      return picker($(this), options);
+    }
+    return this.map(function() {
+      var $this, data;
+
+      $this = $(this);
+      data = picker($this);
+      if (typeof options === 'string') {
+        data[options].call($this);
+        return this;
+      } else {
+        return data;
+      }
+    });
+  };
 
 }).call(this);

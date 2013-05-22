@@ -151,7 +151,7 @@ describe 'jquery-thingy-picker', ->
     describe 'Instance Methods / Commands', ->
       describe 'showAllItems', ->
         it 'call show on all items', ->
-          console.log "picker", picker
+
           for item in picker.items()
             spyOn(item, 'show')
 

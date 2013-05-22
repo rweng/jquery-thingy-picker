@@ -18,21 +18,26 @@ module.exports = (grunt) ->
           ascii_only: true
 
     coffee:
-      glob_to_multiple:
+      compile:
+        files:
+          'build/main/javascript/jquery-thingy-picker.js': 'src/main/coffeescript/*.coffee',
+      specs:
         expand: true
-        cwd: "src"
-        src: '**/*.coffee'
-        dest: 'build/'
+        cwd: 'src/spec/coffeescript'
+        src: ['*.coffee']
+        dest: 'build/spec/javascript/'
         ext: '.js'
-        rename: (base, path) ->
-          return base + path.replace(/coffeescript/g, 'javascript')
 
     copy:
-      files:
-        expand: true
-        cwd: 'src'
-        src: "**/*.(js|coffee)"
-        dest: 'build/'
+      all:
+        files:[{
+          expand: true
+          cwd: 'src/'
+          src: ['**/*.js']
+          dest: 'build/'
+          filter: 'isFile'
+        }]
+
 
     watch:
       coffee:
@@ -92,6 +97,9 @@ module.exports = (grunt) ->
       serve:
         cmd: 'node build/server.js'
 
+    clean:
+      build: 'build'
+
   # These plugins provide necessary tasks.
   grunt.loadNpmTasks "grunt-contrib-watch"
   grunt.loadNpmTasks "grunt-contrib-haml"
@@ -101,6 +109,7 @@ module.exports = (grunt) ->
   grunt.loadNpmTasks('grunt-contrib-yuidoc');
   grunt.loadNpmTasks('grunt-karma');
   grunt.loadNpmTasks('grunt-exec');
+  grunt.loadNpmTasks('grunt-contrib-clean');
 
   grunt.registerTask 'symlink', 'Creates symlinks', ->
     relink = (src, dest) ->
@@ -113,6 +122,6 @@ module.exports = (grunt) ->
 
   grunt.registerTask 'serve', ['exec:serve']
   grunt.registerTask 'push', 'Push to Github and Heroku', ['karma:all', 'exec:push_github', 'exec:push_heroku']
-  grunt.registerTask 'compile', "Compiles everything", ['coffee', 'haml', 'less', 'copy', 'symlink', 'yuidoc']
+  grunt.registerTask 'compile', "Compiles everything", ['coffee', 'copy', 'haml', 'less', 'symlink', 'yuidoc']
   grunt.registerTask "default", ['compile', 'karma:all', "watch"]
 

@@ -151,7 +151,6 @@
           return it('call show on all items', function() {
             var item, _i, _j, _len, _len1, _ref, _ref1, _results;
 
-            console.log("picker", picker);
             _ref = picker.items();
             for (_i = 0, _len = _ref.length; _i < _len; _i++) {
               item = _ref[_i];
