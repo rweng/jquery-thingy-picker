@@ -5,9 +5,8 @@ docs = new(nStatic.Server)('build/docs')
 
 require('http').createServer (request, response) ->
 	request.addListener 'end', ->
-		if newUrl = request.url.replace /^\/docs/, ''
-			console.log "serving docs"
-			request.url = newUrl
+		if request.url.match /^\/docs/
+			request.url = request.url.replace /^\/docs\/?/, '/'
 			docs.serve request, response
 		else
 			example.serve request, response

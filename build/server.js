@@ -9,11 +9,8 @@
 
   require('http').createServer(function(request, response) {
     return request.addListener('end', function() {
-      var newUrl;
-
-      if (newUrl = request.url.replace(/^\/docs/, '')) {
-        console.log("serving docs");
-        request.url = newUrl;
+      if (request.url.match(/^\/docs/)) {
+        request.url = request.url.replace(/^\/docs\/?/, '/');
         return docs.serve(request, response);
       } else {
         return example.serve(request, response);

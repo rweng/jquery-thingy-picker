@@ -89,6 +89,8 @@ module.exports = (grunt) ->
         cmd: 'git push origin master'
       push_heroku:
         cmd: 'git push heroku master'
+      serve:
+        cmd: 'node build/server.js'
 
   # These plugins provide necessary tasks.
   grunt.loadNpmTasks "grunt-contrib-watch"
@@ -109,6 +111,7 @@ module.exports = (grunt) ->
     relink '../css', 'build/example/css'
     relink '../main/javascript', 'build/example/js'
 
+  grunt.registerTask 'serve', ['exec:serve']
   grunt.registerTask 'push', 'Push to Github and Heroku', ['karma:all', 'exec:push_github', 'exec:push_heroku']
   grunt.registerTask 'compile', "Compiles everything", ['coffee', 'haml', 'less', 'copy', 'symlink', 'yuidoc']
   grunt.registerTask "default", ['compile', 'karma:all', "watch"]
