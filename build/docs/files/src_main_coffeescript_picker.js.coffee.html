@@ -265,8 +265,8 @@ class Picker
   @method updateVisibleItems
   ###
   updateVisibleItems: =&gt;
-    filterText = $el.find(&quot;input.filter&quot;).val()
-    mainFilter = $el.find(&#x27;.filter-link.selected&#x27;).data(&#x27;tp-filter&#x27;)
+    filterText = @$el.find(&quot;input.filter&quot;).val()
+    mainFilter = @$el.find(&#x27;.filter-link.selected&#x27;).data(&#x27;tp-filter&#x27;)
 
     for item in @items
       filterLinkSaysShow = mainFilter == &quot;all&quot; or (mainFilter == &quot;selected&quot; and item.isSelected())

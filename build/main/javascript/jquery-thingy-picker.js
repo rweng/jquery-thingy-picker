@@ -427,8 +427,8 @@
     Picker.prototype.updateVisibleItems = function() {
       var filterLinkSaysShow, filterText, filterTextSaysShow, item, mainFilter, _i, _len, _ref, _results;
 
-      filterText = $el.find("input.filter").val();
-      mainFilter = $el.find('.filter-link.selected').data('tp-filter');
+      filterText = this.$el.find("input.filter").val();
+      mainFilter = this.$el.find('.filter-link.selected').data('tp-filter');
       _ref = this.items;
       _results = [];
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
