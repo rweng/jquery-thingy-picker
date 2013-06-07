@@ -15,7 +15,7 @@ class Picker
     SELECTION_CHANGED: 'selection.changed'
 
 
-  base_html: ->
+  baseHtml: ->
     html =
       "<div class='thingy-picker'>" +
       "    <div class='inner-header'>" +
@@ -43,7 +43,7 @@ class Picker
     @$el = $(element)
 
     # initialize html
-    @$el.html @base_html()
+    @$el.html @baseHtml()
 
     # create items
     if @items.length == 0 and @data().length > 0

@@ -222,7 +222,7 @@
       SELECTION_CHANGED: 'selection.changed'
     };
 
-    Picker.prototype.base_html = function() {
+    Picker.prototype.baseHtml = function() {
       var html;
 
       return html = "<div class='thingy-picker'>" + "    <div class='inner-header'>" + ("        <span class='filter-label'>" + this.labels.find_items + "</span><input type='text' placeholder='Start typing a name' class='filter'/>") + ("        <a class='filter-link selected' data-tp-filter='all' href='#'>" + this.labels.all + "</a>") + ("        <a class='filter-link' data-tp-filter='selected' href='#'>" + this.labels.selected + " (<span class='selected-count'>0</span>)</a>") + (this.maxSelected ? "<div class='max-selected-wrapper'></div>" : "") + "    </div>" + "    <div class='items'></div>" + "</div>";
@@ -257,7 +257,7 @@
       };
       $.extend(this, default_options, options || {});
       this.$el = $(element);
-      this.$el.html(this.base_html());
+      this.$el.html(this.baseHtml());
       if (this.items.length === 0 && this.data().length > 0) {
         $.each(this.data(), function(i, data) {
           return _this.addItem(new Item(data));
