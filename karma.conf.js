@@ -11,7 +11,7 @@ files = [
   'build/spec/lib/*.js',
    JASMINE,
   JASMINE_ADAPTER,
-  'build/main/javascript/*.js',
+  'build/javascript/*.js',
   'build/spec/**/*_spec.js'
 ];
 

@@ -6,8 +6,8 @@
         "url": ""
     },
     "files": {
-        "src/main/coffeescript/item.js.coffee": {
-            "name": "src/main/coffeescript/item.js.coffee",
+        "src/coffeescript/item.js.coffee": {
+            "name": "src/coffeescript/item.js.coffee",
             "modules": {},
             "classes": {
                 "Item": 1
@@ -15,8 +15,8 @@
             "fors": {},
             "namespaces": {}
         },
-        "src/main/coffeescript/picker.js.coffee": {
-            "name": "src/main/coffeescript/picker.js.coffee",
+        "src/coffeescript/picker.js.coffee": {
+            "name": "src/coffeescript/picker.js.coffee",
             "modules": {},
             "classes": {
                 "Picker": 1
@@ -35,7 +35,7 @@
             "extensions": [],
             "plugin_for": [],
             "extension_for": [],
-            "file": "src/main/coffeescript/item.js.coffee",
+            "file": "src/coffeescript/item.js.coffee",
             "line": 9,
             "description": "A Item is a single, selectable item in a ThingyPicker",
             "is_constructor": 1,
@@ -60,7 +60,7 @@
             "extensions": [],
             "plugin_for": [],
             "extension_for": [],
-            "file": "src/main/coffeescript/picker.js.coffee",
+            "file": "src/coffeescript/picker.js.coffee",
             "line": 1,
             "description": "Main Class for Picker",
             "is_constructor": 1,
@@ -80,7 +80,7 @@
     },
     "classitems": [
         {
-            "file": "src/main/coffeescript/item.js.coffee",
+            "file": "src/coffeescript/item.js.coffee",
             "line": 18,
             "static": 1,
             "itemtype": "method",
@@ -99,14 +99,14 @@
             "class": "Item"
         },
         {
-            "file": "src/main/coffeescript/item.js.coffee",
+            "file": "src/coffeescript/item.js.coffee",
             "line": 29,
             "itemtype": "event",
             "name": "selection-changed",
             "class": "Item"
         },
         {
-            "file": "src/main/coffeescript/item.js.coffee",
+            "file": "src/coffeescript/item.js.coffee",
             "line": 50,
             "description": "this.data",
             "itemtype": "method",
@@ -118,7 +118,7 @@
             "class": "Item"
         },
         {
-            "file": "src/main/coffeescript/item.js.coffee",
+            "file": "src/coffeescript/item.js.coffee",
             "line": 59,
             "description": "true if not overwritten",
             "itemtype": "method",
@@ -130,7 +130,7 @@
             "class": "Item"
         },
         {
-            "file": "src/main/coffeescript/item.js.coffee",
+            "file": "src/coffeescript/item.js.coffee",
             "line": 68,
             "itemtype": "method",
             "name": "on",
@@ -149,7 +149,7 @@
             "class": "Item"
         },
         {
-            "file": "src/main/coffeescript/item.js.coffee",
+            "file": "src/coffeescript/item.js.coffee",
             "line": 76,
             "description": "selects the item if it is unselected, unselects if it is selected",
             "itemtype": "method",
@@ -161,7 +161,7 @@
             "class": "Item"
         },
         {
-            "file": "src/main/coffeescript/item.js.coffee",
+            "file": "src/coffeescript/item.js.coffee",
             "line": 85,
             "itemtype": "method",
             "name": "isVisible",
@@ -172,7 +172,7 @@
             "class": "Item"
         },
         {
-            "file": "src/main/coffeescript/item.js.coffee",
+            "file": "src/coffeescript/item.js.coffee",
             "line": 93,
             "description": "delegates to $el.show",
             "itemtype": "method",
@@ -180,7 +180,7 @@
             "class": "Item"
         },
         {
-            "file": "src/main/coffeescript/item.js.coffee",
+            "file": "src/coffeescript/item.js.coffee",
             "line": 100,
             "description": "delegates to $el.hide",
             "itemtype": "method",
@@ -188,14 +188,14 @@
             "class": "Item"
         },
         {
-            "file": "src/main/coffeescript/item.js.coffee",
+            "file": "src/coffeescript/item.js.coffee",
             "line": 107,
             "itemtype": "method",
             "name": "deselect",
             "class": "Item"
         },
         {
-            "file": "src/main/coffeescript/item.js.coffee",
+            "file": "src/coffeescript/item.js.coffee",
             "line": 117,
             "description": "Marks this item as selected",
             "itemtype": "method",
@@ -203,7 +203,7 @@
             "class": "Item"
         },
         {
-            "file": "src/main/coffeescript/item.js.coffee",
+            "file": "src/coffeescript/item.js.coffee",
             "line": 127,
             "itemtype": "method",
             "name": "isSelected",
@@ -214,7 +214,7 @@
             "class": "Item"
         },
         {
-            "file": "src/main/coffeescript/picker.js.coffee",
+            "file": "src/coffeescript/picker.js.coffee",
             "line": 11,
             "itemtype": "event",
             "name": "selection.changed",
@@ -228,14 +228,14 @@
             "class": "Picker"
         },
         {
-            "file": "src/main/coffeescript/picker.js.coffee",
+            "file": "src/coffeescript/picker.js.coffee",
             "line": 102,
             "itemtype": "method",
             "name": "getSelectedItems",
             "class": "Picker"
         },
         {
-            "file": "src/main/coffeescript/picker.js.coffee",
+            "file": "src/coffeescript/picker.js.coffee",
             "line": 110,
             "itemtype": "method",
             "name": "hasMaxSelected",
@@ -246,7 +246,7 @@
             "class": "Picker"
         },
         {
-            "file": "src/main/coffeescript/picker.js.coffee",
+            "file": "src/coffeescript/picker.js.coffee",
             "line": 118,
             "description": "calls show on all items",
             "itemtype": "method",
@@ -254,7 +254,7 @@
             "class": "Picker"
         },
         {
-            "file": "src/main/coffeescript/picker.js.coffee",
+            "file": "src/coffeescript/picker.js.coffee",
             "line": 129,
             "description": "hides all items except the selected ones",
             "itemtype": "method",
@@ -262,7 +262,7 @@
             "class": "Picker"
         },
         {
-            "file": "src/main/coffeescript/picker.js.coffee",
+            "file": "src/coffeescript/picker.js.coffee",
             "line": 141,
             "description": "deselects all items",
             "itemtype": "method",
@@ -274,7 +274,7 @@
             "class": "Picker"
         },
         {
-            "file": "src/main/coffeescript/picker.js.coffee",
+            "file": "src/coffeescript/picker.js.coffee",
             "line": 158,
             "itemtype": "method",
             "name": "visibleItems",
@@ -285,7 +285,7 @@
             "class": "Picker"
         },
         {
-            "file": "src/main/coffeescript/picker.js.coffee",
+            "file": "src/coffeescript/picker.js.coffee",
             "line": 174,
             "itemtype": "method",
             "name": "updateVisibleItems",

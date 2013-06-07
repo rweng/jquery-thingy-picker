@@ -25,7 +25,7 @@ module.exports = (grunt) ->
         options:
           join: true
         files:
-          'build/main/javascript/jquery-thingy-picker.js': 'src/main/coffeescript/*.coffee',
+          'build/javascript/jquery-thingy-picker.js': 'src/coffeescript/*.coffee',
       specs:
         expand: true
         cwd: 'src/spec/coffeescript'
@@ -78,7 +78,7 @@ module.exports = (grunt) ->
         version: "<%= pkg.version %>"
         url: "<%= pkg.homepage %>"
         options:
-          paths: "src/main/coffeescript/"
+          paths: "src/coffeescript/"
           outdir: "build/docs/"
           extension: ".coffee",
           syntaxtype: "coffee"
@@ -123,7 +123,7 @@ module.exports = (grunt) ->
 
     console.log "creating symlinks ..."
     relink '../css', 'build/example/css'
-    relink '../main/javascript', 'build/example/js'
+    relink '../javascript', 'build/example/js'
 
   grunt.registerTask 'serve', ['compile', 'exec:serve']
   grunt.registerTask 'push', 'Push to Github and Heroku', ['karma:all', 'exec:push_github', 'exec:push_heroku']
