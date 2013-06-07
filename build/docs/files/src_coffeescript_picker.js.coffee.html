@@ -104,28 +104,40 @@ class Picker
     ###
     SELECTION_CHANGED: &#x27;selection.changed&#x27;
 
-  constructor: (element, options) -&gt;
-    $.extend(@, options) if options
 
-    @$el = $(element)
-    @debug ||= false
-    @maxSelected ||= false
-    @preSelectedItems ||= []
-    @data ||= []
-    @items ||= []
-
-    # initialize html
-    @$el.html(
+  baseHtml: -&gt;
+    html =
       &quot;&lt;div class=&#x27;thingy-picker&#x27;&gt;&quot; +
-      &quot;    &lt;div class=&#x27;inner-header&#x27;&gt;&quot; +
-      &quot;        &lt;span class=&#x27;filter-label&#x27;&gt;#{@labels.find_items}&lt;/span&gt;&lt;input type=&#x27;text&#x27; placeholder=&#x27;Start typing a name&#x27; class=&#x27;filter&#x27;/&gt;&quot; +
+      &quot;    &lt;div class=&#x27;inner-header&#x27;&gt;&quot;
+    html +=
+      &quot;        &lt;span class=&#x27;filter-label&#x27;&gt;#{@labels.find_items}&lt;/span&gt;&lt;input type=&#x27;text&#x27; placeholder=&#x27;Start typing a name&#x27; class=&#x27;filter&#x27;/&gt;&quot; if @isFilterEnabled
+    html +=
       &quot;        &lt;a class=&#x27;filter-link selected&#x27; data-tp-filter=&#x27;all&#x27; href=&#x27;#&#x27;&gt;#{@labels.all}&lt;/a&gt;&quot; +
-      &quot;        &lt;a class=&#x27;filter-link&#x27; data-tp-filter=&#x27;selected&#x27; href=&#x27;#&#x27;&gt;#{@labels.selected} (&lt;span class=&#x27;selected-count&#x27;&gt;0&lt;/span&gt;)&lt;/a&gt;&quot; +
-      (if @maxSelected then &quot;&lt;div class=&#x27;max-selected-wrapper&#x27;&gt;&lt;/div&gt;&quot; else &quot;&quot;) +
+      &quot;        &lt;a class=&#x27;filter-link&#x27; data-tp-filter=&#x27;selected&#x27; href=&#x27;#&#x27;&gt;#{@labels.selected} (&lt;span class=&#x27;selected-count&#x27;&gt;0&lt;/span&gt;)&lt;/a&gt;&quot; if @areFilterLinksEnabled
+    html += &quot;&lt;div class=&#x27;max-selected-wrapper&#x27;&gt;&lt;/div&gt;&quot; if @maxSelected
+    html +=
       &quot;    &lt;/div&gt;&quot; +
       &quot;    &lt;div class=&#x27;items&#x27;&gt;&lt;/div&gt;&quot; +
       &quot;&lt;/div&gt;&quot;
-    )
+    html
+
+
+  constructor: (element, options) -&gt;
+    default_options =
+      items: []
+      data: []
+      debug: false
+      maxSelected: false
+      preSelectedItems: []
+      isFilterEnabled: true
+      areFilterLinksEnabled: true
+
+    $.extend @, default_options, options || {}
+
+    @$el = $(element)
+
+    # initialize html
+    @$el.html @baseHtml()
 
     # create items
     $.each(@data, (i, data) =&gt;
@@ -139,8 +151,6 @@ class Picker
         @updateSelectedCount()
 
         @$el.trigger(Picker.EVENTS.SELECTION_CHANGED, item)
-
-
 
       console.log &quot;item&quot;, item if @debug
       @addItem(item)

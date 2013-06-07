@@ -14,18 +14,9 @@ class Picker
     ###
     SELECTION_CHANGED: 'selection.changed'
 
-  constructor: (element, options) ->
-    $.extend(@, options) if options
 
-    @$el = $(element)
-    @debug ||= false
-    @maxSelected ||= false
-    @preSelectedItems ||= []
-    @data ||= []
-    @items ||= []
-
-    # initialize html
-    @$el.html(
+  base_html: ->
+    html =
       "<div class='thingy-picker'>" +
       "    <div class='inner-header'>" +
       "        <span class='filter-label'>#{@labels.find_items}</span><input type='text' placeholder='Start typing a name' class='filter'/>" +
@@ -35,7 +26,21 @@ class Picker
       "    </div>" +
       "    <div class='items'></div>" +
       "</div>"
-    )
+
+  constructor: (element, options) ->
+    default_options =
+      items: []
+      data: []
+      debug: false
+      maxSelected: false
+      preSelectedItems: []
+
+    $.extend @, default_options, options || {}
+
+    @$el = $(element)
+
+  # initialize html
+    @$el.html @base_html()
 
     # create items
     $.each(@data, (i, data) =>

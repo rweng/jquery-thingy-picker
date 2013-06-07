@@ -223,6 +223,12 @@
       SELECTION_CHANGED: 'selection.changed'
     };
 
+    Picker.prototype.base_html = function() {
+      var html;
+
+      return html = "<div class='thingy-picker'>" + "    <div class='inner-header'>" + ("        <span class='filter-label'>" + this.labels.find_items + "</span><input type='text' placeholder='Start typing a name' class='filter'/>") + ("        <a class='filter-link selected' data-tp-filter='all' href='#'>" + this.labels.all + "</a>") + ("        <a class='filter-link' data-tp-filter='selected' href='#'>" + this.labels.selected + " (<span class='selected-count'>0</span>)</a>") + (this.maxSelected ? "<div class='max-selected-wrapper'></div>" : "") + "    </div>" + "    <div class='items'></div>" + "</div>";
+    };
+
     function Picker(element, options) {
       this.updateMaxSelectedMessage = __bind(this.updateMaxSelectedMessage, this);
       this.addItem = __bind(this.addItem, this);
@@ -236,18 +242,19 @@
       this.showAllItems = __bind(this.showAllItems, this);
       this.getSelectedItems = __bind(this.getSelectedItems, this);
       this.toJSON = __bind(this.toJSON, this);
-      var _this = this;
+      var default_options,
+        _this = this;
 
-      if (options) {
-        $.extend(this, options);
-      }
+      default_options = {
+        items: [],
+        data: [],
+        debug: false,
+        maxSelected: false,
+        preSelectedItems: []
+      };
+      $.extend(this, default_options, options || {});
       this.$el = $(element);
-      this.debug || (this.debug = false);
-      this.maxSelected || (this.maxSelected = false);
-      this.preSelectedItems || (this.preSelectedItems = []);
-      this.data || (this.data = []);
-      this.items || (this.items = []);
-      this.$el.html("<div class='thingy-picker'>" + "    <div class='inner-header'>" + ("        <span class='filter-label'>" + this.labels.find_items + "</span><input type='text' placeholder='Start typing a name' class='filter'/>") + ("        <a class='filter-link selected' data-tp-filter='all' href='#'>" + this.labels.all + "</a>") + ("        <a class='filter-link' data-tp-filter='selected' href='#'>" + this.labels.selected + " (<span class='selected-count'>0</span>)</a>") + (this.maxSelected ? "<div class='max-selected-wrapper'></div>" : "") + "    </div>" + "    <div class='items'></div>" + "</div>");
+      this.$el.html(this.base_html());
       $.each(this.data, function(i, data) {
         var item;
 

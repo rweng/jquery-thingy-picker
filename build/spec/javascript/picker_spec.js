@@ -196,7 +196,6 @@
             var result;
 
             $el.find('.item:first').addClass('selected');
-            expect($el.find(".item.selected").length).toBe(1);
             console.log("thingyPicker() result", $el.thingyPicker());
             result = $el.thingyPicker().clearSelection();
             console.log("result", result);
