@@ -19,7 +19,7 @@
       <h1>JavaScript Example</h1>
       <div class='picker'></div>
       <script>
-        $('.js-example .picker').thingyPicker({data: [{
+        $('.js-example .picker').thingyPicker({data: function(){return [{
           id: 1,
           name: "50x50",
           picture: "http://placehold.it/50x50"
@@ -31,7 +31,7 @@
           id: 3,
           name: "100x50",
           picture: "http://placehold.it/100x50"
-        }],
+        }]},
         isFilterEnabled: false,
         areFilterLinksEnabled: false
         });

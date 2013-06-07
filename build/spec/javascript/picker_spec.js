@@ -22,7 +22,7 @@
     window.$el = picker = void 0;
     makeThingy = function($el) {
       $el.thingyPicker({
-        data: itemData()
+        data: itemData
       });
       return $el;
     };

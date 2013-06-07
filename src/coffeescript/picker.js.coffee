@@ -27,10 +27,11 @@ class Picker
       "    <div class='items'></div>" +
       "</div>"
 
+
   constructor: (element, options) ->
     default_options =
       # data from which Items are created
-      data: []
+      data: -> []
       # you can also pass in Item instances directly
       items: []
       debug: false
@@ -41,12 +42,12 @@ class Picker
 
     @$el = $(element)
 
-  # initialize html
+    # initialize html
     @$el.html @base_html()
 
     # create items
-    if @items.length == 0 and @data.length > 0
-      $.each @data, (i, data) =>
+    if @items.length == 0 and @data().length > 0
+      $.each @data(), (i, data) =>
         @addItem(new Item(data))
 
 
@@ -67,10 +68,6 @@ class Picker
 
     @updateMaxSelectedMessage()
     @updateSelectedCount()
-
-  # ----------+----------+----------+----------+----------+----------+----------+
-  # Public functions
-  # ----------+----------+----------+----------+----------+----------+----------+
 
   labels:
     selected: "Selected",

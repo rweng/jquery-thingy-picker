@@ -245,7 +245,9 @@
         _this = this;
 
       default_options = {
-        data: [],
+        data: function() {
+          return [];
+        },
         items: [],
         debug: false,
         maxSelected: false,
@@ -256,8 +258,8 @@
       $.extend(this, default_options, options || {});
       this.$el = $(element);
       this.$el.html(this.base_html());
-      if (this.items.length === 0 && this.data.length > 0) {
-        $.each(this.data, function(i, data) {
+      if (this.items.length === 0 && this.data().length > 0) {
+        $.each(this.data(), function(i, data) {
           return _this.addItem(new Item(data));
         });
       }

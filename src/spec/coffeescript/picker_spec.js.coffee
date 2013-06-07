@@ -19,7 +19,7 @@ describe 'jquery-thingy-picker', ->
 
   makeThingy = ($el)->
     $el.thingyPicker({
-      data: itemData()
+      data: itemData
     })
     $el
 
