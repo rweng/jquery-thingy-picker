@@ -1,7 +1,6 @@
 (function() {
   var $, Item, Picker, ThingyPicker, root,
-    __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
-    __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
+    __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
 
   root = window;
 
@@ -246,33 +245,22 @@
         _this = this;
 
       default_options = {
-        items: [],
         data: [],
+        items: [],
         debug: false,
         maxSelected: false,
-        preSelectedItems: []
+        isItemPreselected: function(item) {
+          return false;
+        }
       };
       $.extend(this, default_options, options || {});
       this.$el = $(element);
       this.$el.html(this.base_html());
-      $.each(this.data, function(i, data) {
-        var item;
-
-        item = new Item(data);
-        _this.items.push(item);
-        item.$el.on(Item.EVENTS.SELECTION_CHANGED, function() {
-          if (_this.debug) {
-            console.log("triggered");
-          }
-          _this.updateMaxSelectedMessage();
-          _this.updateSelectedCount();
-          return _this.$el.trigger(Picker.EVENTS.SELECTION_CHANGED, item);
+      if (this.items.length === 0 && this.data.length > 0) {
+        $.each(this.data, function(i, data) {
+          return _this.addItem(new Item(data));
         });
-        if (_this.debug) {
-          console.log("item", item);
-        }
-        return _this.addItem(item);
-      });
+      }
       this.$el.find(".filter-link").click(function(event) {
         event.preventDefault();
         _this.$el.find(".filter-link").removeClass("selected");
@@ -455,13 +443,28 @@
       return this.hasMaxSelected();
     };
 
-    Picker.prototype.addItem = function(item) {
-      var _ref;
+    /**
+    @method addItem
+    @param {Item} item
+    */
 
-      this.$el.find(".items").append(item.$el);
-      if (_ref = item.data.id, __indexOf.call(this.preSelectedItems, _ref) >= 0) {
-        return item.select();
+
+    Picker.prototype.addItem = function(item) {
+      var _this = this;
+
+      this.items.push(item);
+      if (this.isItemPreselected(item)) {
+        item.select();
       }
+      item.$el.on(Item.EVENTS.SELECTION_CHANGED, function() {
+        if (_this.debug) {
+          console.log("triggered");
+        }
+        _this.updateMaxSelectedMessage();
+        _this.updateSelectedCount();
+        return _this.$el.trigger(Picker.EVENTS.SELECTION_CHANGED, item);
+      });
+      return this.$el.find(".items").append(item.$el);
     };
 
     Picker.prototype.updateMaxSelectedMessage = function() {

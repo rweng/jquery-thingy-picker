@@ -29,11 +29,13 @@ class Picker
 
   constructor: (element, options) ->
     default_options =
-      items: []
+      # data from which Items are created
       data: []
+      # you can also pass in Item instances directly
+      items: []
       debug: false
       maxSelected: false
-      preSelectedItems: []
+      isItemPreselected: (item) -> false
 
     $.extend @, default_options, options || {}
 
@@ -43,23 +45,9 @@ class Picker
     @$el.html @base_html()
 
     # create items
-    $.each(@data, (i, data) =>
-      item = new Item(data)
-      @items.push item
-
-      item.$el.on Item.EVENTS.SELECTION_CHANGED, =>
-        console.log "triggered" if @debug
-
-        @updateMaxSelectedMessage()
-        @updateSelectedCount()
-
-        @$el.trigger(Picker.EVENTS.SELECTION_CHANGED, item)
-
-
-
-      console.log "item", item if @debug
-      @addItem(item)
-    );
+    if @items.length == 0 and @data.length > 0
+      $.each @data, (i, data) =>
+        @addItem(new Item(data))
 
 
     ########################################
@@ -130,7 +118,6 @@ class Picker
       item.show()
 
 
-
   ###*
   hides all items except the selected ones
 
@@ -194,11 +181,23 @@ class Picker
   maxSelectedEnabled: =>
     @hasMaxSelected()
 
-  # adds a ThingyItem to the ThingyPicker
+  ###*
+  @method addItem
+  @param {Item} item
+  ###
   addItem: (item) =>
-    @$el.find(".items").append(item.$el)
-    item.select() if item.data.id in @preSelectedItems
+    @items.push item
+    item.select() if @isItemPreselected(item)
 
+    item.$el.on Item.EVENTS.SELECTION_CHANGED, =>
+      console.log "triggered" if @debug
+
+      @updateMaxSelectedMessage()
+      @updateSelectedCount()
+
+      @$el.trigger(Picker.EVENTS.SELECTION_CHANGED, item)
+
+    @$el.find(".items").append(item.$el)
 
   updateMaxSelectedMessage: =>
     message = @labels.max_selected_message.replace("{0}", @selectedCount()).replace("{1}", @maxSelected)
