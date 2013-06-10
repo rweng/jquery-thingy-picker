@@ -228,7 +228,7 @@
       return html = "<div class='thingy-picker'>" + "    <div class='inner-header'>" + ("        <span class='filter-label'>" + this.labels.find_items + "</span><input type='text' placeholder='Start typing a name' class='filter'/>") + ("        <a class='filter-link selected' data-tp-filter='all' href='#'>" + this.labels.all + "</a>") + ("        <a class='filter-link' data-tp-filter='selected' href='#'>" + this.labels.selected + " (<span class='selected-count'>0</span>)</a>") + (this.maxSelected ? "<div class='max-selected-wrapper'></div>" : "") + "    </div>" + "    <div class='items'></div>" + "</div>";
     };
 
-    function Picker(element, options) {
+    function Picker(options) {
       this.updateMaxSelectedMessage = __bind(this.updateMaxSelectedMessage, this);
       this.addItem = __bind(this.addItem, this);
       this.maxSelectedEnabled = __bind(this.maxSelectedEnabled, this);
@@ -245,6 +245,7 @@
         _this = this;
 
       default_options = {
+        $el: $("<div class='thingy-picker' />"),
         data: function() {
           return [];
         },
@@ -256,7 +257,6 @@
         }
       };
       $.extend(this, default_options, options || {});
-      this.$el = $(element);
       this.$el.html(this.baseHtml());
       if (this.items.length === 0 && this.data().length > 0) {
         $.each(this.data(), function(i, data) {
@@ -491,7 +491,9 @@
       if ($el.data('thingyPicker')) {
         return $el.data('thingyPicker');
       }
-      obj = new Picker($el[0], options);
+      obj = new Picker($.extend(options, {
+        $el: $el
+      }));
       $el.data('thingyPicker', obj);
       return obj;
     };

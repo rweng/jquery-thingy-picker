@@ -44,6 +44,32 @@
     afterEach(function() {
       return $hidden.remove();
     });
+    describe('constructor', function() {
+      describe('with no arguments', function() {
+        return it('should create a div container', function() {
+          picker = new ThingyPicker.Picker;
+          return expect(picker.$el.is('div.thingy-picker')).toBe(true);
+        });
+      });
+      return describe('with options hash', function() {
+        return it('should use the provided $el as container', function() {
+          picker = new ThingyPicker.Picker({
+            $el: $('<section id="test" />')
+          });
+          return expect(picker.$el.is('section#test')).toBe(true);
+        });
+      });
+    });
+    describe('#baseHtml', function() {
+      return it('determines how an empty picker is rendered', function() {
+        picker = new ThingyPicker.Picker({
+          baseHtml: function() {
+            return "<div id='bla'></div>";
+          }
+        });
+        return expect(picker.$el.find('#bla').length).toBe(1);
+      });
+    });
     it('#element is defined', function() {
       return expect($el.length).toBe(1);
     });

@@ -229,14 +229,14 @@
         },
         {
             "file": "src/coffeescript/picker.js.coffee",
-            "line": 112,
+            "line": 92,
             "itemtype": "method",
             "name": "getSelectedItems",
             "class": "Picker"
         },
         {
             "file": "src/coffeescript/picker.js.coffee",
-            "line": 120,
+            "line": 100,
             "itemtype": "method",
             "name": "hasMaxSelected",
             "return": {
@@ -247,7 +247,7 @@
         },
         {
             "file": "src/coffeescript/picker.js.coffee",
-            "line": 128,
+            "line": 108,
             "description": "calls show on all items",
             "itemtype": "method",
             "name": "showAllItems",
@@ -255,7 +255,7 @@
         },
         {
             "file": "src/coffeescript/picker.js.coffee",
-            "line": 139,
+            "line": 118,
             "description": "hides all items except the selected ones",
             "itemtype": "method",
             "name": "showSelectedItemsOnly",
@@ -263,7 +263,7 @@
         },
         {
             "file": "src/coffeescript/picker.js.coffee",
-            "line": 151,
+            "line": 130,
             "description": "deselects all items",
             "itemtype": "method",
             "name": "clearSelection",
@@ -275,7 +275,7 @@
         },
         {
             "file": "src/coffeescript/picker.js.coffee",
-            "line": 168,
+            "line": 147,
             "itemtype": "method",
             "name": "visibleItems",
             "return": {
@@ -286,9 +286,23 @@
         },
         {
             "file": "src/coffeescript/picker.js.coffee",
-            "line": 184,
+            "line": 163,
             "itemtype": "method",
             "name": "updateVisibleItems",
+            "class": "Picker"
+        },
+        {
+            "file": "src/coffeescript/picker.js.coffee",
+            "line": 181,
+            "itemtype": "method",
+            "name": "addItem",
+            "params": [
+                {
+                    "name": "item",
+                    "description": "",
+                    "type": "Item"
+                }
+            ],
             "class": "Picker"
         }
     ],

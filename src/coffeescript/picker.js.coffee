@@ -28,8 +28,10 @@ class Picker
       "</div>"
 
 
-  constructor: (element, options) ->
+  constructor: (options) ->
+
     default_options =
+      $el: $("<div class='thingy-picker' />")
       # data from which Items are created
       data: -> []
       # you can also pass in Item instances directly
@@ -39,8 +41,6 @@ class Picker
       isItemPreselected: (item) -> false
 
     $.extend @, default_options, options || {}
-
-    @$el = $(element)
 
     # initialize html
     @$el.html @baseHtml()

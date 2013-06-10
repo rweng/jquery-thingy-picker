@@ -46,6 +46,26 @@ describe 'jquery-thingy-picker', ->
   afterEach ->
     $hidden.remove()
 
+  describe 'constructor', ->
+    describe 'with no arguments', ->
+      it 'should create a div container', ->
+        picker = new ThingyPicker.Picker
+
+        expect(picker.$el.is('div.thingy-picker')).toBe(true)
+
+    describe 'with options hash', ->
+      it 'should use the provided $el as container', ->
+        picker = new ThingyPicker.Picker
+          $el: $('<section id="test" />')
+
+        expect(picker.$el.is('section#test')).toBe(true)
+
+  describe '#baseHtml', ->
+    it 'determines how an empty picker is rendered', ->
+      picker = new ThingyPicker.Picker
+        baseHtml: -> "<div id='bla'></div>"
+      expect(picker.$el.find('#bla').length).toBe(1)
+
   it '#element is defined', ->
     expect($el.length).toBe(1)
 

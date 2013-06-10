@@ -108,29 +108,25 @@ class Picker
   baseHtml: -&gt;
     html =
       &quot;&lt;div class=&#x27;thingy-picker&#x27;&gt;&quot; +
-      &quot;    &lt;div class=&#x27;inner-header&#x27;&gt;&quot;
-    html +=
-      &quot;        &lt;span class=&#x27;filter-label&#x27;&gt;#{@labels.find_items}&lt;/span&gt;&lt;input type=&#x27;text&#x27; placeholder=&#x27;Start typing a name&#x27; class=&#x27;filter&#x27;/&gt;&quot; if @isFilterEnabled
-    html +=
+      &quot;    &lt;div class=&#x27;inner-header&#x27;&gt;&quot; +
+      &quot;        &lt;span class=&#x27;filter-label&#x27;&gt;#{@labels.find_items}&lt;/span&gt;&lt;input type=&#x27;text&#x27; placeholder=&#x27;Start typing a name&#x27; class=&#x27;filter&#x27;/&gt;&quot; +
       &quot;        &lt;a class=&#x27;filter-link selected&#x27; data-tp-filter=&#x27;all&#x27; href=&#x27;#&#x27;&gt;#{@labels.all}&lt;/a&gt;&quot; +
-      &quot;        &lt;a class=&#x27;filter-link&#x27; data-tp-filter=&#x27;selected&#x27; href=&#x27;#&#x27;&gt;#{@labels.selected} (&lt;span class=&#x27;selected-count&#x27;&gt;0&lt;/span&gt;)&lt;/a&gt;&quot; if @areFilterLinksEnabled
-    html += &quot;&lt;div class=&#x27;max-selected-wrapper&#x27;&gt;&lt;/div&gt;&quot; if @maxSelected
-    html +=
+      &quot;        &lt;a class=&#x27;filter-link&#x27; data-tp-filter=&#x27;selected&#x27; href=&#x27;#&#x27;&gt;#{@labels.selected} (&lt;span class=&#x27;selected-count&#x27;&gt;0&lt;/span&gt;)&lt;/a&gt;&quot; +
+      (if @maxSelected then &quot;&lt;div class=&#x27;max-selected-wrapper&#x27;&gt;&lt;/div&gt;&quot; else &quot;&quot;) +
       &quot;    &lt;/div&gt;&quot; +
       &quot;    &lt;div class=&#x27;items&#x27;&gt;&lt;/div&gt;&quot; +
       &quot;&lt;/div&gt;&quot;
-    html
 
 
   constructor: (element, options) -&gt;
     default_options =
+      # data from which Items are created
+      data: -&gt; []
+      # you can also pass in Item instances directly
       items: []
-      data: []
       debug: false
       maxSelected: false
-      preSelectedItems: []
-      isFilterEnabled: true
-      areFilterLinksEnabled: true
+      isItemPreselected: (item) -&gt; false
 
     $.extend @, default_options, options || {}
 
@@ -140,21 +136,9 @@ class Picker
     @$el.html @baseHtml()
 
     # create items
-    $.each(@data, (i, data) =&gt;
-      item = new Item(data)
-      @items.push item
-
-      item.$el.on Item.EVENTS.SELECTION_CHANGED, =&gt;
-        console.log &quot;triggered&quot; if @debug
-
-        @updateMaxSelectedMessage()
-        @updateSelectedCount()
-
-        @$el.trigger(Picker.EVENTS.SELECTION_CHANGED, item)
-
-      console.log &quot;item&quot;, item if @debug
-      @addItem(item)
-    );
+    if @items.length == 0 and @data().length &gt; 0
+      $.each @data(), (i, data) =&gt;
+        @addItem(new Item(data))
 
 
     ########################################
@@ -174,10 +158,6 @@ class Picker
 
     @updateMaxSelectedMessage()
     @updateSelectedCount()
-
-  # ----------+----------+----------+----------+----------+----------+----------+
-  # Public functions
-  # ----------+----------+----------+----------+----------+----------+----------+
 
   labels:
     selected: &quot;Selected&quot;,
@@ -223,7 +203,6 @@ class Picker
   showAllItems: =&gt;
     for item in @items
       item.show()
-
 
 
   ###*
@@ -289,11 +268,23 @@ class Picker
   maxSelectedEnabled: =&gt;
     @hasMaxSelected()
 
-  # adds a ThingyItem to the ThingyPicker
+  ###*
+  @method addItem
+  @param {Item} item
+  ###
   addItem: (item) =&gt;
-    @$el.find(&quot;.items&quot;).append(item.$el)
-    item.select() if item.data.id in @preSelectedItems
+    @items.push item
+    item.select() if @isItemPreselected(item)
 
+    item.$el.on Item.EVENTS.SELECTION_CHANGED, =&gt;
+      console.log &quot;triggered&quot; if @debug
+
+      @updateMaxSelectedMessage()
+      @updateSelectedCount()
+
+      @$el.trigger(Picker.EVENTS.SELECTION_CHANGED, item)
+
+    @$el.find(&quot;.items&quot;).append(item.$el)
 
   updateMaxSelectedMessage: =&gt;
     message = @labels.max_selected_message.replace(&quot;{0}&quot;, @selectedCount()).replace(&quot;{1}&quot;, @maxSelected)
