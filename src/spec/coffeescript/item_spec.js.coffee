@@ -4,7 +4,7 @@ describe 'Item', ->
   beforeEach ->
     item = new ThingyPicker.Item(data)
 
-  ddescribe '$el', ->
+  describe '$el', ->
     it 'returns the jquery wrapped element', ->
       expect(item.$el.length).toBe(1)
 

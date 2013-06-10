@@ -11,7 +11,7 @@
     beforeEach(function() {
       return item = new ThingyPicker.Item(data);
     });
-    ddescribe('$el', function() {
+    describe('$el', function() {
       it('returns the jquery wrapped element', function() {
         return expect(item.$el.length).toBe(1);
       });
