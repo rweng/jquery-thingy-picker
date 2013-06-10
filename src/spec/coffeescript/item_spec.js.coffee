@@ -4,6 +4,13 @@ describe 'Item', ->
   beforeEach ->
     item = new ThingyPicker.Item(data)
 
+  ddescribe '$el', ->
+    it 'returns the jquery wrapped element', ->
+      expect(item.$el.length).toBe(1)
+
+    it 'has an item instance in data-tp-item', ->
+      expect(item.$el.data('tp-item')).toBe(item)
+
   it 'should call toggle if $el is clicked', ->
     spyOn(item, 'toggle')
 

@@ -11,6 +11,14 @@
     beforeEach(function() {
       return item = new ThingyPicker.Item(data);
     });
+    ddescribe('$el', function() {
+      it('returns the jquery wrapped element', function() {
+        return expect(item.$el.length).toBe(1);
+      });
+      return it('has an item instance in data-tp-item', function() {
+        return expect(item.$el.data('tp-item')).toBe(item);
+      });
+    });
     it('should call toggle if $el is clicked', function() {
       spyOn(item, 'toggle');
       item.$el.trigger("click");
