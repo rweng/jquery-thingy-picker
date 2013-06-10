@@ -42,6 +42,9 @@ class Picker
 
     $.extend @, default_options, options || {}
 
+    # put an instance in data-instance
+    @$el.data('instance', @)
+
     # initialize html
     @$el.html @baseHtml()
 

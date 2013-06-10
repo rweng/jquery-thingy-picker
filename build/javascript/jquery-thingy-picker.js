@@ -257,6 +257,7 @@
         }
       };
       $.extend(this, default_options, options || {});
+      this.$el.data('instance', this);
       this.$el.html(this.baseHtml());
       if (this.items.length === 0 && this.data().length > 0) {
         $.each(this.data(), function(i, data) {

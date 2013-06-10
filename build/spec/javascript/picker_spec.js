@@ -44,6 +44,17 @@
     afterEach(function() {
       return $hidden.remove();
     });
+    describe('$el', function() {
+      beforeEach(function() {
+        return picker = new ThingyPicker.Picker;
+      });
+      it('is the jquery container element', function() {
+        return expect(picker.$el.hasClass('thingy-picker')).toBe(true);
+      });
+      return it('has the picker in data-instance', function() {
+        return expect(picker.$el.data('instance')).toBe(picker);
+      });
+    });
     describe('constructor', function() {
       describe('with no arguments', function() {
         return it('should create a div container', function() {

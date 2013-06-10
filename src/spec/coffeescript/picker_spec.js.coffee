@@ -46,6 +46,18 @@ describe 'jquery-thingy-picker', ->
   afterEach ->
     $hidden.remove()
 
+
+  describe '$el', ->
+    beforeEach ->
+      picker = new ThingyPicker.Picker
+    it 'is the jquery container element', ->
+      expect(picker.$el.hasClass('thingy-picker')).toBe(true)
+
+    it 'has the picker in data-instance', ->
+      expect(picker.$el.data('instance')).toBe(picker)
+
+
+
   describe 'constructor', ->
     describe 'with no arguments', ->
       it 'should create a div container', ->
@@ -92,7 +104,6 @@ describe 'jquery-thingy-picker', ->
           foundItems.push $(obj).data('tp-item').data
 
         expect(foundItems).toEqual(itemData())
-
 
     describe 'Filtering', ->
       it 'is not filtered by default', ->
