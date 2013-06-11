@@ -301,8 +301,20 @@
       };
     };
 
-    Picker.prototype.isItemFiltered = function(item, filterText) {
-      return !new RegExp(filterText, "i").test(item.data.name);
+    Picker.prototype.isItemFiltered = function(item) {
+      var $inputFilter, linkFilter;
+
+      $inputFilter = this.$el.find("input.filter");
+      if ($inputFilter.length === 1) {
+        if (!new RegExp($inputFilter.val(), "i").test(item.data.name)) {
+          return true;
+        }
+      }
+      linkFilter = this.$el.find('.filter-link.selected').data('tp-filter');
+      if (linkFilter === "selected" && !item.isSelected()) {
+        return true;
+      }
+      return false;
     };
 
     /**
@@ -423,20 +435,16 @@
 
 
     Picker.prototype.updateVisibleItems = function() {
-      var filterLinkSaysShow, filterText, filterTextSaysShow, item, mainFilter, _i, _len, _ref, _results;
+      var item, _i, _len, _ref, _results;
 
-      filterText = this.$el.find("input.filter").val();
-      mainFilter = this.$el.find('.filter-link.selected').data('tp-filter');
       _ref = this.items;
       _results = [];
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         item = _ref[_i];
-        filterLinkSaysShow = mainFilter === "all" || (mainFilter === "selected" && item.isSelected());
-        filterTextSaysShow = !this.isItemFiltered(item, filterText);
-        if (filterLinkSaysShow && filterTextSaysShow) {
-          _results.push(item.show());
-        } else {
+        if (this.isItemFiltered(item)) {
           _results.push(item.hide());
+        } else {
+          _results.push(item.show());
         }
       }
       return _results;

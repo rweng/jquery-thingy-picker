@@ -118,8 +118,10 @@ class Picker
       &quot;&lt;/div&gt;&quot;
 
 
-  constructor: (element, options) -&gt;
+  constructor: (options) -&gt;
+
     default_options =
+      $el: $(&quot;&lt;div class=&#x27;thingy-picker&#x27; /&gt;&quot;)
       # data from which Items are created
       data: -&gt; []
       # you can also pass in Item instances directly
@@ -130,7 +132,8 @@ class Picker
 
     $.extend @, default_options, options || {}
 
-    @$el = $(element)
+    # put an instance in data-instance
+    @$el.data(&#x27;instance&#x27;, @)
 
     # initialize html
     @$el.html @baseHtml()
