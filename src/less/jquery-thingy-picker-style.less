@@ -17,32 +17,9 @@ limitations under the License.
 */
 
 .thingy-picker {
-  a {
-    &.filter-link {
-      &:link, &:visited {
-        font-weight: bold;
-        text-decoration: none;
-      }
-    }
 
-    &.filter-link:hover, &.selected {
-      background-color: #6D84B4;
-      -moz-border-radius: 5px;
-      -webkit-border-radius: 5px;
-      color: #FFFFFF;
-    }
-  }
-
-  input {
-    background-color: #fcfcfc;
-    border: 1px solid #ccc;
-    font: 11px verdana, arial, helvetica, sans-serif;
-    margin: 2px 0;
-    padding: 2px 4px;
-
-    &.filter {
-      height: 23px;
-    }
+  a.selected {
+    color: darkgrey;
   }
 
   .items {
@@ -114,34 +91,8 @@ limitations under the License.
   }
 
   .inner-header {
-    background: none repeat scroll 0 0 #F7F7F7;
-    border-bottom: 1px solid #CCCCCC;
-    color: #3B5998;
-    font-size: 11px;
     font-weight: bold;
-    height: 25px;
     padding: 2px;
-
-    .filter-link {
-      float: right;
-    }
-
-    span.filter-label {
-      color: #333333;
-      font-weight: bold;
-      margin: 3px 0 2px;
-    }
-  }
-
-  .filter-link {
-    margin: 4px 5px 4px 5px;
-    padding: 3px 5px 3px 5px;
-  }
-
-  .max-selected-wrapper {
-    float: right;
-    margin: 4px 5px 4px 5px;
-    padding: 3px 5px 3px 5px;
   }
 }
 
