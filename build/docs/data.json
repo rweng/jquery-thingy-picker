@@ -229,14 +229,14 @@
         },
         {
             "file": "src/coffeescript/picker.js.coffee",
-            "line": 95,
+            "line": 106,
             "itemtype": "method",
             "name": "getSelectedItems",
             "class": "Picker"
         },
         {
             "file": "src/coffeescript/picker.js.coffee",
-            "line": 103,
+            "line": 114,
             "itemtype": "method",
             "name": "hasMaxSelected",
             "return": {
@@ -247,7 +247,7 @@
         },
         {
             "file": "src/coffeescript/picker.js.coffee",
-            "line": 111,
+            "line": 122,
             "description": "calls show on all items",
             "itemtype": "method",
             "name": "showAllItems",
@@ -255,7 +255,7 @@
         },
         {
             "file": "src/coffeescript/picker.js.coffee",
-            "line": 121,
+            "line": 132,
             "description": "hides all items except the selected ones",
             "itemtype": "method",
             "name": "showSelectedItemsOnly",
@@ -263,7 +263,7 @@
         },
         {
             "file": "src/coffeescript/picker.js.coffee",
-            "line": 133,
+            "line": 144,
             "description": "deselects all items",
             "itemtype": "method",
             "name": "clearSelection",
@@ -275,7 +275,7 @@
         },
         {
             "file": "src/coffeescript/picker.js.coffee",
-            "line": 150,
+            "line": 161,
             "itemtype": "method",
             "name": "visibleItems",
             "return": {
@@ -286,14 +286,14 @@
         },
         {
             "file": "src/coffeescript/picker.js.coffee",
-            "line": 166,
+            "line": 177,
             "itemtype": "method",
             "name": "updateVisibleItems",
             "class": "Picker"
         },
         {
             "file": "src/coffeescript/picker.js.coffee",
-            "line": 184,
+            "line": 187,
             "itemtype": "method",
             "name": "addItem",
             "params": [

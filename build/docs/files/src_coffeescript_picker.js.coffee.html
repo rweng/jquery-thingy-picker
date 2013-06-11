@@ -179,8 +179,19 @@ class Picker
     ((x &lt; y) ? -1 : ((x &gt; y) ? 1 : 0))
 
 
-  isItemFiltered: (item, filterText) -&gt;
-    not new RegExp(filterText, &quot;i&quot;).test(item.data.name)
+  isItemFiltered: (item) -&gt;
+    # test input field filter
+    $inputFilter = @$el.find(&quot;input.filter&quot;)
+    if $inputFilter.length == 1
+      return true unless new RegExp($inputFilter.val(), &quot;i&quot;).test(item.data.name)
+
+    # test links filter
+    linkFilter = @$el.find(&#x27;.filter-link.selected&#x27;).data(&#x27;tp-filter&#x27;)
+    return true if linkFilter == &quot;selected&quot; and not item.isSelected()
+
+    # if everything gone through, return not filtered
+    return false
+
 
   ###*
   @method getSelectedItems
@@ -257,16 +268,8 @@ class Picker
   @method updateVisibleItems
   ###
   updateVisibleItems: =&gt;
-    filterText = @$el.find(&quot;input.filter&quot;).val()
-    mainFilter = @$el.find(&#x27;.filter-link.selected&#x27;).data(&#x27;tp-filter&#x27;)
-
     for item in @items
-      filterLinkSaysShow = mainFilter == &quot;all&quot; or (mainFilter == &quot;selected&quot; and item.isSelected())
-      filterTextSaysShow = not @isItemFiltered(item, filterText)
-      if filterLinkSaysShow and filterTextSaysShow
-        item.show()
-      else
-        item.hide()
+      if @isItemFiltered(item) then item.hide() else item.show()
 
   maxSelectedEnabled: =&gt;
     @hasMaxSelected()

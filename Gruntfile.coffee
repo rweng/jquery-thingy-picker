@@ -64,12 +64,17 @@ module.exports = (grunt) ->
           "build/example/index.html": "src/example/index.html.haml"
 
     less:
-      options:
-        yuicompress: true
+      main:
+        options:
+          yuicompress: true
 
-      files:
-        src: "src/less/jquery-thingy-picker.less"
-        dest: "build/css/jquery-thingy-picker.css"
+        files: [
+          expand: true
+          cwd: 'src/less'
+          src: ['*.less']
+          dest: 'build/css/'
+          ext: '.css'
+        ]
 
     yuidoc:
       compile:
