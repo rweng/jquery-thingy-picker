@@ -78,6 +78,13 @@ describe 'jquery-thingy-picker', ->
         baseHtml: -> "<div id='bla'></div>"
       expect(picker.$el.find('#bla').length).toBe(1)
 
+    it 'if the $el has html, it uses that', ->
+      picker = new ThingyPicker.Picker
+        $el: $("<div><div id='test' /></div>")
+
+      expect(picker.$el.find('#test').length).toBe(1)
+
+
   it '#element is defined', ->
     expect($el.length).toBe(1)
 

@@ -258,7 +258,14 @@
       };
       $.extend(this, default_options, options || {});
       this.$el.data('instance', this);
-      this.$el.html(this.baseHtml());
+      if (!String.prototype.trim) {
+        String.prototype.trim = function() {
+          return this.replace(/^\s+|\s+$/g, "");
+        };
+      }
+      if (this.$el.html().trim() === '') {
+        this.$el.html(this.baseHtml());
+      }
       if (this.items.length === 0 && this.data().length > 0) {
         $.each(this.data(), function(i, data) {
           return _this.addItem(new Item(data));

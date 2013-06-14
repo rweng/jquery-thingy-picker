@@ -46,7 +46,8 @@ class Picker
     @$el.data('instance', @)
 
     # initialize html
-    @$el.html @baseHtml()
+    unless String::trim then String::trim = -> @replace /^\s+|\s+$/g, ""
+    if @$el.html().trim() == '' then @$el.html @baseHtml() 
 
     # create items
     if @items.length == 0 and @data().length > 0

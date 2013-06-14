@@ -72,13 +72,19 @@
       });
     });
     describe('#baseHtml', function() {
-      return it('determines how an empty picker is rendered', function() {
+      it('determines how an empty picker is rendered', function() {
         picker = new ThingyPicker.Picker({
           baseHtml: function() {
             return "<div id='bla'></div>";
           }
         });
         return expect(picker.$el.find('#bla').length).toBe(1);
+      });
+      return it('if the $el has html, it uses that', function() {
+        picker = new ThingyPicker.Picker({
+          $el: $("<div><div id='test' /></div>")
+        });
+        return expect(picker.$el.find('#test').length).toBe(1);
       });
     });
     it('#element is defined', function() {
