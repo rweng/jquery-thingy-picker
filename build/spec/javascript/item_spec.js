@@ -70,7 +70,7 @@
         });
       });
     });
-    return describe('#toggle', function() {
+    describe('#toggle', function() {
       it('calls select() if deselected', function() {
         item.deselect();
         spyOn(item, 'select');
@@ -82,6 +82,38 @@
         spyOn(item, 'deselect');
         item.toggle();
         return expect(item.deselect).toHaveBeenCalled();
+      });
+    });
+    describe('#show', function() {
+      beforeEach(function() {
+        item.hide();
+        return item.show();
+      });
+      it('makes $el visible', function() {
+        return expect(item.isVisible()).toBe(true);
+      });
+      return it('removes .filtered', function() {
+        return expect(item.$el.hasClass('filtered')).toBe(false);
+      });
+    });
+    describe('#hide', function() {
+      beforeEach(function() {
+        return item.hide();
+      });
+      it('hides the $el', function() {
+        return expect(item.isVisible()).toBe(false);
+      });
+      return it('adds the class "filtered" to $el', function() {
+        return expect(item.$el.hasClass('filtered')).toBe(true);
+      });
+    });
+    return describe('#isVisible', function() {
+      it('returns true if $el is visible', function() {
+        return expect(item.isVisible()).toBe(true);
+      });
+      return it('returns false if $el is hidden', function() {
+        item.$el.hide();
+        return expect(item.isVisible()).toBe(false);
       });
     });
   });

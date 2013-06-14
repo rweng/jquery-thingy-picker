@@ -57,3 +57,19 @@ describe 'Item', ->
       item.toggle()
 
       expect(item.deselect).toHaveBeenCalled()
+
+  describe '#show', ->
+    beforeEach -> item.hide(); item.show()
+    it 'makes $el visible', -> expect(item.isVisible()).toBe(true)
+    it 'removes .filtered', -> expect(item.$el.hasClass 'filtered').toBe(false)
+  
+  describe '#hide', ->
+    beforeEach -> item.hide()
+    it 'hides the $el', -> expect(item.isVisible()).toBe(false)
+    it 'adds the class "filtered" to $el', -> expect(item.$el.hasClass('filtered')).toBe(true)
+  
+  describe '#isVisible', ->
+    it 'returns true if $el is visible', -> expect(item.isVisible()).toBe(true)
+    it 'returns false if $el is hidden', ->
+      item.$el.hide()
+      expect(item.isVisible()).toBe(false)

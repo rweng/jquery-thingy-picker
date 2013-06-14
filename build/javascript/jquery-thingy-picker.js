@@ -135,23 +135,25 @@
     };
 
     /**
-    delegates to $el.show
+    delegates to $el.show and removes .filtered from $el
     @method show
     */
 
 
     Item.prototype.show = function() {
-      return this.$el.show();
+      this.$el.show();
+      return this.$el.removeClass('filtered');
     };
 
     /**
-    delegates to $el.hide
+    delegates to $el.hide and adds the class 'filtered' to $el
     @method hide
     */
 
 
     Item.prototype.hide = function() {
-      return this.$el.hide();
+      this.$el.hide();
+      return this.$el.addClass('filtered');
     };
 
     /**

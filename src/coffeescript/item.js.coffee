@@ -91,18 +91,20 @@ class Item
 
 
   ###*
-  delegates to $el.show
+  delegates to $el.show and removes .filtered from $el
   @method show
   ###
   show: =>
     @$el.show()
+    @$el.removeClass 'filtered'
 
   ###*
-  delegates to $el.hide
+  delegates to $el.hide and adds the class 'filtered' to $el
   @method hide
   ###
   hide: =>
     @$el.hide()
+    @$el.addClass 'filtered'
 
   ###*
   @method deselect
